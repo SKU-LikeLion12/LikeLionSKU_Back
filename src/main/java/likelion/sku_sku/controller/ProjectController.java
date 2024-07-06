@@ -46,10 +46,12 @@ public class ProjectController {
                     @ApiResponse(responseCode = "404", description = "")})
     @GetMapping("")
     public ResponseEntity<ResponseProjectUpdate> findProject(@RequestParam String title) {
-        Optional<Project> project = projectService.findByTitle(title);
-        return project.map(value -> ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseProjectUpdate(value.getTitle(), value.getSubTitle(), value.arrayToImage())))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        ResponseProjectUpdate responseProject = projectService.findProject(title);
+        if (responseProject != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(responseProject);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Operation(summary = "(민규) 모든 프로젝트 조회", description = "모든 프로젝트 대한 정보 조회",

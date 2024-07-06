@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import static likelion.sku_sku.dto.ProjectDTO.*;
 
 @Service
 @RequiredArgsConstructor
@@ -43,11 +44,16 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public Optional<Project> findByTitle(String title) {
-        return projectRepository.findByTitle(title);
+    public ResponseProjectUpdate findProject(String title) {
+        return projectRepository.findByTitle(title)
+                .map(project -> new ResponseProjectUpdate(
+                        project.getTitle(),
+                        project.getSubTitle(),
+                        project.arrayToImage()))
+                .orElse(null);
     }
     @Transactional
-    public void deleteProject(String title) throws IOException {
+    public void deleteProject(String title) {
         Project project = projectRepository.findByTitle(title)
                 .orElseThrow(() -> new RuntimeException("Project not found with title " + title));
         projectRepository.delete(project);

@@ -44,6 +44,15 @@ public class LionDTO {
         private String email;
     }
 
+    @Data
+    public static class IdRoleRequest {
+        @Schema(description = "lion 아이디", example = "1")
+        private Long id;
+
+        @Schema(description = "권한", example = "ADMIN_LION")
+        private RoleType roleType;
+    }
+
 // Response
     @Data
     @AllArgsConstructor

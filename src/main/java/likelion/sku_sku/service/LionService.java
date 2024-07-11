@@ -51,4 +51,13 @@ public class LionService {
                 .orElseThrow(() -> new RuntimeException("Lion not found with email " + email));
         lionRepository.delete(lion);
     }
+
+    @Transactional
+    public Lion updateLionRole(Long id, RoleType roleType) {
+        Lion lion = lionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Lion not found"));
+        lion.roleUpdate(roleType);
+        return lionRepository.save(lion);
+    }
+
 }

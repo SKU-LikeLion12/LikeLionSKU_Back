@@ -27,4 +27,8 @@ public class Lion {
         this.email = email;
         this.role = role;
     }
+
+    public void roleUpdate(RoleType role) {
+        this.role = role;
+    }
 }

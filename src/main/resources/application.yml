@@ -1,23 +1,44 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/skusku?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: mxcvzs200@
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
-
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         jdbc:
           time_zone: Asia/Seoul
-#    database-platform:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: ${GOOGLE_REDIRECT_URI}
+            scope:
+              - profile
+              - email
+            authorization-grant-type: authorization_code
+            client-name: Google
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
 
 jwt:
-  key: askqwhrkjweagfjasdfasfdahsjkfhqlwkjfhbasdjkfhlqwkjefhbadskjfbalsdhfvbasdfasdfasdfasdfasdqmjhfvgjasdasdfasdf
+  secret-key: ${JWT_SECRET_KEY}
+  expire-length: 86400000 # 1 day (24 hours in milliseconds)
 
 api-key:
-  date-checker: 1Kw49paSD5t9RqepmPwQpD8cNSs0I1SzwQlnt5n62oU6vD5P%2Fxnnp2t3I8PwfAa%2BtFY02jbP6yWFcfiKPMRWqA%3D%3D
+  date-checker: ${DATE_CHECKER_API_KEY}
+
+url:
+  access-token: https://oauth2.googleapis.com/token
+  profile: https://www.googleapis.com/oauth2/v3/userinfo

@@ -35,7 +35,7 @@ public class ProjectController {
     @Operation(summary = "(민규) 프로젝트 수정", description = "프로젝트 id, 프로젝트 제목, 프로젝트 부제목 필요, 사진은 안바꾸고 싶으면 안넣으면 됨",
             responses = {@ApiResponse(responseCode = "201", description = "수정 성공 후 변경된 정보를 포함한 객체 생성 "),
                     @ApiResponse(responseCode = "", description = "")})
-    @PutMapping("")
+    @PutMapping("/update")
     public ResponseEntity<ResponseProjectUpdate> updateProject(ProjectUpdateRequest request) throws IOException {
         Project project = projectService.updateProject(request.getId(), request.getTitle(), request.getSubTitle(), request.getImage());
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseProjectUpdate(project.getTitle(), project.getSubTitle(), project.arrayToImage()));

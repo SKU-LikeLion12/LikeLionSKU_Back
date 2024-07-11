@@ -24,7 +24,7 @@ public class ProjectDTO {
     @Data
     public static class ProjectUpdateRequest{
         @Schema(description = "프로젝트 아이디", example = "1")
-        Long id;
+        private Long id;
 
         @NotEmpty
         @Schema(description = "프로젝트 제목", example = "스쿠스쿠")

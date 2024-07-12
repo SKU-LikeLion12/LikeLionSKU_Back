@@ -8,19 +8,21 @@ import likelion.sku_sku.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import static likelion.sku_sku.dto.ProjectDTO.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/project")
+@RequestMapping("/admin/project")
+@PreAuthorize("hasRole('ADMIN_LION')")
 @Tag(name = "관리자 페이지: 프로젝트 관련")
 public class ProjectController {
+
     private final ProjectService projectService;
 
     @Operation(summary = "(민규) 프로젝트 추가", description = "프로젝트 제목, 프로젝트 부제목, 프로젝트 사진 필요",

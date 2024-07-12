@@ -9,8 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import static likelion.sku_sku.dto.ProjectDTO.*;
+
+import static likelion.sku_sku.dto.ProjectDTO.ResponseProjectUpdate;
 
 @Service
 @RequiredArgsConstructor

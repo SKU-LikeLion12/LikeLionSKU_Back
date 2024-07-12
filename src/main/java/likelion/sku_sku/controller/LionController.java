@@ -4,20 +4,22 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.sku_sku.domain.Lion;
-import likelion.sku_sku.domain.RoleType;
 import likelion.sku_sku.service.LionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
 import static likelion.sku_sku.dto.LionDTO.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lion")
+@RequestMapping("/admin/lion")
+@PreAuthorize("hasRole('ADMIN_LION')")
 @Tag(name = "관리자 페이지: lion 관련")
 public class LionController {
     private final LionService lionService;
@@ -50,7 +52,7 @@ public class LionController {
     }
 
 
-    @Operation(summary = "(민규) lion 조회", description = "lion 이름 필요",
+    @Operation(summary = "(민규) lion 이름으로 조회", description = "lion 이름 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 lion 이름, lion 이메일, lion 권한이 출력."),
                     @ApiResponse(responseCode = "404", description = "")})
     @GetMapping("/name")
@@ -62,7 +64,7 @@ public class LionController {
         return ResponseEntity.ok(lions);
     }
 
-    @Operation(summary = "(민규) lion 조회", description = "lion email 필요",
+    @Operation(summary = "(민규) lion 이메일로 조회", description = "lion email 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 lion 이름, lion 이메일, lion 권한이 출력."),
                     @ApiResponse(responseCode = "404", description = "lion이 존재하지 않음")})
     @GetMapping("/email")

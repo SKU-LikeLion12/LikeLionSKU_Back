@@ -12,6 +12,8 @@ public class ProjectDTO {
     // Request
     @Data
     public static class ProjectCreateRequest {
+        @Schema(description = "프로젝트 기수", example = "12th")
+        private String classTh;
         @Schema(description = "프로젝트 제목", example = "스쿠스쿠")
         private String title;
         @Schema(description = "프로젝트 부제목", example = "LikeLion sku 공식페이지")
@@ -25,6 +27,9 @@ public class ProjectDTO {
     public static class ProjectUpdateRequest{
         @Schema(description = "프로젝트 아이디", example = "1")
         private Long id;
+
+        @Schema(description = "프로젝트 기수", example = "12th")
+        private String classTh;
 
         @NotEmpty
         @Schema(description = "프로젝트 제목", example = "스쿠스쿠")
@@ -49,6 +54,9 @@ public class ProjectDTO {
     @Data
     @AllArgsConstructor
     public static class ResponseProjectUpdate {
+        @Schema(description = "프로젝트 기수", example = "12th")
+        private String classTh;
+
         @Schema(description = "프로젝트 제목", example = "스쿠스쿠")
         private String title;
 

@@ -18,8 +18,8 @@ import static likelion.sku_sku.dto.LionDTO.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/lion")
-@PreAuthorize("hasRole('ADMIN_LION')")
+@RequestMapping("/lion")
+//@PreAuthorize("hasRole('ADMIN_LION')")
 @Tag(name = "관리자 페이지: lion 관련")
 public class LionController {
     private final LionService lionService;

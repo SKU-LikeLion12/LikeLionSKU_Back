@@ -13,6 +13,7 @@ spring:
         format_sql: true
         jdbc:
           time_zone: Asia/Seoul
+        dialect: org.hibernate.dialect.MySQLDialect
   security:
     oauth2:
       client:

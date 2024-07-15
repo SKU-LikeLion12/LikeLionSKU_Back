@@ -34,11 +34,6 @@ public class SkuSkuApplication {
 	@Value("${DATE_CHECKER_API_KEY}")
 	private String dateCheckerApiKey;
 	public static void main(String[] args) {
-		SpringApplication.run(SkuSkuApplication.class, args);
-	}
-
-	@PostConstruct
-	public void init() {
 		Dotenv dotenv = Dotenv.load();
 		System.setProperty("DATABASE_URL", dotenv.get("DATABASE_URL"));
 		System.setProperty("DATABASE_USERNAME", dotenv.get("DATABASE_USERNAME"));
@@ -48,5 +43,12 @@ public class SkuSkuApplication {
 		System.setProperty("GOOGLE_REDIRECT_URI", dotenv.get("GOOGLE_REDIRECT_URI"));
 		System.setProperty("JWT_SECRET_KEY", dotenv.get("JWT_SECRET_KEY"));
 		System.setProperty("DATE_CHECKER_API_KEY", dotenv.get("DATE_CHECKER_API_KEY"));
+
+		SpringApplication.run(SkuSkuApplication.class, args);
 	}
+
+//	@PostConstruct
+//	public void init() {
+//
+//	}
 }

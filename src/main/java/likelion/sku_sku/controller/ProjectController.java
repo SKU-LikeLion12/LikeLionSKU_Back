@@ -18,8 +18,8 @@ import static likelion.sku_sku.dto.ProjectDTO.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/project")
-@PreAuthorize("hasRole('ADMIN_LION')")
+@RequestMapping("/project")
+//@PreAuthorize("hasRole('ADMIN_LION')")
 @Tag(name = "관리자 페이지: 프로젝트 관련")
 public class ProjectController {
 
@@ -30,7 +30,7 @@ public class ProjectController {
                     @ApiResponse(responseCode = "", description = "")})
     @PostMapping("/add")
     public ResponseEntity<Project> addProject(ProjectCreateRequest request)  throws IOException {
-        Project project = projectService.addProject(request.getTitle(), request.getSubTitle(), request.getImage());
+        Project project = projectService.addProject(request.getClassTh(), request.getTitle(), request.getSubTitle(), request.getImage());
         return ResponseEntity.status(HttpStatus.CREATED).body(project);
     }
 
@@ -39,8 +39,8 @@ public class ProjectController {
                     @ApiResponse(responseCode = "", description = "")})
     @PutMapping("/update")
     public ResponseEntity<ResponseProjectUpdate> updateProject(ProjectUpdateRequest request) throws IOException {
-        Project project = projectService.updateProject(request.getId(), request.getTitle(), request.getSubTitle(), request.getImage());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseProjectUpdate(project.getTitle(), project.getSubTitle(), project.arrayToImage()));
+        Project project = projectService.updateProject(request.getId(), request.getClassTh(), request.getTitle(), request.getSubTitle(), request.getImage());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseProjectUpdate(project.getClassTh(), project.getTitle(), project.getSubTitle(), project.arrayToImage()));
     }
 
     @Operation(summary = "(민규) 프로젝트 조회", description = "프로젝트 대한 정보 조회",
@@ -68,7 +68,7 @@ public class ProjectController {
     @Operation(summary = "(민규) 프로젝트 삭제", description = "프로젝트 이름 넣으면 해당 프로젝트 삭제",
             responses = {@ApiResponse(responseCode = "200", description = "프로젝트 삭제 성공")})
     @DeleteMapping("")
-    public void deleteProject(@RequestBody TitleRequest request) throws IOException {
+    public void deleteProject(@RequestBody TitleRequest request) {
         projectService.deleteProject(request.getTitle());
     }
 }

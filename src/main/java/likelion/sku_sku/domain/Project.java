@@ -14,6 +14,7 @@ import java.io.IOException;
 public class Project {
     @Id @GeneratedValue
     private Long id;
+    private String classTh;
     private String title;
     private String subTitle;
 
@@ -21,7 +22,8 @@ public class Project {
     @Column(name = "image", columnDefinition = "MEDIUMBLOB")
     private byte[] image;
 
-    public Project(String title, String subTitle, byte[] image) {
+    public Project(String classTh, String title, String subTitle, byte[] image) {
+        this.classTh = classTh;
         this.title = title;
         this.subTitle = subTitle;
         this.image = image;
@@ -30,7 +32,8 @@ public class Project {
         return ImageUtility.encodeImage(this.image);
     }
 
-    public void changeProject(String title, String subTitle) {
+    public void changeProject(String classTh, String title, String subTitle) {
+        this.classTh = classTh;
         this.title = title;
         this.subTitle = subTitle;
     }

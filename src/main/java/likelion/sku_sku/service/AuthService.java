@@ -6,6 +6,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import likelion.sku_sku.domain.Lion;
+import likelion.sku_sku.repository.LionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final LionService lionService;
+    private final LionRepository lionRepository;
     private final JwtService jwtService;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
@@ -47,7 +48,7 @@ public class AuthService {
             String userId = googlePayload.getSubject();
             String email = googlePayload.getEmail();
 
-            Optional<Lion> optionalLion = lionService.getLionByEmail(email);
+            Optional<Lion> optionalLion = lionRepository.findByEmail(email);
             if (optionalLion.isPresent()) {
                 Lion lion = optionalLion.get();
                 String jwtToken = jwtService.createJwtToken(userId, email, lion.getRole());

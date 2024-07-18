@@ -24,7 +24,7 @@ import static likelion.sku_sku.dto.LionDTO.*;
 public class LionController {
     private final LionService lionService;
 
-    @Operation(summary = "(민규) lion 추가", description = "lion 이름, lion 이메일, lion 권한 필요",
+    @Operation(summary = "(민규) lion 추가", description = "Header에 Bearer 토큰 필요, lion 이름, lion 이메일, lion 권한 필요",
             responses = {@ApiResponse(responseCode = "201", description = "생성"),
                     @ApiResponse(responseCode = "", description = "")})
     @PostMapping("/add")
@@ -33,7 +33,7 @@ public class LionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(lion);
     }
 
-    @Operation(summary = "(민규) lion 수정", description = "lion id, lion 이름, lion 이메일, lion 권한 필요",
+    @Operation(summary = "(민규) lion 수정", description = "Header에 Bearer 토큰 필요, lion id, lion 이름, lion 이메일, lion 권한 필요",
             responses = {@ApiResponse(responseCode = "201", description = "수정 성공 후 변경된 정보를 포함한 객체 생성 "),
                     @ApiResponse(responseCode = "", description = "")})
     @PutMapping("/update")
@@ -42,7 +42,7 @@ public class LionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseLionUpdate(lion.getName(), lion.getEmail(), lion.getRole()));
     }
 
-    @Operation(summary = "(민규) lion 권한 변경", description = "id, role 필요",
+    @Operation(summary = "(민규) lion 권한 변경", description = "Header에 Bearer 토큰 필요, id, role 필요",
             responses = {@ApiResponse(responseCode = "200", description = "권한 변경 성공"),
                     @ApiResponse(responseCode = "404", description = "lion이 존재하지 않음")})
     @PutMapping("/role")
@@ -51,7 +51,7 @@ public class LionController {
         return lion != null ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
-    @Operation(summary = "(민규) lion 이름으로 조회", description = "lion 이름 필요",
+    @Operation(summary = "(민규) lion 이름으로 조회", description = "Header에 Bearer 토큰 필요, lion 이름 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 lion 이름, lion 이메일, lion 권한이 출력."),
                     @ApiResponse(responseCode = "404", description = "")})
     @GetMapping("/name")
@@ -63,7 +63,7 @@ public class LionController {
         return ResponseEntity.ok(lions);
     }
 
-    @Operation(summary = "(민규) lion 이메일로 조회", description = "lion email 필요",
+    @Operation(summary = "(민규) lion 이메일로 조회", description = "Header에 Bearer 토큰 필요, lion email 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 lion 이름, lion 이메일, lion 권한이 출력."),
                     @ApiResponse(responseCode = "404", description = "lion이 존재하지 않음")})
     @GetMapping("/email")
@@ -72,7 +72,7 @@ public class LionController {
         return lion.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @Operation(summary = "(민규) 모든 lion 조회", description = "모든 lion에 대한 정보 조회",
+    @Operation(summary = "(민규) 모든 lion 조회", description = "Header에 Bearer 토큰 필요, 모든 lion에 대한 정보 조회",
             responses = {@ApiResponse(responseCode = "200", description = "모든 lion 조회 성공"),
                     @ApiResponse(responseCode = "404", description = "lion이 존재하지 않음")})
     @GetMapping("/all")
@@ -84,7 +84,7 @@ public class LionController {
         return ResponseEntity.ok(lions);
     }
 
-    @Operation(summary = "(민규) lion 삭제", description = "lion email 필요",
+    @Operation(summary = "(민규) lion 삭제", description = "Header에 Bearer 토큰 필요, lion email 필요",
             responses = {@ApiResponse(responseCode = "200", description = "lion 삭제 성공"),
                     @ApiResponse(responseCode = "404", description = "")})
     @DeleteMapping("")

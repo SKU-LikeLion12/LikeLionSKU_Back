@@ -25,7 +25,7 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    @Operation(summary = "(민규) 프로젝트 추가", description = "프로젝트 제목, 프로젝트 부제목, 프로젝트 사진 필요",
+    @Operation(summary = "(민규) 프로젝트 추가", description = "Header에 Bearer 토큰 필요, 프로젝트 제목, 프로젝트 부제목, 프로젝트 사진 필요",
             responses = {@ApiResponse(responseCode = "201", description = "생성"),
                     @ApiResponse(responseCode = "", description = "")})
     @PostMapping("/add")
@@ -34,7 +34,7 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(project);
     }
 
-    @Operation(summary = "(민규) 프로젝트 수정", description = "프로젝트 id, 프로젝트 제목, 프로젝트 부제목 필요, 사진은 안바꾸고 싶으면 안넣으면 됨",
+    @Operation(summary = "(민규) 프로젝트 수정", description = "Header에 Bearer 토큰 필요, 프로젝트 id, 프로젝트 제목, 프로젝트 부제목 필요, 사진은 안바꾸고 싶으면 안넣으면 됨",
             responses = {@ApiResponse(responseCode = "201", description = "수정 성공 후 변경된 정보를 포함한 객체 생성 "),
                     @ApiResponse(responseCode = "", description = "")})
     @PutMapping("/update")
@@ -43,7 +43,7 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseProjectUpdate(project.getClassTh(), project.getTitle(), project.getSubTitle(), project.arrayToImage()));
     }
 
-    @Operation(summary = "(민규) 프로젝트 조회", description = "프로젝트 대한 정보 조회",
+    @Operation(summary = "(민규) 프로젝트 조회", description = "Header에 Bearer 토큰 필요, 프로젝트 대한 정보 조회",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 프로젝트 제목, 프로젝트 부제목, 프로젝트 사진이 출력."),
                     @ApiResponse(responseCode = "404", description = "")})
     @GetMapping("")
@@ -56,7 +56,7 @@ public class ProjectController {
         }
     }
 
-    @Operation(summary = "(민규) 모든 프로젝트 조회", description = "모든 프로젝트 대한 정보 조회",
+    @Operation(summary = "(민규) 모든 프로젝트 조회", description = "Header에 Bearer 토큰 필요, 모든 프로젝트 대한 정보 조회",
             responses = {@ApiResponse(responseCode = "200", description = "모든 프로젝트 조회 성공"),
                     @ApiResponse(responseCode = "", description = "")})
     @GetMapping("/all")
@@ -65,7 +65,7 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(projects);
     }
 
-    @Operation(summary = "(민규) 프로젝트 삭제", description = "프로젝트 이름 넣으면 해당 프로젝트 삭제",
+    @Operation(summary = "(민규) 프로젝트 삭제", description = "Header에 Bearer 토큰 필요, 프로젝트 이름 넣으면 해당 프로젝트 삭제",
             responses = {@ApiResponse(responseCode = "200", description = "프로젝트 삭제 성공")})
     @DeleteMapping("")
     public void deleteProject(@RequestBody TitleRequest request) {

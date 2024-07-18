@@ -43,3 +43,9 @@ api-key:
 url:
   access-token: https://oauth2.googleapis.com/token
   profile: https://www.googleapis.com/oauth2/v3/userinfo
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs # API 문서 경로
+  swagger-ui:
+    path: /swagger-ui/index.html # Swagger UI 경로 수정

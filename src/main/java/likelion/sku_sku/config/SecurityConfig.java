@@ -24,6 +24,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()  // Swagger UI 및 API 문서 경로 허용
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/lion/**", "/project/**").hasRole("ADMIN_LION")
                                 .anyRequest().authenticated()

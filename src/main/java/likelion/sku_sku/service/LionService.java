@@ -18,8 +18,8 @@ public class LionService {
 
     @Transactional
     public Lion addLion(String name, String email, RoleType role) {
-        if (lionRepository.findByEmail(email).isPresent()) { // 이메일 중복 여부 확인
-            throw new IllegalArgumentException("Email already exists");
+        if (lionRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("그 email 이미 있지롱");
         }
         Lion lion = new Lion(name, email, role);
         return lionRepository.save(lion);
@@ -40,7 +40,7 @@ public class LionService {
     @Transactional
     public Lion updateLion(Long id, String name, String email, RoleType role) {
         Lion lion = lionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Lion not found"));
+                .orElseThrow(() -> new IllegalArgumentException("그런 Lion 없는디요"));
         lion.update(name, email, role);
         return lionRepository.save(lion);
     }
@@ -48,16 +48,15 @@ public class LionService {
     @Transactional
     public void deleteLion(String email) {
         Lion lion = lionRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Lion not found with email " + email));
+                .orElseThrow(() -> new RuntimeException("그런 email 가진 Lion 없는디요"));
         lionRepository.delete(lion);
     }
 
-    @Transactional
-    public Lion updateLionRole(Long id, RoleType roleType) {
-        Lion lion = lionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Lion not found"));
-        lion.roleUpdate(roleType);
-        return lionRepository.save(lion);
-    }
-
+//    @Transactional
+//    public Lion updateLionRole(Long id, RoleType roleType) {
+//        Lion lion = lionRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("그런 Lion 없는디요"));
+//        lion.roleUpdate(roleType);
+//        return lionRepository.save(lion);
+//    }
 }

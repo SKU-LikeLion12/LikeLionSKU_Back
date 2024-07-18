@@ -21,6 +21,9 @@ public class ProjectService {
 
     @Transactional
     public Project addProject(String classTh, String title, String subTitle, MultipartFile image) throws IOException {
+        if (projectRepository.findByTitle(title).isPresent()) {
+            throw new IllegalArgumentException("title 이미 있지롱");
+        }
         byte[] imageBytes = image.getBytes();
         Project project = new Project(classTh, title, subTitle, imageBytes);
         return projectRepository.save(project);
@@ -29,7 +32,7 @@ public class ProjectService {
     @Transactional
     public Project updateProject(Long id, String classTh, String title, String subTitle, MultipartFile image) throws IOException {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Project not found with id " + id));
+                .orElseThrow(() -> new RuntimeException("그런 id 가진 project 없지롱"));
 
         if (image != null) {
             project.setImage(image);
@@ -54,11 +57,11 @@ public class ProjectService {
                         project.arrayToImage()))
                 .orElse(null);
     }
+
     @Transactional
     public void deleteProject(String title) {
         Project project = projectRepository.findByTitle(title)
-                .orElseThrow(() -> new RuntimeException("Project not found with title " + title));
+                .orElseThrow(() -> new RuntimeException("그런 title 가진 project 없지롱" + title));
         projectRepository.delete(project);
     }
-
 }

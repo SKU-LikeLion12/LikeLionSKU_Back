@@ -26,7 +26,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = resolveToken(request);
         if (token != null && jwtService.validateToken(token)) {
             Authentication auth = getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            if (auth != null) {
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
         }
         filterChain.doFilter(request, response);
     }
@@ -42,7 +44,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private Authentication getAuthentication(String token) {
         Claims claims = jwtService.getClaimsFromToken(token);
         String email = claims.get("email").toString();
-        String role = claims.get("role").toString();  // 역할 정보를 문자열로 추출
-        return new UsernamePasswordAuthenticationToken(email, "", Collections.singletonList(() -> "ROLE_" + role));
+        String role = claims.get("role").toString();
+
+        if (email.endsWith("@sungkyul.ac.kr") && (role.equals("BABY_LION") || role.equals("ADMIN_LION"))) {
+            return new UsernamePasswordAuthenticationToken(email, "", Collections.singletonList(() -> "ROLE_" + role));
+        }
+        return null;
     }
 }

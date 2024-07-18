@@ -6,6 +6,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import likelion.sku_sku.domain.Lion;
+import likelion.sku_sku.domain.RoleType;
 import likelion.sku_sku.repository.LionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,11 @@ public class AuthService {
 
     public ResponseEntity<?> googleLogin(Map<String, String> requestPayload) {
         String token = requestPayload.get("token");
+
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token is missing or empty");
+        }
+
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), JSON_FACTORY)
                 .setAudience(Collections.singletonList(googleClientId))
                 .build();
@@ -39,25 +45,28 @@ public class AuthService {
         GoogleIdToken idToken;
         try {
             idToken = verifier.verify(token);
+            if (idToken == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Google token");
+            }
         } catch (GeneralSecurityException | IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Token verification failed");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Token verification failed: " + e.getMessage());
         }
 
-        if (idToken != null) {
-            GoogleIdToken.Payload googlePayload = idToken.getPayload();
-            String userId = googlePayload.getSubject();
-            String email = googlePayload.getEmail();
+        GoogleIdToken.Payload googlePayload = idToken.getPayload();
+        String email = googlePayload.getEmail();
 
-            Optional<Lion> optionalLion = lionRepository.findByEmail(email);
-            if (optionalLion.isPresent()) {
-                Lion lion = optionalLion.get();
-                String jwtToken = jwtService.createJwtToken(userId, email, lion.getRole());
+        Optional<Lion> optionalLion = lionRepository.findByEmail(email);
+        if (optionalLion.isPresent()) {
+            Lion lion = optionalLion.get();
+            if (email.endsWith("@sungkyul.ac.kr") && (lion.getRole() == RoleType.BABY_LION || lion.getRole() == RoleType.ADMIN_LION)) {
+                String jwtToken = jwtService.createJwtToken(email, lion.getRole());
                 return ResponseEntity.ok(Collections.singletonMap("token", jwtToken));
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not have the required role");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Google token");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
         }
     }
 }

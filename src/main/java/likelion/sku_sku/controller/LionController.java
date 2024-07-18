@@ -19,7 +19,7 @@ import static likelion.sku_sku.dto.LionDTO.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/lion")
-//@PreAuthorize("hasRole('ADMIN_LION')")
+@PreAuthorize("hasRole('ADMIN_LION')")
 @Tag(name = "관리자 페이지: lion 관련")
 public class LionController {
     private final LionService lionService;
@@ -50,7 +50,6 @@ public class LionController {
         Lion lion = lionService.updateLionRole(request.getId(), request.getRoleType());
         return lion != null ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
-
 
     @Operation(summary = "(민규) lion 이름으로 조회", description = "lion 이름 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 lion 이름, lion 이메일, lion 권한이 출력."),

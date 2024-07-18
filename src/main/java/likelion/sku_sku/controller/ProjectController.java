@@ -19,7 +19,7 @@ import static likelion.sku_sku.dto.ProjectDTO.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/project")
-//@PreAuthorize("hasRole('ADMIN_LION')")
+@PreAuthorize("hasRole('ADMIN_LION')")
 @Tag(name = "관리자 페이지: 프로젝트 관련")
 public class ProjectController {
 
@@ -47,8 +47,8 @@ public class ProjectController {
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 프로젝트 제목, 프로젝트 부제목, 프로젝트 사진이 출력."),
                     @ApiResponse(responseCode = "404", description = "")})
     @GetMapping("")
-    public ResponseEntity<ResponseProjectUpdate> findProject(@RequestParam String title) {
-        ResponseProjectUpdate responseProject = projectService.findProject(title);
+    public ResponseEntity<ResponseProjectUpdate> findProject(TitleRequest request) {
+        ResponseProjectUpdate responseProject = projectService.findProject(request.getTitle());
         if (responseProject != null) {
             return ResponseEntity.status(HttpStatus.OK).body(responseProject);
         } else {

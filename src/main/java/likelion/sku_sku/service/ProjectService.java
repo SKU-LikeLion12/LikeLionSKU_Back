@@ -33,13 +33,16 @@ public class ProjectService {
     public Project updateProject(Long id, String classTh, String title, String subTitle, MultipartFile image) throws IOException {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("그런 id 가진 project 없지롱"));
-
-        if (image != null) {
+        if (projectRepository.findByTitle(title).isPresent()) {
+            throw new IllegalArgumentException("title 이미 있지롱");
+        }
+        if (image != null && !image.isEmpty()) {
             project.setImage(image);
         }
-        String newClassTh = (classTh != null ? classTh : project.getClassTh());
-        String newTitle = (title != null ? title : project.getTitle());
-        String newSubTitle = (subTitle != null ? subTitle : project.getSubTitle());
+
+        String newClassTh = (classTh != null && !classTh.isEmpty() ? classTh : project.getClassTh());
+        String newTitle = (title != null && !title.isEmpty() ? title : project.getTitle());
+        String newSubTitle = (subTitle != null && !subTitle.isEmpty() ? subTitle : project.getSubTitle());
         project.changeProject(newClassTh, newTitle, newSubTitle);
         return project;
     }

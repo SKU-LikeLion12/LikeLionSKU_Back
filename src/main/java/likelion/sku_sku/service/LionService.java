@@ -24,7 +24,21 @@ public class LionService {
         Lion lion = new Lion(name, email, role);
         return lionRepository.save(lion);
     }
+    @Transactional
+    public Lion updateLion(Long id, String name, String email, RoleType role) {
+        Lion lion = lionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("그런 Lion 없는디요"));
 
+        if (lionRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("그 email 이미 있지롱");
+        }
+
+        String newName = (name != null && !name.isEmpty() ? name : lion.getName());
+        String newEmail = (email != null && !email.isEmpty() ? email : lion.getEmail());
+        RoleType newRole = (role != null ? role : lion.getRole());
+        lion.update(newName, newEmail, newRole);
+        return lionRepository.save(lion);
+    }
     public List<Lion> getLionsByName(String name) {
         return lionRepository.findByName(name);
     }
@@ -35,14 +49,6 @@ public class LionService {
 
     public List<Lion> getAllLions() {
         return lionRepository.findAll();
-    }
-
-    @Transactional
-    public Lion updateLion(Long id, String name, String email, RoleType role) {
-        Lion lion = lionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("그런 Lion 없는디요"));
-        lion.update(name, email, role);
-        return lionRepository.save(lion);
     }
 
     @Transactional

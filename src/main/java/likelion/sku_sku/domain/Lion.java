@@ -14,7 +14,7 @@ public class Lion {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    private RoleType role = RoleType.BABY_LION;
+    private RoleType role;
 
     public Lion(String name, String email, RoleType role) {
         this.name = name;

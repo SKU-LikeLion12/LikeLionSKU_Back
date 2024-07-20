@@ -8,6 +8,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import likelion.sku_sku.domain.Lion;
 import likelion.sku_sku.domain.RoleType;
 import likelion.sku_sku.repository.LionRepository;
+import likelion.sku_sku.security.JwtUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ import java.util.Optional;
 public class AuthService {
 
     private final LionRepository lionRepository;
-    private final JwtService jwtService;
+    private final JwtUtility jwtService;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
     @Value("${GOOGLE_CLIENT_ID}")

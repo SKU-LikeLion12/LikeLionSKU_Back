@@ -51,8 +51,8 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public ResponseProjectUpdate findProject(String title) {
-        return projectRepository.findByTitle(title)
+    public ResponseProjectUpdate findProjectById(Long id) {
+        return projectRepository.findById(id)
                 .map(project -> new ResponseProjectUpdate(
                         project.getClassTh(),
                         project.getTitle(),
@@ -62,9 +62,9 @@ public class ProjectService {
     }
 
     @Transactional
-    public void deleteProject(String title) {
-        Project project = projectRepository.findByTitle(title)
-                .orElseThrow(() -> new RuntimeException("그런 title 가진 project 없지롱" + title));
+    public void deleteProjectById(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("그런 id 가진 Project 없지롱: " + id));
         projectRepository.delete(project);
     }
 }

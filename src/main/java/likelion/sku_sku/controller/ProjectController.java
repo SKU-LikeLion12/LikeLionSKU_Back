@@ -63,12 +63,12 @@ public class ProjectController {
         }
     }
 
-    @Operation(summary = "(민규) Project 개별 정보 조회", description = "Headers에 Bearer token 필요, Project의 title 필요",
+    @Operation(summary = "(민규) id로 Project 개별 정보 조회", description = "Headers에 Bearer token 필요, Project의 ID 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 프로젝트 제목, 프로젝트 부제목, 프로젝트 사진이 출력."),
-                    @ApiResponse(responseCode = "404", description = "그런 Project 없는디요")})
-    @GetMapping("")
-    public ResponseEntity<ResponseProjectUpdate> findProject(TitleRequest request) {
-        ResponseProjectUpdate responseProject = projectService.findProject(request.getTitle());
+                    @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없는디요")})
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseProjectUpdate> findProjectById(@PathVariable("id") Long id) {
+        ResponseProjectUpdate responseProject = projectService.findProjectById(id);
         if (responseProject != null) {
             return ResponseEntity.status(HttpStatus.OK).body(responseProject);
         } else {
@@ -88,13 +88,13 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(projects);
     }
 
-    @Operation(summary = "(민규) Project 삭제", description = "Headers에 Bearer token 필요, Project의 name 필요",
-            responses = {@ApiResponse(responseCode = "200", description = "프로젝트 삭제 성공"),
-                    @ApiResponse(responseCode = "404", description = "그런 title 가진 Project 없는디요")})
-    @DeleteMapping("")
-    public ResponseEntity<String> deleteProject(@RequestBody TitleRequest request) {
+    @Operation(summary = "(민규) Project 삭제", description = "Headers에 Bearer token 필요, Project의 id 필요",
+              responses = {@ApiResponse(responseCode = "200", description = "프로젝트 삭제 성공"),
+        @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없는디요")})
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteProject(@PathVariable("id") Long id) {
         try {
-            projectService.deleteProject(request.getTitle());
+            projectService.deleteProjectById(id);
             return ResponseEntity.ok("Project 삭제 성공");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

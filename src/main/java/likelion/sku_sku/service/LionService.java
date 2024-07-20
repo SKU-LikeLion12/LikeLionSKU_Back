@@ -2,17 +2,14 @@ package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Lion;
 import likelion.sku_sku.domain.RoleType;
-import likelion.sku_sku.dto.LionDTO;
-import likelion.sku_sku.dto.ProjectDTO;
 import likelion.sku_sku.repository.LionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
-import static likelion.sku_sku.dto.LionDTO.*;
+import static likelion.sku_sku.dto.LionDTO.ResponseLionUpdate;
 
 @Service
 @RequiredArgsConstructor

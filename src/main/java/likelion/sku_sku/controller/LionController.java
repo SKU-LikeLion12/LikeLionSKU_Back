@@ -12,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import static likelion.sku_sku.dto.LionDTO.*;
 
@@ -72,7 +71,6 @@ public class LionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
 
     @Operation(summary = "(민규) 모든 Lion에 대한 정보 조회", description = "Headers에 Bearer token 필요",
             responses = {@ApiResponse(responseCode = "200", description = "모든 Lion 조회 성공"),

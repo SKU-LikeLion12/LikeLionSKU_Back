@@ -17,17 +17,17 @@ public class JwtUtility {
 
     public String createJwtToken(String email, RoleType role) {
         return Jwts.builder()
-                .setSubject(email)
-                .claim("email", email)
-                .claim("role", role.name())  // 역할 정보 클레임에 포함
+                .setSubject(email) // 주체를 email로 설정
+                .claim("email", email) // 클레임에 email 포함
+                .claim("role", role.name())  // 클레임에 role 포함
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1일 유효기간
                 .signWith(SignatureAlgorithm.HS512, jwtSecretKey)
-                .compact();
+                .compact(); // jwt 직렬화 하여 압축된 문자열로 반환
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token); // 토큰을 비밀 키를 사용하여 파싱 및 검증
             return true;
         } catch (Exception e) {
             return false;
@@ -35,6 +35,6 @@ public class JwtUtility {
     }
 
     public Claims getClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token).getBody(); // jwt를 파싱하여 클레임 추출 및 반환
     }
 }

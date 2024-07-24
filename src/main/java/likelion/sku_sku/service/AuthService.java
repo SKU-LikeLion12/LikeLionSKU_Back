@@ -29,7 +29,7 @@ public class AuthService {
     private final JwtUtility jwtService;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance(); // JSON 처리를 위한 Jackson 라이브러리의 인스턴스
 
-    @Value("${GOOGLE_CLIENT_ID}")
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
 
     // 클라이언트로부터 받은 요청 데이터에서 토큰 추출

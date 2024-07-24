@@ -1,6 +1,8 @@
 package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Project;
+import likelion.sku_sku.exception.IllegalProjectException;
+import likelion.sku_sku.exception.IllegalTitleException;
 import likelion.sku_sku.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class ProjectService {
     @Transactional
     public Project addProject(String classTh, String title, String subTitle, MultipartFile image) throws IOException {
         if (projectRepository.findByTitle(title).isPresent()) {
-            throw new IllegalArgumentException("title 이미 있지롱");
+            throw new IllegalTitleException("그 title 이미 있");
         }
         byte[] imageBytes = image.getBytes();
         Project project = new Project(classTh, title, subTitle, imageBytes);
@@ -32,9 +34,9 @@ public class ProjectService {
     @Transactional
     public Project updateProject(Long id, String classTh, String title, String subTitle, MultipartFile image) throws IOException {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("그런 id 가진 project 없지롱"));
+                .orElseThrow(() -> new IllegalProjectException("그런 id 가진 project 없"));
         if (projectRepository.findByTitle(title).isPresent()) {
-            throw new IllegalArgumentException("title 이미 있지롱");
+            throw new IllegalTitleException("그 title 이미 있");
         }
         if (image != null && !image.isEmpty()) {
             project.setImage(image);
@@ -64,7 +66,7 @@ public class ProjectService {
     @Transactional
     public void deleteProjectById(Long id) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("그런 id 가진 Project 없지롱: " + id));
+                .orElseThrow(() -> new IllegalProjectException("그런 id 가진 Project 없"));
         projectRepository.delete(project);
     }
 }

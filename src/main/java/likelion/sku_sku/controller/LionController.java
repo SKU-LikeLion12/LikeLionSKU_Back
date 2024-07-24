@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.sku_sku.domain.Lion;
+import likelion.sku_sku.exception.IllegalEmailException;
+import likelion.sku_sku.exception.IllegalLionException;
 import likelion.sku_sku.exception.InvalidRoleException;
 import likelion.sku_sku.service.LionService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ public class LionController {
 
     @Operation(summary = "(민규) Lion 추가", description = "Headers에 Bearer token 필요, Lion의 name, email, role 필요",
             responses = {@ApiResponse(responseCode = "201", description = "Lion 생성 성공, Lion 객체 반환"),
-                    @ApiResponse(responseCode = "409", description = "그 email 이미 있지롱")})
+                    @ApiResponse(responseCode = "409", description = "그 email 이미 있")})
     @PostMapping("/add")
     public ResponseEntity<?> addLion(LionCreateRequest request) {
         try {
@@ -37,15 +39,15 @@ public class LionController {
             return ResponseEntity.status(HttpStatus.CREATED).body(lion);
         } catch (InvalidRoleException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalEmailException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 
     @Operation(summary = "(민규) Lion 수정", description = "Headers에 Bearer token 필요, Lion의 id, name, email, role 필요",
             responses = {@ApiResponse(responseCode = "201", description = "Lion 수정 성공, 수정된 Lion 객체 반환"),
-                    @ApiResponse(responseCode = "409", description = "그 name 이미 있지롱"),
-                    @ApiResponse(responseCode = "404", description = "그런 Lion 없는디요")})
+                    @ApiResponse(responseCode = "409", description = "그 email 이미 있"),
+                    @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없")})
     @PutMapping("/update")
     public ResponseEntity<?> updateLion(LionUpdateRequest request) {
         try {
@@ -55,19 +57,19 @@ public class LionController {
                     request.getEmail(),
                     request.getRoleType());
             return ResponseEntity.status(HttpStatus.CREATED).body(lion);
-        } catch (InvalidRoleException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (RuntimeException e) {
+        } catch (IllegalLionException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (InvalidRoleException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (IllegalEmailException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 
 
     @Operation(summary = "(민규) id로 Lion 개별 정보 조회", description = "Headers에 Bearer token 필요, Lion의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 Lion 이름, 이메일, 역할이 출력."),
-                    @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없는디요")})
+                    @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없")})
     @GetMapping("/{id}")
         public ResponseEntity<ResponseLionUpdate> findLionById(@PathVariable("id") Long id) {
         ResponseLionUpdate responseLion = lionService.findLionById(id);
@@ -80,7 +82,7 @@ public class LionController {
 
     @Operation(summary = "(민규) 모든 Lion에 대한 정보 조회", description = "Headers에 Bearer token 필요",
             responses = {@ApiResponse(responseCode = "200", description = "모든 Lion 조회 성공"),
-                    @ApiResponse(responseCode = "404", description = "Lion이 한명도 없는디요")})
+                    @ApiResponse(responseCode = "404", description = "Lion이 한명도 없")})
     @GetMapping("/all")
     public ResponseEntity<List<Lion>> getAllLions() {
         List<Lion> lions = lionService.getAllLions();
@@ -92,13 +94,13 @@ public class LionController {
 
     @Operation(summary = "(민규) Lion 삭제", description = "Headers에 Bearer token 필요, Lion의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "Lion 삭제 성공"),
-                    @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없지롱")})
+                    @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없")})
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteLion(@PathVariable("id") Long id) {
         try {
             lionService.deleteLionById(id);
             return ResponseEntity.ok("Lion 삭제 성공");
-        } catch (RuntimeException e) {
+        } catch (IllegalLionException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

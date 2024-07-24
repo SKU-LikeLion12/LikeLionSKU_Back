@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.sku_sku.domain.Lion;
+import likelion.sku_sku.exception.InvalidRoleException;
 import likelion.sku_sku.service.LionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,8 @@ public class LionController {
                     request.getEmail(),
                     request.getRoleType());
             return ResponseEntity.status(HttpStatus.CREATED).body(lion);
+        } catch (InvalidRoleException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
@@ -52,12 +55,15 @@ public class LionController {
                     request.getEmail(),
                     request.getRoleType());
             return ResponseEntity.status(HttpStatus.CREATED).body(lion);
+        } catch (InvalidRoleException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
 
     @Operation(summary = "(민규) id로 Lion 개별 정보 조회", description = "Headers에 Bearer token 필요, Lion의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 Lion 이름, 이메일, 역할이 출력."),

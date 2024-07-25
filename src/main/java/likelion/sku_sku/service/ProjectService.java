@@ -1,8 +1,8 @@
 package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Project;
-import likelion.sku_sku.exception.IllegalProjectIdException;
-import likelion.sku_sku.exception.IllegalTitleException;
+import likelion.sku_sku.exception.InvalidProjectIdException;
+import likelion.sku_sku.exception.InvalidTitleException;
 import likelion.sku_sku.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class ProjectService {
     @Transactional
     public Project addProject(String classTh, String title, String subTitle, MultipartFile image) throws IOException {
         if (projectRepository.findByTitle(title).isPresent()) {
-            throw new IllegalTitleException("그 title 이미 있");
+            throw new InvalidTitleException();
         }
         byte[] imageBytes = image.getBytes();
         Project project = new Project(classTh, title, subTitle, imageBytes);
@@ -34,16 +34,15 @@ public class ProjectService {
     @Transactional
     public Project updateProject(Long id, String classTh, String title, String subTitle, MultipartFile image) throws IOException {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new IllegalProjectIdException("그런 id 가진 project 없"));
-        if (projectRepository.findByTitle(title).isPresent()) {
-            throw new IllegalTitleException("그 title 이미 있");
-        }
+                .orElseThrow(InvalidProjectIdException::new);
         if (image != null && !image.isEmpty()) {
             project.setImage(image);
         }
-
         String newClassTh = (classTh != null && !classTh.isEmpty() ? classTh : project.getClassTh());
         String newTitle = (title != null && !title.isEmpty() ? title : project.getTitle());
+        if (!newTitle.equals(project.getTitle()) && projectRepository.findByTitle(title).isPresent()) {
+            throw new InvalidTitleException();
+        }
         String newSubTitle = (subTitle != null && !subTitle.isEmpty() ? subTitle : project.getSubTitle());
         project.changeProject(newClassTh, newTitle, newSubTitle);
         return project;
@@ -66,7 +65,7 @@ public class ProjectService {
     @Transactional
     public void deleteProjectById(Long id) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new IllegalProjectIdException("그런 id 가진 Project 없"));
+                .orElseThrow(InvalidProjectIdException::new);
         projectRepository.delete(project);
     }
 }

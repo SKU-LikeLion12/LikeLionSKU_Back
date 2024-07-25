@@ -1,7 +1,7 @@
 package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Project;
-import likelion.sku_sku.exception.IllegalProjectException;
+import likelion.sku_sku.exception.IllegalProjectIdException;
 import likelion.sku_sku.exception.IllegalTitleException;
 import likelion.sku_sku.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class ProjectService {
     @Transactional
     public Project updateProject(Long id, String classTh, String title, String subTitle, MultipartFile image) throws IOException {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new IllegalProjectException("그런 id 가진 project 없"));
+                .orElseThrow(() -> new IllegalProjectIdException("그런 id 가진 project 없"));
         if (projectRepository.findByTitle(title).isPresent()) {
             throw new IllegalTitleException("그 title 이미 있");
         }
@@ -66,7 +66,7 @@ public class ProjectService {
     @Transactional
     public void deleteProjectById(Long id) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new IllegalProjectException("그런 id 가진 Project 없"));
+                .orElseThrow(() -> new IllegalProjectIdException("그런 id 가진 Project 없"));
         projectRepository.delete(project);
     }
 }

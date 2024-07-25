@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.sku_sku.domain.Lion;
 import likelion.sku_sku.exception.IllegalEmailException;
-import likelion.sku_sku.exception.IllegalLionException;
+import likelion.sku_sku.exception.IllegalLionIdException;
 import likelion.sku_sku.exception.InvalidRoleException;
 import likelion.sku_sku.service.LionService;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +57,7 @@ public class LionController {
                     request.getEmail(),
                     request.getRoleType());
             return ResponseEntity.status(HttpStatus.CREATED).body(lion);
-        } catch (IllegalLionException e) {
+        } catch (IllegalLionIdException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch (InvalidRoleException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -100,7 +100,7 @@ public class LionController {
         try {
             lionService.deleteLionById(id);
             return ResponseEntity.ok("Lion 삭제 성공");
-        } catch (IllegalLionException e) {
+        } catch (IllegalLionIdException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

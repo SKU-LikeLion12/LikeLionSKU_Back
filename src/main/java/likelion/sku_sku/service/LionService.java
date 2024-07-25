@@ -2,8 +2,8 @@ package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Lion;
 import likelion.sku_sku.domain.RoleType;
-import likelion.sku_sku.exception.IllegalEmailException;
-import likelion.sku_sku.exception.IllegalLionIdException;
+import likelion.sku_sku.exception.InvalidEmailException;
+import likelion.sku_sku.exception.InvalidLionIdException;
 import likelion.sku_sku.exception.InvalidRoleException;
 import likelion.sku_sku.repository.LionRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +23,10 @@ public class LionService {
     @Transactional
     public Lion addLion(String name, String email, RoleType role) {
         if (role != RoleType.ADMIN_LION && role != RoleType.BABY_LION) {
-            throw new InvalidRoleException("잘못된 role 값");
+            throw new InvalidRoleException();
         }
         if (lionRepository.findByEmail(email).isPresent()) {
-            throw new IllegalEmailException("그 email 이미 있");
+            throw new InvalidEmailException();
         }
         Lion lion = new Lion(name, email, role);
         return lionRepository.save(lion);
@@ -35,16 +35,16 @@ public class LionService {
     @Transactional
     public Lion updateLion(Long id, String name, String email, RoleType role) {
         Lion lion = lionRepository.findById(id)
-                .orElseThrow(() -> new IllegalLionIdException("그런 id 가진 Lion 없"));
-        RoleType newRole = (role != null ? role : lion.getRole());
-        if (newRole != RoleType.ADMIN_LION && newRole != RoleType.BABY_LION) {
-            throw new InvalidRoleException("잘못된 role 값");
-        }
-        if (lionRepository.findByEmail(email).isPresent()) {
-            throw new IllegalEmailException("그 email 이미 있");
-        }
+                .orElseThrow(InvalidLionIdException::new);
         String newName = (name != null && !name.isEmpty() ? name : lion.getName());
         String newEmail = (email != null && !email.isEmpty() ? email : lion.getEmail());
+        if (!newEmail.equals(lion.getEmail()) && lionRepository.findByEmail(email).isPresent()) {
+            throw new InvalidEmailException();
+        }
+        RoleType newRole = (role != null ? role : lion.getRole());
+        if (newRole != RoleType.ADMIN_LION && newRole != RoleType.BABY_LION) {
+            throw new InvalidRoleException();
+        }
         lion.update(newName, newEmail, newRole);
         return lionRepository.save(lion);
     }
@@ -65,7 +65,7 @@ public class LionService {
     @Transactional
     public void deleteLionById(Long id) {
         Lion lion = lionRepository.findById(id)
-                .orElseThrow(() -> new IllegalLionIdException("그런 id 가진 Lion 없"));
+                .orElseThrow(InvalidLionIdException::new);
         lionRepository.delete(lion);
     }
 }

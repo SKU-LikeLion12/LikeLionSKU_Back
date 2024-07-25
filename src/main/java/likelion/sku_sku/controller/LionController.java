@@ -4,9 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.sku_sku.domain.Lion;
-import likelion.sku_sku.exception.IllegalEmailException;
-import likelion.sku_sku.exception.IllegalLionIdException;
-import likelion.sku_sku.exception.InvalidRoleException;
 import likelion.sku_sku.service.LionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,18 +27,12 @@ public class LionController {
             responses = {@ApiResponse(responseCode = "201", description = "Lion 생성 성공, Lion 객체 반환"),
                     @ApiResponse(responseCode = "409", description = "그 email 이미 있")})
     @PostMapping("/add")
-    public ResponseEntity<?> addLion(LionCreateRequest request) {
-        try {
-            Lion lion = lionService.addLion(
-                    request.getName(),
-                    request.getEmail(),
-                    request.getRoleType());
-            return ResponseEntity.status(HttpStatus.CREATED).body(lion);
-        } catch (InvalidRoleException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (IllegalEmailException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+    public ResponseEntity<Lion> addLion(@RequestBody LionCreateRequest request) {
+        Lion lion = lionService.addLion(
+                request.getName(),
+                request.getEmail(),
+                request.getRoleType());
+        return ResponseEntity.status(HttpStatus.CREATED).body(lion);
     }
 
     @Operation(summary = "(민규) Lion 수정", description = "Headers에 Bearer token 필요, Lion의 id, name, email, role 필요",
@@ -49,29 +40,20 @@ public class LionController {
                     @ApiResponse(responseCode = "409", description = "그 email 이미 있"),
                     @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없")})
     @PutMapping("/update")
-    public ResponseEntity<?> updateLion(LionUpdateRequest request) {
-        try {
-            Lion lion = lionService.updateLion(
-                    request.getId(),
-                    request.getName(),
-                    request.getEmail(),
-                    request.getRoleType());
-            return ResponseEntity.status(HttpStatus.CREATED).body(lion);
-        } catch (IllegalLionIdException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (InvalidRoleException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (IllegalEmailException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+    public ResponseEntity<Lion> updateLion(@RequestBody LionUpdateRequest request) {
+        Lion lion = lionService.updateLion(
+                request.getId(),
+                request.getName(),
+                request.getEmail(),
+                request.getRoleType());
+        return ResponseEntity.status(HttpStatus.CREATED).body(lion);
     }
-
 
     @Operation(summary = "(민규) id로 Lion 개별 정보 조회", description = "Headers에 Bearer token 필요, Lion의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 Lion 이름, 이메일, 역할이 출력."),
                     @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없")})
     @GetMapping("/{id}")
-        public ResponseEntity<ResponseLionUpdate> findLionById(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseLionUpdate> findLionById(@PathVariable("id") Long id) {
         ResponseLionUpdate responseLion = lionService.findLionById(id);
         if (responseLion != null) {
             return ResponseEntity.status(HttpStatus.OK).body(responseLion);
@@ -97,11 +79,7 @@ public class LionController {
                     @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없")})
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteLion(@PathVariable("id") Long id) {
-        try {
-            lionService.deleteLionById(id);
-            return ResponseEntity.ok("Lion 삭제 성공");
-        } catch (IllegalLionIdException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        lionService.deleteLionById(id);
+        return ResponseEntity.ok("Lion 삭제 성공");
     }
 }

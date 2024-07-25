@@ -4,8 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.sku_sku.domain.Project;
-import likelion.sku_sku.exception.IllegalProjectIdException;
-import likelion.sku_sku.exception.IllegalTitleException;
 import likelion.sku_sku.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,16 +30,12 @@ public class ProjectController {
                     @ApiResponse(responseCode = "409", description = "그 title 이미 있")})
     @PostMapping("/add")
     public ResponseEntity<?> addProject(ProjectCreateRequest request) throws IOException {
-        try {
             Project project = projectService.addProject(
                     request.getClassTh(),
                     request.getTitle(),
                     request.getSubTitle(),
                     request.getImage());
             return ResponseEntity.status(HttpStatus.CREATED).body(project);
-        } catch (IllegalTitleException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
     }
 
     @Operation(summary = "(민규) Project 수정", description = "Headers에 Bearer token 필요, Project의 id, title, subTitle 필요, image는 안바꾸고 싶으면 안넣으면 됨",
@@ -50,7 +44,6 @@ public class ProjectController {
                     @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없")})
     @PutMapping("/update")
     public ResponseEntity<?> updateProject(ProjectUpdateRequest request) throws IOException {
-        try {
             Project project = projectService.updateProject(
                     request.getId(),
                     request.getClassTh(),
@@ -58,11 +51,6 @@ public class ProjectController {
                     request.getSubTitle(),
                     request.getImage());
             return ResponseEntity.status(HttpStatus.CREATED).body(project);
-        } catch (IllegalProjectIdException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (IllegalTitleException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
     }
 
     @Operation(summary = "(민규) id로 Project 개별 정보 조회", description = "Headers에 Bearer token 필요, Project의 ID 필요",
@@ -95,11 +83,7 @@ public class ProjectController {
         @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없")})
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProject(@PathVariable("id") Long id) {
-        try {
             projectService.deleteProjectById(id);
             return ResponseEntity.ok("Project 삭제 성공");
-        } catch (IllegalProjectIdException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
     }
 }

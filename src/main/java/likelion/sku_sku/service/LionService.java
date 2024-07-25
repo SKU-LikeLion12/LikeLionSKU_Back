@@ -3,7 +3,7 @@ package likelion.sku_sku.service;
 import likelion.sku_sku.domain.Lion;
 import likelion.sku_sku.domain.RoleType;
 import likelion.sku_sku.exception.IllegalEmailException;
-import likelion.sku_sku.exception.IllegalLionException;
+import likelion.sku_sku.exception.IllegalLionIdException;
 import likelion.sku_sku.exception.InvalidRoleException;
 import likelion.sku_sku.repository.LionRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class LionService {
     @Transactional
     public Lion updateLion(Long id, String name, String email, RoleType role) {
         Lion lion = lionRepository.findById(id)
-                .orElseThrow(() -> new IllegalLionException("그런 id 가진 Lion 없"));
+                .orElseThrow(() -> new IllegalLionIdException("그런 id 가진 Lion 없"));
         RoleType newRole = (role != null ? role : lion.getRole());
         if (newRole != RoleType.ADMIN_LION && newRole != RoleType.BABY_LION) {
             throw new InvalidRoleException("잘못된 role 값");
@@ -65,7 +65,7 @@ public class LionService {
     @Transactional
     public void deleteLionById(Long id) {
         Lion lion = lionRepository.findById(id)
-                .orElseThrow(() -> new IllegalLionException("그런 id 가진 Lion 없"));
+                .orElseThrow(() -> new IllegalLionIdException("그런 id 가진 Lion 없"));
         lionRepository.delete(lion);
     }
 }

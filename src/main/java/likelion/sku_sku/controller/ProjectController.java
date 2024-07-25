@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.sku_sku.domain.Project;
-import likelion.sku_sku.exception.IllegalProjectException;
+import likelion.sku_sku.exception.IllegalProjectIdException;
 import likelion.sku_sku.exception.IllegalTitleException;
 import likelion.sku_sku.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +58,7 @@ public class ProjectController {
                     request.getSubTitle(),
                     request.getImage());
             return ResponseEntity.status(HttpStatus.CREATED).body(project);
-        } catch (IllegalProjectException e) {
+        } catch (IllegalProjectIdException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch (IllegalTitleException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
@@ -98,7 +98,7 @@ public class ProjectController {
         try {
             projectService.deleteProjectById(id);
             return ResponseEntity.ok("Project 삭제 성공");
-        } catch (IllegalProjectException e) {
+        } catch (IllegalProjectIdException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

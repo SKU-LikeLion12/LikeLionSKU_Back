@@ -33,11 +33,17 @@ public class GlobalExceptionHandler {
     // Project
     @ExceptionHandler(InvalidProjectIdException.class)
     public ResponseEntity<String> invalidProjectId(InvalidProjectIdException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그런 id 가진 project 없");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그런 id 가진 Project 없");
     }
 
     @ExceptionHandler(InvalidTitleException.class)
     public ResponseEntity<String> invalidTitle(InvalidTitleException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("그 title 이미 있");
+    }
+
+    // Article
+    @ExceptionHandler(InvalidArticleIdException.class)
+    public ResponseEntity<String> invalidArticleId(InvalidArticleIdException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그런 id 가진 Article 없");
     }
 }

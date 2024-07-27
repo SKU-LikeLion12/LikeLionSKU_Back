@@ -16,7 +16,7 @@ public class JwtUtility {
     private String jwtKey;
 
     @Value("${jwt.expire-length}")
-    private String expireLength;
+    private long expireLength;
 
     public String createJwtToken(String email, RoleType role) {
         return Jwts.builder()

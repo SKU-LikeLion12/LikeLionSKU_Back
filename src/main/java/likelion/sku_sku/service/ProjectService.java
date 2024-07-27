@@ -1,7 +1,7 @@
 package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Project;
-import likelion.sku_sku.exception.InvalidProjectIdException;
+import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.exception.InvalidTitleException;
 import likelion.sku_sku.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class ProjectService {
     @Transactional
     public Project updateProject(Long id, String classTh, String title, String subTitle, MultipartFile image) throws IOException {
         Project project = projectRepository.findById(id)
-                .orElseThrow(InvalidProjectIdException::new);
+                .orElseThrow(InvalidIdException::new);
         if (image != null && !image.isEmpty()) {
             project.setImage(image);
         }
@@ -65,7 +65,7 @@ public class ProjectService {
     @Transactional
     public void deleteProjectById(Long id) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(InvalidProjectIdException::new);
+                .orElseThrow(InvalidIdException::new);
         projectRepository.delete(project);
     }
 }

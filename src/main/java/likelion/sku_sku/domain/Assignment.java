@@ -12,5 +12,12 @@ import lombok.NoArgsConstructor;
 public class Assignment {
     @Id @GeneratedValue
     private Long id;
+    private String title;
 
+    public Assignment(String title) {
+        this.title = title;
+    }
+    public void update(String title) {
+        this.title = title;
+    }
 }

@@ -3,6 +3,7 @@ package likelion.sku_sku.service;
 import likelion.sku_sku.domain.Lion;
 import likelion.sku_sku.domain.RoleType;
 import likelion.sku_sku.exception.InvalidEmailException;
+import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.exception.InvalidLionIdException;
 import likelion.sku_sku.exception.InvalidRoleException;
 import likelion.sku_sku.repository.LionRepository;
@@ -35,7 +36,7 @@ public class LionService {
     @Transactional
     public Lion updateLion(Long id, String name, String email, RoleType role) {
         Lion lion = lionRepository.findById(id)
-                .orElseThrow(InvalidLionIdException::new);
+                .orElseThrow(InvalidIdException::new);
         String newName = (name != null && !name.isEmpty() ? name : lion.getName());
         String newEmail = (email != null && !email.isEmpty() ? email : lion.getEmail());
         if (!newEmail.equals(lion.getEmail()) && lionRepository.findByEmail(email).isPresent()) {
@@ -65,7 +66,7 @@ public class LionService {
     @Transactional
     public void deleteLionById(Long id) {
         Lion lion = lionRepository.findById(id)
-                .orElseThrow(InvalidLionIdException::new);
+                .orElseThrow(InvalidIdException::new);
         lionRepository.delete(lion);
     }
 }

@@ -9,15 +9,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    // All
+    @ExceptionHandler(InvalidIdException.class)
+    public ResponseEntity<String> invalidId(InvalidIdException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그 id에 해당하는 값 없");
+    }
+
     // Lion
     @ExceptionHandler(InvalidEmailException.class)
     public ResponseEntity<String> invalidEmail(InvalidEmailException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("그 email 이미 있");
-    }
-
-    @ExceptionHandler(InvalidLionIdException.class)
-    public ResponseEntity<String> invalidLionId(InvalidLionIdException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그런 id 가진 Lion 없");
     }
 
     @ExceptionHandler(InvalidRoleException.class)
@@ -25,25 +26,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 role 값");
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<String> handleGlobalException(Exception e) {
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다: " + e.getMessage());
-//    }
-
     // Project
-    @ExceptionHandler(InvalidProjectIdException.class)
-    public ResponseEntity<String> invalidProjectId(InvalidProjectIdException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그런 id 가진 Project 없");
-    }
-
     @ExceptionHandler(InvalidTitleException.class)
     public ResponseEntity<String> invalidTitle(InvalidTitleException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("그 title 이미 있");
     }
 
     // Article
-    @ExceptionHandler(InvalidArticleIdException.class)
-    public ResponseEntity<String> invalidArticleId(InvalidArticleIdException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그런 id 가진 Article 없");
-    }
+
+
+    // Assignment
+
+
+    // LectureFile
+
+
 }

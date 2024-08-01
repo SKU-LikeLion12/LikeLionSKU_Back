@@ -12,19 +12,22 @@ public class Lion {
     private Long id;
     private String name;
     private String email;
-
+    @Enumerated(EnumType.STRING)
+    private TrackType track;
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
-    public Lion(String name, String email, RoleType role) {
+    public Lion(String name, String email, TrackType track, RoleType role) {
         this.name = name;
         this.email = email;
+        this.track = track;
         this.role = role;
     }
 
-    public void update(String name, String email, RoleType role) {
+    public void update(String name, String email, TrackType track, RoleType role) {
         this.name = name;
         this.email = email;
+        this.track = track;
         this.role = role;
     }
 

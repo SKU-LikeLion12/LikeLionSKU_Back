@@ -9,6 +9,7 @@ public class LectureFileDTO {
 
     @Data
     public static class uploadLectureFileRequest {
+        private Long articleId;
         private List<MultipartFile> files;
     }
 }

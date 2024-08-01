@@ -2,10 +2,8 @@ package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Lion;
 import likelion.sku_sku.domain.RoleType;
-import likelion.sku_sku.exception.InvalidEmailException;
-import likelion.sku_sku.exception.InvalidIdException;
-import likelion.sku_sku.exception.InvalidLionIdException;
-import likelion.sku_sku.exception.InvalidRoleException;
+import likelion.sku_sku.domain.TrackType;
+import likelion.sku_sku.exception.*;
 import likelion.sku_sku.repository.LionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,31 +20,24 @@ public class LionService {
     private final LionRepository lionRepository;
 
     @Transactional
-    public Lion addLion(String name, String email, RoleType role) {
-        if (role != RoleType.ADMIN_LION && role != RoleType.BABY_LION) {
-            throw new InvalidRoleException();
-        }
+    public Lion addLion(String name, String email, TrackType track, RoleType role) {
         if (lionRepository.findByEmail(email).isPresent()) {
             throw new InvalidEmailException();
         }
-        Lion lion = new Lion(name, email, role);
+        Lion lion = new Lion(name, email, track, role);
         return lionRepository.save(lion);
     }
 
     @Transactional
-    public Lion updateLion(Long id, String name, String email, RoleType role) {
+    public Lion updateLion(Long id, String name, String email, TrackType track, RoleType role) {
         Lion lion = lionRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         String newName = (name != null && !name.isEmpty() ? name : lion.getName());
         String newEmail = (email != null && !email.isEmpty() ? email : lion.getEmail());
-        if (!newEmail.equals(lion.getEmail()) && lionRepository.findByEmail(email).isPresent()) {
-            throw new InvalidEmailException();
-        }
+        TrackType newTrack = (track != null ? track : lion.getTrack());
         RoleType newRole = (role != null ? role : lion.getRole());
-        if (newRole != RoleType.ADMIN_LION && newRole != RoleType.BABY_LION) {
-            throw new InvalidRoleException();
-        }
-        lion.update(newName, newEmail, newRole);
+
+        lion.update(newName, newEmail, newTrack, newRole);
         return lionRepository.save(lion);
     }
 
@@ -59,6 +50,7 @@ public class LionService {
                 .map(lion -> new ResponseLionUpdate(
                         lion.getName(),
                         lion.getEmail(),
+                        lion.getTrack(),
                         lion.getRole()))
                 .orElse(null);
     }

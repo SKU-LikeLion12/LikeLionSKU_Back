@@ -21,11 +21,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("그 email 이미 있");
     }
 
-    @ExceptionHandler(InvalidRoleException.class)
-    public ResponseEntity<String> invalidRole(InvalidRoleException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 role 값");
-    }
-
     // Project
     @ExceptionHandler(InvalidTitleException.class)
     public ResponseEntity<String> invalidTitle(InvalidTitleException e) {

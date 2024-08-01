@@ -31,6 +31,7 @@ public class LionController {
         Lion lion = lionService.addLion(
                 request.getName(),
                 request.getEmail(),
+                request.getTrackType(),
                 request.getRoleType());
         return ResponseEntity.status(HttpStatus.CREATED).body(lion);
     }
@@ -45,6 +46,7 @@ public class LionController {
                 request.getId(),
                 request.getName(),
                 request.getEmail(),
+                request.getTrackType(),
                 request.getRoleType());
         return ResponseEntity.status(HttpStatus.CREATED).body(lion);
     }

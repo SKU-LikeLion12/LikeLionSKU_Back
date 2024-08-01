@@ -8,5 +8,4 @@ import java.util.Optional;
 
 public interface LionRepository extends JpaRepository<Lion, Long> {
     Optional<Lion> findByEmail(String email);
-    List<Lion> findByName(String name);
 }

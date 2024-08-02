@@ -1,10 +1,10 @@
 package likelion.sku_sku.service;
 
-import likelion.sku_sku.domain.Article;
 import likelion.sku_sku.domain.LectureFile;
+import likelion.sku_sku.domain.Suggestion;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.repository.LectureFileRepository;
-import likelion.sku_sku.repository.ArticleRepository;
+import likelion.sku_sku.repository.SuggestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LectureFileService {
     private final LectureFileRepository lectureFileRepository;
-    private final ArticleRepository articleRepository;
+    private final SuggestionRepository articleRepository;
 
     @Transactional
     public LectureFile saveFile(Long articleId, MultipartFile file) throws IOException {
-        Article article = articleRepository.findById(articleId)
+        Suggestion article = articleRepository.findById(articleId)
                 .orElseThrow(InvalidIdException::new);
         LectureFile lectureFile = new LectureFile(article, file.getOriginalFilename(), file.getContentType(), file.getSize());
         return lectureFileRepository.save(lectureFile);
@@ -30,7 +30,7 @@ public class LectureFileService {
 
     @Transactional
     public List<LectureFile> saveFiles(Long articleId, List<MultipartFile> files) throws IOException {
-        Article article = articleRepository.findById(articleId)
+        Suggestion article = articleRepository.findById(articleId)
                 .orElseThrow(InvalidIdException::new);
         List<LectureFile> lectureFiles = new ArrayList<>();
         for (MultipartFile file : files) {

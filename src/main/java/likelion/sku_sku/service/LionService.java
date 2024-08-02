@@ -1,9 +1,10 @@
 package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Lion;
-import likelion.sku_sku.domain.RoleType;
-import likelion.sku_sku.domain.TrackType;
-import likelion.sku_sku.exception.*;
+import likelion.sku_sku.domain.enums.RoleType;
+import likelion.sku_sku.domain.enums.TrackType;
+import likelion.sku_sku.exception.InvalidEmailException;
+import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.repository.LionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

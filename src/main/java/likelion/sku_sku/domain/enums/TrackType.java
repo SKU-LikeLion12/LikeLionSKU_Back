@@ -1,4 +1,4 @@
-package likelion.sku_sku.domain;
+package likelion.sku_sku.domain.enums;
 
 public enum TrackType {
     BACKEND,

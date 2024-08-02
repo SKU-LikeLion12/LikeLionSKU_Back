@@ -3,7 +3,7 @@ package likelion.sku_sku.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import likelion.sku_sku.domain.RoleType;
+import likelion.sku_sku.domain.enums.RoleType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

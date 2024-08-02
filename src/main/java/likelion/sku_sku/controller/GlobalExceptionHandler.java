@@ -1,6 +1,8 @@
 package likelion.sku_sku.controller;
 
-import likelion.sku_sku.exception.*;
+import likelion.sku_sku.exception.InvalidEmailException;
+import likelion.sku_sku.exception.InvalidIdException;
+import likelion.sku_sku.exception.InvalidTitleException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

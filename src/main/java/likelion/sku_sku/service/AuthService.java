@@ -6,7 +6,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import likelion.sku_sku.domain.Lion;
-import likelion.sku_sku.domain.RoleType;
+import likelion.sku_sku.domain.enums.RoleType;
 import likelion.sku_sku.repository.LionRepository;
 import likelion.sku_sku.security.JwtUtility;
 import lombok.RequiredArgsConstructor;

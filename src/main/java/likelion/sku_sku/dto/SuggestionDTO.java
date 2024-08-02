@@ -1,14 +1,13 @@
 package likelion.sku_sku.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import likelion.sku_sku.domain.Article;
-import likelion.sku_sku.domain.RoleType;
-import likelion.sku_sku.domain.TrackType;
+import likelion.sku_sku.domain.Suggestion;
+import likelion.sku_sku.domain.enums.TrackType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
-public class ArticleDTO {
+public class SuggestionDTO {
 
     @Data
     public static class ArticleCreateRequest {
@@ -34,7 +33,7 @@ public class ArticleDTO {
         private LocalDateTime createDate;
         @Schema(description = "수정 여부", example = "true")
         private boolean isChange;
-        public ResponseArticle(Article article) {
+        public ResponseArticle(Suggestion article) {
             this.track = article.getTrack();
             this.title = article.getTitle();
             this.content = article.getContent();

@@ -1,6 +1,8 @@
 package likelion.sku_sku.domain;
 
 import jakarta.persistence.*;
+import likelion.sku_sku.domain.enums.RoleType;
+import likelion.sku_sku.domain.enums.TrackType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

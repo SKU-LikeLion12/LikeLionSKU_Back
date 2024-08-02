@@ -10,16 +10,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor
 @Entity
-public class LectureFile {
-    @Id @GeneratedValue
+@NoArgsConstructor
+@Getter
+public class AssigmentFile {
+    @Id
+    @GeneratedValue
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "lecture_id")
+    @Column(name = "assignment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Lecture lecture;
+    private Assignment assignment;
     private String fileName;
     private String fileType;
     private long size;
@@ -29,16 +30,16 @@ public class LectureFile {
     @Lob
     @Column(name = "file", columnDefinition = "LONGBLOB")
     private byte[] file;
-    public LectureFile(Lecture lecture, String fileName, String fileType, long size) {
-        this.lecture = lecture;
+    public AssigmentFile(Assignment assignment, String fileName, String fileType, long size) {
+        this.assignment = assignment;
         this.fileName = fileName;
         this.fileType = fileType;
         this.size = size;
         this.createDate = LocalDateTime.now();
         this.updatedDate = this.createDate;
     }
-    public void update(Lecture lecture, String fileName, String fileType, long size) {
-        this.lecture = lecture;
+    public void update(Assignment assignment, String fileName, String fileType, long size) {
+        this.assignment = assignment;
         this.fileName = fileName;
         this.fileType = fileType;
         this.size = size;

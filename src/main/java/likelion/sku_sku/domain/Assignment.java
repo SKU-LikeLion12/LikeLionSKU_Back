@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
+@Entity // 과제 안내
 @NoArgsConstructor
 public class Assignment {
     @Id @GeneratedValue

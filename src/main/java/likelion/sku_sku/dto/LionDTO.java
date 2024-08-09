@@ -41,6 +41,12 @@ public class LionDTO {
         private RoleType roleType;
     }
 
+    @Data
+    public static class LionNameRequest {
+        @Schema(description = "이름", example = "한민규")
+        private String name;
+    }
+
 // Response
     @Data
     @AllArgsConstructor

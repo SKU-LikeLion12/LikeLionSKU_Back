@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Getter
+@Getter // 과제 제출
 public class AssigmentFile {
     @Id
     @GeneratedValue
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "assignment_id")
+    @JoinColumn(name = "assignment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Assignment assignment;
     private String fileName;

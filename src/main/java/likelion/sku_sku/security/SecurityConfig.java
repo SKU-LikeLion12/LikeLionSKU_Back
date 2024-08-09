@@ -1,7 +1,5 @@
-package likelion.sku_sku.config;
+package likelion.sku_sku.security;
 
-import likelion.sku_sku.security.JwtAuthenticationFilter;
-import likelion.sku_sku.security.JwtUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,9 +21,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll()
+//                                .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/lion/**").hasAnyRole("ADMIN_LION", "BABY_LION")
-                                .requestMatchers("/project/**").hasRole("ADMIN_LION")
+//                                .requestMatchers("/project/**").hasRole("ADMIN_LION")
+//                                .requestMatchers("/lion/**").hasAnyRole("ADMIN_LION", "BABY_LION")
                                 .anyRequest().permitAll()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtility), UsernamePasswordAuthenticationFilter.class);

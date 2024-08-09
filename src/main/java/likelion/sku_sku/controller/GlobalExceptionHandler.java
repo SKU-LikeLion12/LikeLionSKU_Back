@@ -1,8 +1,6 @@
 package likelion.sku_sku.controller;
 
-import likelion.sku_sku.exception.InvalidEmailException;
-import likelion.sku_sku.exception.InvalidIdException;
-import likelion.sku_sku.exception.InvalidTitleException;
+import likelion.sku_sku.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,7 +20,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> invalidEmail(InvalidEmailException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("그 email 이미 있");
     }
-
+    @ExceptionHandler(InvalidLionException.class)
+    public ResponseEntity<String> invalidLion(InvalidLionException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이런 Lion 없");
+    }
     // Project
     @ExceptionHandler(InvalidTitleException.class)
     public ResponseEntity<String> invalidTitle(InvalidTitleException e) {
@@ -36,6 +37,8 @@ public class GlobalExceptionHandler {
 
 
     // LectureFile
-
-
+    @ExceptionHandler(InvalidLectureFileException.class)
+    public ResponseEntity<String> invalidLectureFile(InvalidLectureFileException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("그 강의자료 없");
+    }
 }

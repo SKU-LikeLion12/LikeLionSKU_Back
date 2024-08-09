@@ -68,7 +68,7 @@ public class ProjectController {
                     @ApiResponse(responseCode = "404", description = "Project가 하나도 없")})
     @GetMapping("/all")
     public ResponseEntity<List<ResponseIdProjectUpdate>> findProjectAll() {
-        List<ResponseIdProjectUpdate> responseIdProjectUpdate = projectService.findProjectAll();
+        List<ResponseIdProjectUpdate> responseIdProjectUpdate = projectService.findProjectAllIdDesc();
         if (responseIdProjectUpdate.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

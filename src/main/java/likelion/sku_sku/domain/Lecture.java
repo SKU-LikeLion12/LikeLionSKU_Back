@@ -11,22 +11,22 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@Entity // 강의자료
-public class LectureFile {
+@Entity // 강의
+public class Lecture {
     @Id @GeneratedValue
     private Long id;
     private String title;
     private String writer;
     private int views = 0; // 객체의 id 값이 조회될 때 마다 조회수 1 증가
 
-    @OneToMany(mappedBy = "lectureFile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<JoinLectureFiles> joinLectureFiles = new ArrayList<>();
 
     private LocalDate createDate; // YYYY-MM-DD
     private LocalDate updatedDate;
 
-    public LectureFile(String title, String writer) {
+    public Lecture(String title, String writer) {
         this.title = title;
         this.writer = writer;
         this.createDate = LocalDate.now();
@@ -37,4 +37,5 @@ public class LectureFile {
         this.writer = writer;
         this.updatedDate = LocalDate.now();
     }
+
 }

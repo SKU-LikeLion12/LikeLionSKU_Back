@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private Authentication getAuthentication(String token) {
         Claims claims = jwtUtility.getClaimsFromToken(token);
-        String email = claims.get("email").toString();
+        String email = claims.getSubject();
         String role = claims.get("role").toString();
 
         if (email.endsWith("@sungkyul.ac.kr") && (role.equals("BABY_LION") || role.equals("ADMIN_LION"))) {

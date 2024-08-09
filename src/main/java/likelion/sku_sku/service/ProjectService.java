@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,8 +64,24 @@ public class ProjectService {
                         project.getUrl(),
                         project.arrayToImage() // 이미지 바이트 배열을 Base64 문자열로 변환
                 ))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayList::new));
     }
+
+    public List<ResponseIdProjectUpdate> findProjectAllIdDesc() {
+        List<Project> projects = projectRepository.findAllByOrderByIdDesc();
+
+        return projects.stream()
+                .map(project -> new ResponseIdProjectUpdate(
+                        project.getId(),
+                        project.getClassTh(),
+                        project.getTitle(),
+                        project.getSubTitle(),
+                        project.getUrl(),
+                        project.arrayToImage() // 이미지 바이트 배열을 Base64 문자열로 변환
+                ))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
 
     public ResponseProjectUpdate findProjectById(Long id) {
         return projectRepository.findById(id)

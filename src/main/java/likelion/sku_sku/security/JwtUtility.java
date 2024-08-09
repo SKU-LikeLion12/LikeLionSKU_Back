@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import likelion.sku_sku.domain.enums.RoleType;
+import likelion.sku_sku.domain.enums.TrackType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,11 @@ public class JwtUtility {
     @Value("${jwt.expire-length}")
     private long expireLength;
 
-    public String createJwtToken(String email, RoleType role) {
+    public String createJwtToken(String name, String email, TrackType track, RoleType role) {
         return Jwts.builder()
                 .setSubject(email) // 주체를 email로 설정
-                .claim("email", email) // 클레임에 email 포함
+                .claim("name", name) // 클레임에 name 포함
+                .claim("track", track.name()) // 클레임에 track 포함
                 .claim("role", role.name())  // 클레임에 role 포함
                 .setExpiration(new Date(System.currentTimeMillis() + expireLength)) // 1일 유효기간
                 .signWith(SignatureAlgorithm.HS512, jwtKey)
@@ -41,4 +43,8 @@ public class JwtUtility {
         return Jwts.parserBuilder().setSigningKey(jwtKey).build().parseClaimsJws(token).getBody();
     }
 
+    public String getEmailFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.getSubject();
+    }
 }

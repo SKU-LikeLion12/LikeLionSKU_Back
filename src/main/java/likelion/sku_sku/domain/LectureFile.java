@@ -1,53 +1,40 @@
 package likelion.sku_sku.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@Entity
+@Entity // 강의자료
 public class LectureFile {
     @Id @GeneratedValue
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "lecture_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Lecture lecture;
-    private String fileName;
-    private String fileType;
-    private long size;
-    private LocalDateTime createDate;
-    private LocalDateTime updatedDate;
+    private String title;
+    private String writer;
+    private int views = 0; // 객체의 id 값이 조회될 때 마다 조회수 1 증가
 
-    @Lob
-    @Column(name = "file", columnDefinition = "LONGBLOB")
-    private byte[] file;
-    public LectureFile(Lecture lecture, String fileName, String fileType, long size) {
-        this.lecture = lecture;
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.size = size;
-        this.createDate = LocalDateTime.now();
+    @OneToMany(mappedBy = "lectureFile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<JoinLectureFiles> joinLectureFiles = new ArrayList<>();
+
+    private LocalDate createDate; // YYYY-MM-DD
+    private LocalDate updatedDate;
+
+    public LectureFile(String title, String writer) {
+        this.title = title;
+        this.writer = writer;
+        this.createDate = LocalDate.now();
         this.updatedDate = this.createDate;
     }
-    public void update(Lecture lecture, String fileName, String fileType, long size) {
-        this.lecture = lecture;
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.size = size;
-        this.updatedDate = LocalDateTime.now();
-
-    }
-
-    public void setFile(MultipartFile file) throws IOException {
-        this.file = file.getBytes();
-        this.size = file.getSize();
+    public void update(String title, String writer) {
+        this.title = title;
+        this.writer = writer;
+        this.updatedDate = LocalDate.now();
     }
 }

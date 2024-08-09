@@ -1,25 +1,15 @@
 package likelion.sku_sku.service;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Base64;
 
 public class FileUploadUtility {
-    public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
-        Path uploadPath = Paths.get(uploadDir);
+    // 파일을 Base64로 인코딩
+    public static String encodeFile(byte[] fileData) {
+        return Base64.getEncoder().encodeToString(fileData);
+    }
 
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        try (var inputStream = multipartFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath);
-        } catch (IOException e) {
-            throw new IOException("Could not save file: " + fileName, e);
-        }
+    // Base64로 인코딩된 파일을 디코딩
+    public static byte[] decodeFile(String encodedFileData) {
+        return Base64.getDecoder().decode(encodedFileData);
     }
 }

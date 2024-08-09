@@ -11,7 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static likelion.sku_sku.dto.ProjectDTO.ResponseIdProjectUpdate;
 import static likelion.sku_sku.dto.ProjectDTO.ResponseProjectUpdate;
 
 @Service
@@ -22,17 +24,17 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
 
     @Transactional
-    public Project addProject(String classTh, String title, String subTitle, MultipartFile image) throws IOException {
+    public Project addProject(String classTh, String title, String subTitle, String url, MultipartFile image) throws IOException {
         if (projectRepository.findByTitle(title).isPresent()) {
             throw new InvalidTitleException();
         }
         byte[] imageBytes = image.getBytes();
-        Project project = new Project(classTh, title, subTitle, imageBytes);
+        Project project = new Project(classTh, title, subTitle, url, imageBytes);
         return projectRepository.save(project);
     }
 
     @Transactional
-    public Project updateProject(Long id, String classTh, String title, String subTitle, MultipartFile image) throws IOException {
+    public Project updateProject(Long id, String classTh, String title, String subTitle, String url, MultipartFile image) throws IOException {
         Project project = projectRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         if (image != null && !image.isEmpty()) {
@@ -44,12 +46,24 @@ public class ProjectService {
             throw new InvalidTitleException();
         }
         String newSubTitle = (subTitle != null && !subTitle.isEmpty() ? subTitle : project.getSubTitle());
-        project.changeProject(newClassTh, newTitle, newSubTitle);
+        String newUrl = (url != null && !url.isEmpty() ? url : project.getUrl());
+        project.changeProject(newClassTh, newTitle, newSubTitle, newUrl);
         return project;
     }
 
-    public List<Project> findProjectAll() {
-        return projectRepository.findAll();
+    public List<ResponseIdProjectUpdate> findProjectAll() {
+        List<Project> projects = projectRepository.findAll();
+
+        return projects.stream()
+                .map(project -> new ResponseIdProjectUpdate(
+                        project.getId(),
+                        project.getClassTh(),
+                        project.getTitle(),
+                        project.getSubTitle(),
+                        project.getUrl(),
+                        project.arrayToImage() // 이미지 바이트 배열을 Base64 문자열로 변환
+                ))
+                .collect(Collectors.toList());
     }
 
     public ResponseProjectUpdate findProjectById(Long id) {
@@ -58,8 +72,9 @@ public class ProjectService {
                         project.getClassTh(),
                         project.getTitle(),
                         project.getSubTitle(),
+                        project.getUrl(),
                         project.arrayToImage()))
-                .orElse(null);
+                .orElseThrow(InvalidIdException::new);
     }
 
     @Transactional

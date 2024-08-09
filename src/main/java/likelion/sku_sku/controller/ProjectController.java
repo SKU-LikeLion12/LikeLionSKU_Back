@@ -8,7 +8,6 @@ import likelion.sku_sku.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -19,13 +18,13 @@ import static likelion.sku_sku.dto.ProjectDTO.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/project")
-@PreAuthorize("hasRole('ADMIN_LION')")
+//@PreAuthorize("hasRole('ADMIN_LION')")
 @Tag(name = "관리자 페이지: Project 관련")
 public class ProjectController {
 
     private final ProjectService projectService;
 
-    @Operation(summary = "(민규) Project 추가", description = "Headers에 Bearer token 필요, Project의 title, subTitle, image 필요",
+    @Operation(summary = "(민규) Project 추가", description = "Headers에 Bearer token 필요, Project의 title, subTitle, image 필요, body에 form-data로 넣어야 함",
             responses = {@ApiResponse(responseCode = "201", description = "생성"),
                     @ApiResponse(responseCode = "409", description = "그 title 이미 있")})
     @PostMapping("/add")
@@ -34,11 +33,12 @@ public class ProjectController {
                     request.getClassTh(),
                     request.getTitle(),
                     request.getSubTitle(),
+                    request.getUrl(),
                     request.getImage());
             return ResponseEntity.status(HttpStatus.CREATED).body(project);
     }
 
-    @Operation(summary = "(민규) Project 수정", description = "Headers에 Bearer token 필요, Project의 id, title, subTitle 필요, image는 안바꾸고 싶으면 안넣으면 됨",
+    @Operation(summary = "(민규) Project 수정", description = "Headers에 Bearer token 필요, Project의 id, title, subTitle 필요, image는 안바꾸고 싶으면 안넣으면 됨, , body에 form-data로 넣어야 함",
             responses = {@ApiResponse(responseCode = "201", description = "수정 성공 후 변경된 정보를 포함한 객체 생성"),
                     @ApiResponse(responseCode = "409", description = "그 title 이미 있"),
                     @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없")})
@@ -49,6 +49,7 @@ public class ProjectController {
                     request.getClassTh(),
                     request.getTitle(),
                     request.getSubTitle(),
+                    request.getUrl(),
                     request.getImage());
             return ResponseEntity.status(HttpStatus.CREATED).body(project);
     }
@@ -59,23 +60,19 @@ public class ProjectController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseProjectUpdate> findProjectById(@PathVariable("id") Long id) {
         ResponseProjectUpdate responseProject = projectService.findProjectById(id);
-        if (responseProject != null) {
             return ResponseEntity.status(HttpStatus.OK).body(responseProject);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     @Operation(summary = "(민규) 모든 Project 정보 조회", description = "Headers에 Bearer token 필요",
             responses = {@ApiResponse(responseCode = "200", description = "모든 프로젝트 조회 성공"),
                     @ApiResponse(responseCode = "404", description = "Project가 하나도 없")})
     @GetMapping("/all")
-    public ResponseEntity<List<Project>> findProjectAll() {
-        List<Project> projects = projectService.findProjectAll();
-        if (projects.isEmpty()) {
+    public ResponseEntity<List<ResponseIdProjectUpdate>> findProjectAll() {
+        List<ResponseIdProjectUpdate> responseIdProjectUpdate = projectService.findProjectAll();
+        if (responseIdProjectUpdate.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(projects);
+        return ResponseEntity.status(HttpStatus.OK).body(responseIdProjectUpdate);
     }
 
     @Operation(summary = "(민규) Project 삭제", description = "Headers에 Bearer token 필요, Project의 id 필요",

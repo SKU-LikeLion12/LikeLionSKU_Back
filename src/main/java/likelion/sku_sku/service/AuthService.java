@@ -74,7 +74,7 @@ public class AuthService {
             // 역할 확인
             if (lion.getRole() == RoleType.BABY_LION || lion.getRole() == RoleType.ADMIN_LION) {
                 // JWT 생성 및 반환
-                String jwtToken = jwtService.createJwtToken(email, lion.getRole());
+                String jwtToken = jwtService.createJwtToken(lion.getName(), email, lion.getTrack(), lion.getRole());
                 return ResponseEntity.ok(Collections.singletonMap("token", jwtToken));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("접근 권한이 없는 유저입니다.");

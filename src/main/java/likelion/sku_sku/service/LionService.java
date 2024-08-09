@@ -5,7 +5,9 @@ import likelion.sku_sku.domain.enums.RoleType;
 import likelion.sku_sku.domain.enums.TrackType;
 import likelion.sku_sku.exception.InvalidEmailException;
 import likelion.sku_sku.exception.InvalidIdException;
+import likelion.sku_sku.exception.InvalidLionException;
 import likelion.sku_sku.repository.LionRepository;
+import likelion.sku_sku.security.JwtUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,13 @@ import static likelion.sku_sku.dto.LionDTO.ResponseLionUpdate;
 @Transactional(readOnly = true)
 public class LionService {
     private final LionRepository lionRepository;
+    private final JwtUtility jwtUtility;
+
+    public String tokenToLionName(String token) {
+        Lion lion = lionRepository.findByEmail(jwtUtility.getEmailFromToken(token))
+                .orElseThrow(InvalidLionException::new);
+        return lion.getName();
+    }
 
     @Transactional
     public Lion addLion(String name, String email, TrackType track, RoleType role) {

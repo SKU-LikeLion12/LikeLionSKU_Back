@@ -15,9 +15,20 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
+    private final SubmitAssignmentService submitAssignmentService;
+
     @Transactional
-    public Feedback addFeedback(SubmitAssignment submitAssignment, String content) {
+    public Feedback addFeedback(Long submitAssignmentId, String content) {
+        SubmitAssignment submitAssignment = submitAssignmentService.findSubmitAssignmentById(submitAssignmentId);
         Feedback feedback = new Feedback(submitAssignment, content);
+        return feedbackRepository.save(feedback);
+    }
+
+    @Transactional
+    public Feedback updateFeedback(Long feedBackId, String content) {
+        Feedback feedback = feedbackRepository.findById(feedBackId)
+                .orElseThrow(InvalidIdException::new);
+        feedback.update(content != null && !content.isEmpty() ? content : feedback.getContent());
         return feedbackRepository.save(feedback);
     }
 

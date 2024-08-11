@@ -81,7 +81,7 @@ public class LionController {
                     @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없")})
     @DeleteMapping("")
     public ResponseEntity<String> deleteLion(@RequestParam Long lionId) {
-        lionService.deleteLionById(lionId);
+        lionService.deleteLion(lionId);
         return ResponseEntity.ok("Lion 삭제 성공");
     }
 }

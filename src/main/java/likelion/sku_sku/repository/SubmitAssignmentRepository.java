@@ -1,8 +1,19 @@
 package likelion.sku_sku.repository;
 
 import likelion.sku_sku.domain.SubmitAssignment;
-import org.hibernate.sql.ast.tree.update.Assignment;
+import likelion.sku_sku.domain.enums.AssignmentStatus;
+import likelion.sku_sku.domain.enums.SubmitStatus;
+import likelion.sku_sku.domain.enums.TrackType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface SubmitAssignmentRepository extends JpaRepository<SubmitAssignment, Long> {
+    List<SubmitAssignment> findByWriterAndAssignment_AssignmentStatus(String writer, AssignmentStatus status);
+    List<SubmitAssignment> findByWriter(String writer);
+
+    List<SubmitAssignment> findByAssignment_Track(TrackType track);
+    int countByWriterAndAssignment_AssignmentStatus(String writer, AssignmentStatus assignmentStatus);
+    int countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(String writer, AssignmentStatus assignmentStatus, SubmitStatus submitStatus);
+
 }

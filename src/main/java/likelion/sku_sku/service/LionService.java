@@ -66,7 +66,7 @@ public class LionService {
     }
 
     @Transactional
-    public void deleteLionById(Long id) {
+    public void deleteLion(Long id) {
         Lion lion = lionRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         lionRepository.delete(lion);

@@ -80,7 +80,7 @@ public class ProjectController {
         @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없")})
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProject(@PathVariable("id") Long id) {
-            projectService.deleteProjectById(id);
+            projectService.deleteProject(id);
             return ResponseEntity.ok("Project 삭제 성공");
     }
 }

@@ -24,7 +24,7 @@ public class Lecture {
 
     private String writer;
 
-    private int viewCount = 0; // 객체의 id 값이 조회될 때 마다 조회수 1 증가
+    private int viewCount = 0; // Lecture 개별 정보 조회될 때 마다 조회수 1 증가
 
     @JsonManagedReference
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)

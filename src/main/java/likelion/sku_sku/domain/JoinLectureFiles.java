@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -33,12 +34,16 @@ public class JoinLectureFiles {
     @Lob @Column(name = "file", columnDefinition = "LONGBLOB")
     private byte[] file;
 
+    private LocalDateTime createDate; // YYYY-MM-DD HH:MM:SS.nnnnnn
+
+
     public JoinLectureFiles(Lecture lecture, MultipartFile file) throws IOException {
         this.lecture = lecture;
         this.fileName = file.getOriginalFilename();
         this.fileType = file.getContentType();
         this.size = file.getSize();
         this.file = file.getBytes();
+        this.createDate = LocalDateTime.now();
     }
 
     public String arrayToFile() {

@@ -1,15 +1,12 @@
 package likelion.sku_sku.service;
 
-import likelion.sku_sku.domain.JoinLectureFiles;
 import likelion.sku_sku.domain.Lecture;
 import likelion.sku_sku.domain.enums.TrackType;
 import likelion.sku_sku.exception.InvalidIdException;
-import likelion.sku_sku.repository.JoinLectureFilesRepository;
 import likelion.sku_sku.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,7 +78,7 @@ public class LectureService {
     }
 
     @Transactional
-    public void deleteLectureById(Long id) {
+    public void deleteLecture(Long id) {
         Lecture lecture = lectureRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         lectureRepository.delete(lecture);

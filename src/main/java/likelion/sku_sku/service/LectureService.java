@@ -29,21 +29,21 @@ public class LectureService {
     private final JoinLectureFilesService joinLectureFilesService;  // 새로운 서비스 의존성 주입
 
     @Transactional
-    public List<Lecture> createLecture(String bearer, createLectureRequest request) throws IOException {
+    public Lecture createLecture(String bearer, createLectureRequest request) throws IOException {
         String writer = lionService.tokenToLionName(bearer.substring(7));
         Lecture lecture = new Lecture(request.getTrackType(), request.getTitle(), writer);
         lectureRepository.save(lecture);
 
         joinLectureFilesService.createJoinLectureFiles(lecture, request.getFiles());
 
-        return List.of(lecture);
+        return lecture;
     }
 
     @Transactional
     public Lecture updateLecture(String bearer, updateLectureRequest request) throws IOException {
         String newWriter = lionService.tokenToLionName(bearer.substring(7));
         Lecture lecture = lectureRepository.findById(request.getId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 강의를 찾을 수 없습니다."));
+                .orElseThrow(InvalidIdException::new);
 
         TrackType newTrack = (request.getTrackType() != null ? request.getTrackType() : lecture.getTrack());
         String newTitle = (request.getTitle() != null && !request.getTitle().isEmpty() ? request.getTitle() : lecture.getTitle());

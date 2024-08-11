@@ -25,7 +25,7 @@ public class JoinLectureFilesService {
             JoinLectureFiles joinLectureFiles = new JoinLectureFiles(lecture, file);
             joinLectureFilesList.add(joinLectureFiles);
         }
-        joinLectureFilesRepository.saveAll(joinLectureFilesList);  // 저장 로직도 이곳에서 처리
+        joinLectureFilesRepository.saveAll(joinLectureFilesList);
         return joinLectureFilesList;
     }
 

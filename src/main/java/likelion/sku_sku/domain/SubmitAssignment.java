@@ -46,12 +46,11 @@ public class SubmitAssignment {
     private List<JoinAssignmentFiles> joinAssignmentFiles = new ArrayList<>();
 
     private LocalDate createDate; // YYYY-MM-DD
-    public SubmitAssignment(TrackType track, Assignment assignment, String writer, SubmitStatus submitStatus, PassNonePass passNonePass) {
-        this.track = track;
+    public SubmitAssignment(Assignment assignment, String writer) {
         this.assignment = assignment;
         this.writer = writer;
-        this.submitStatus = submitStatus;
-        this.passNonePass = passNonePass;
         this.createDate = LocalDate.now();
     }
+
+//    public void update()
 }

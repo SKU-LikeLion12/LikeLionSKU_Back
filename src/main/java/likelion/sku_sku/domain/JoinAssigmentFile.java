@@ -15,19 +15,22 @@ import java.io.IOException;
 @NoArgsConstructor
 @Getter // 과제 파일 제출
 public class JoinAssigmentFile {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignment_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "submit_assignment_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private SubmitAssignment assignment;
+
     private String fileName;
+
     private String fileType;
+
     private long size = 0;
-    @Lob
-    @Column(name = "file", columnDefinition = "LONGBLOB")
+
+    @Lob @Column(name = "file", columnDefinition = "LONGBLOB")
     private byte[] file;
 
     public JoinAssigmentFile(SubmitAssignment assignment, MultipartFile file) throws IOException {

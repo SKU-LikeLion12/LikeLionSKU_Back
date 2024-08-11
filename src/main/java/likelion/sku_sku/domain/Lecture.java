@@ -16,14 +16,18 @@ import java.util.List;
 public class Lecture {
     @Id @GeneratedValue
     private Long id;
+
     @Enumerated(EnumType.STRING)
     private TrackType track;
+
     private String title;
+
     private String writer;
+
     private int viewCount = 0; // 객체의 id 값이 조회될 때 마다 조회수 1 증가
 
-    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JoinLectureFiles> joinLectureFiles = new ArrayList<>();
 
     private LocalDate createDate; // YYYY-MM-DD

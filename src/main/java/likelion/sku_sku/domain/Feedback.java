@@ -10,13 +10,19 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @Getter // 과제 피드백
 public class Feedback {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assigment_id")
+    @JoinColumn(name = "submit_assignment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private SubmitAssignment submitAssignment;
+
     @Column(columnDefinition = "TEXT")
     private String content;
+
+    public Feedback(SubmitAssignment submitAssignment, String content) {
+        this.submitAssignment = submitAssignment;
+        this.content = content;
+    }
 }

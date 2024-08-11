@@ -12,10 +12,14 @@ import lombok.NoArgsConstructor;
 public class Lion {
     @Id @GeneratedValue
     private Long id;
+
     private String name;
+
     private String email;
+
     @Enumerated(EnumType.STRING)
     private TrackType track;
+
     @Enumerated(EnumType.STRING)
     private RoleType role;
 

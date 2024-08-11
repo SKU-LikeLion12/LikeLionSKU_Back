@@ -18,16 +18,19 @@ public class JoinLectureFiles {
     @Id @GeneratedValue
     private Long id;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
     private Lecture lecture;
+
     private String fileName;
+
     private String fileType;
+
     private long size = 0;
-    @Lob
-    @Column(name = "file", columnDefinition = "LONGBLOB")
+
+    @Lob @Column(name = "file", columnDefinition = "LONGBLOB")
     private byte[] file;
 
     public JoinLectureFiles(Lecture lecture, MultipartFile file) throws IOException {

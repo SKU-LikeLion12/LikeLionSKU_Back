@@ -11,18 +11,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-@Getter
-@NoArgsConstructor
 @Entity
-public class JoinLectureFiles {
+@NoArgsConstructor
+@Getter // 과제 파일 제출
+public class JoinAssignmentFiles {
     @Id @GeneratedValue
     private Long id;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecture_id")
+    @JoinColumn(name = "submitAssignment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Lecture lecture;
+    private SubmitAssignment submitAssignment;
 
     private String fileName;
 
@@ -33,8 +33,8 @@ public class JoinLectureFiles {
     @Lob @Column(name = "file", columnDefinition = "LONGBLOB")
     private byte[] file;
 
-    public JoinLectureFiles(Lecture lecture, MultipartFile file) throws IOException {
-        this.lecture = lecture;
+    public JoinAssignmentFiles(SubmitAssignment submitAssignment, MultipartFile file) throws IOException {
+        this.submitAssignment = submitAssignment;
         this.fileName = file.getOriginalFilename();
         this.fileType = file.getContentType();
         this.size = file.getSize();

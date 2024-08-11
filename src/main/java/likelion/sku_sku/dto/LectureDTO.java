@@ -1,6 +1,7 @@
 package likelion.sku_sku.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import likelion.sku_sku.domain.enums.TrackType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +14,21 @@ import static likelion.sku_sku.dto.JoinLectureFilesDTO.*;
 public class LectureDTO {
 
     @Data
-    public static class uploadLectureRequest {
+    public static class createLectureRequest {
+        @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
+        private TrackType trackType;
+        @Schema(description = "강의 제목", example = "백엔드 3주차")
+        private String title;
+        @Schema(description = "강의 파일", example = "파일 넣으셔")
+        private List<MultipartFile> files;
+    }
+
+    @Data
+    public static class updateLectureRequest {
+        @Schema(description = "강의 id", example = "1")
+        private Long id;
+        @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
+        private TrackType trackType;
         @Schema(description = "강의 제목", example = "백엔드 3주차")
         private String title;
         @Schema(description = "강의 파일", example = "파일 넣으셔")
@@ -25,6 +40,8 @@ public class LectureDTO {
     public static class ResponseLecture {
         @Schema(description = "강의 id", example = "1")
         private Long id;
+        @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
+        private TrackType trackType;
         @Schema(description = "강의 제목", example = "백엔드 3주차")
         private String title;
         @Schema(description = "강의 작성자", example = "한민규")
@@ -33,8 +50,6 @@ public class LectureDTO {
         private int views;
         @Schema(description = "강의 작성 시간", example = "YYYY-MM-DD")
         private LocalDate createDate;
-        @Schema(description = "강의 수정 시간", example = "YYYY-MM-DD")
-        private LocalDate updatedDate;
         @Schema(description = "강의 파일", example = """
                                                     {
                                                         "id": 1,

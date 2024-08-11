@@ -1,4 +1,4 @@
-package likelion.sku_sku.controller;
+package likelion.sku_sku.controller.adminLion;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -57,15 +57,15 @@ public class ProjectController {
     @Operation(summary = "(민규) id로 Project 개별 정보 조회", description = "Headers에 Bearer token 필요, Project의 ID 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 프로젝트 제목, 프로젝트 부제목, 프로젝트 사진이 출력."),
                     @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없")})
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseProjectUpdate> findProjectById(@PathVariable("id") Long id) {
-        ResponseProjectUpdate responseProject = projectService.findProjectById(id);
+    @GetMapping("")
+    public ResponseEntity<ResponseProjectUpdate> findProjectById(@RequestParam Long projectId) {
+        ResponseProjectUpdate responseProject = projectService.findProjectById(projectId);
             return ResponseEntity.status(HttpStatus.OK).body(responseProject);
     }
 
     @Operation(summary = "(민규) 모든 Project 정보 조회", description = "Headers에 Bearer token 필요",
             responses = {@ApiResponse(responseCode = "200", description = "모든 프로젝트 조회 성공"),
-                    @ApiResponse(responseCode = "404", description = "Project가 하나도 없")})
+                    @ApiResponse(responseCode = "404", description = "Project 하나도 없")})
     @GetMapping("/all")
     public ResponseEntity<List<ResponseIdProjectUpdate>> findProjectAll() {
         List<ResponseIdProjectUpdate> responseIdProjectUpdate = projectService.findProjectAllIdDesc();

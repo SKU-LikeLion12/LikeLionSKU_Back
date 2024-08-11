@@ -8,7 +8,7 @@ public class JoinLectureFilesDTO {
     @Data
     public static class CreateJoinLectureFilesRequest {
         @Schema(description = "파일 id", example = "1")
-        private Long id;
+        private Long lectureId;
         @Schema(description = "파일 이름", example = "Spring.pdf")
         private String fileName;
         @Schema(description = "파일 유형", example = "application/pdf")
@@ -19,7 +19,7 @@ public class JoinLectureFilesDTO {
         private String file; // base64로 인코딩된 파일 데이터
 
         public CreateJoinLectureFilesRequest(JoinLectureFiles joinLectureFiles) {
-            this.id = joinLectureFiles.getId();
+            this.lectureId = joinLectureFiles.getId();
             this.fileName = joinLectureFiles.getFileName();
             this.fileType = joinLectureFiles.getFileType();
             this.size = joinLectureFiles.getSize();

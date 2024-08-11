@@ -16,6 +16,7 @@ public class Feedback {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Assignment assignment;
+    private SubmitAssignment submitAssignment;
+    @Column(columnDefinition = "TEXT")
     private String content;
 }

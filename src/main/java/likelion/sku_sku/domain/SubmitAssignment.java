@@ -2,7 +2,6 @@ package likelion.sku_sku.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.PassNonePass;
 import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
@@ -14,36 +13,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Entity // 과제 안내
+@Entity // 과제 제출
 @NoArgsConstructor
-public class Assignment {
+public class SubmitAssignment {
     @Id @GeneratedValue
     private Long id;
     @Enumerated(EnumType.STRING)
     private TrackType track;
-    private String title;
-    private String description;
+    private String writer;
     @Enumerated(EnumType.STRING)
     private SubmitStatus submitStatus = SubmitStatus.UNSUBMITTED;
     @Enumerated(EnumType.STRING)
     private PassNonePass passNonePass = PassNonePass.FAIL;
-    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Feedback> feedback = new ArrayList<>();
-    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<JoinAssigmentFile> joinAssigmentFile = new ArrayList<>();
 
     private LocalDate createDate; // YYYY-MM-DD
-    public Assignment(TrackType track, String title, String description, SubmitStatus submitStatus, PassNonePass passNonePass) {
+    public SubmitAssignment(TrackType track,String writer, SubmitStatus submitStatus, PassNonePass passNonePass) {
         this.track = track;
-        this.title = title;
-        this.description = description;
+        this.writer = writer;
         this.submitStatus = submitStatus;
         this.passNonePass = passNonePass;
         this.createDate = LocalDate.now();
-    }
-    public void update(String title) {
-        this.title = title;
     }
 }

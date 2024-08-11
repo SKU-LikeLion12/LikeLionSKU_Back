@@ -10,11 +10,10 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Getter // 과제 제출
+@Getter // 과제 파일 제출
 public class JoinAssigmentFile {
     @Id
     @GeneratedValue
@@ -23,7 +22,7 @@ public class JoinAssigmentFile {
     @JoinColumn(name = "assignment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
-    private Assignment assignment;
+    private SubmitAssignment assignment;
     private String fileName;
     private String fileType;
     private long size = 0;
@@ -31,7 +30,7 @@ public class JoinAssigmentFile {
     @Column(name = "file", columnDefinition = "LONGBLOB")
     private byte[] file;
 
-    public JoinAssigmentFile(Assignment assignment, MultipartFile file) throws IOException {
+    public JoinAssigmentFile(SubmitAssignment assignment, MultipartFile file) throws IOException {
         this.assignment = assignment;
         this.fileName = file.getOriginalFilename();
         this.fileType = file.getContentType();

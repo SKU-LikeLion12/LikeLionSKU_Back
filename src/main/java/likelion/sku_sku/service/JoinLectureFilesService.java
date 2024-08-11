@@ -31,6 +31,6 @@ public class JoinLectureFilesService {
 
     @Transactional
     public void deleteByLecture(Lecture lecture) {
-        joinLectureFilesRepository.deleteByLecture(lecture);  // 해당 Lecture에 연관된 모든 JoinLectureFiles 삭제
+        joinLectureFilesRepository.deleteByLecture(lecture);
     }
 }

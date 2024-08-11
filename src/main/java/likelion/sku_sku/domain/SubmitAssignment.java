@@ -1,5 +1,6 @@
 package likelion.sku_sku.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import likelion.sku_sku.domain.enums.PassNonePass;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class SubmitAssignment {
     @Enumerated(EnumType.STRING)
     private TrackType track;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -45,12 +48,11 @@ public class SubmitAssignment {
     @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JoinAssignmentFiles> joinAssignmentFiles = new ArrayList<>();
 
-    private LocalDate createDate; // YYYY-MM-DD
-    public SubmitAssignment(Assignment assignment, String writer) {
+    private LocalDateTime createDate; // YYYY-MM-DD HH:MM:SS.nnnnnn
+    public SubmitAssignment(TrackType track, Assignment assignment, String writer) {
+        this.track = track;
         this.assignment = assignment;
         this.writer = writer;
-        this.createDate = LocalDate.now();
+        this.createDate = LocalDateTime.now();
     }
-
-//    public void update()
 }

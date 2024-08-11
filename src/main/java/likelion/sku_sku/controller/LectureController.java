@@ -70,7 +70,7 @@ public class LectureController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteLecture(@RequestHeader("Authorization") String bearer,
                                            @RequestParam Long lectureId) {
-        lectureService.deleteLectureById(lectureId);
+        lectureService.deleteLecture(lectureId);
         return ResponseEntity.status(HttpStatus.OK).body("강의자료 삭제 성공");
     }
 

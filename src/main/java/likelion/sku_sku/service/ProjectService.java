@@ -95,7 +95,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public void deleteProjectById(Long id) {
+    public void deleteProject(Long id) {
         Project project = projectRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         projectRepository.delete(project);

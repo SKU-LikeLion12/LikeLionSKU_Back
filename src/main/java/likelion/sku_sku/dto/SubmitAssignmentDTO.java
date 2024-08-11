@@ -15,7 +15,7 @@ public class SubmitAssignmentDTO {
 
     @Data
     public static class UpdateSubmitRequest {
-        private Long SubmitAssignmentId;
+        private Long submitAssignmentId;
         private List<MultipartFile> files;
     }
 }

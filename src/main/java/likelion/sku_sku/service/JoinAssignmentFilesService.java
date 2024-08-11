@@ -1,11 +1,7 @@
 package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.JoinAssignmentFiles;
-import likelion.sku_sku.domain.JoinLectureFiles;
-import likelion.sku_sku.domain.Lecture;
 import likelion.sku_sku.domain.SubmitAssignment;
-import likelion.sku_sku.domain.enums.TrackType;
-import likelion.sku_sku.dto.LectureDTO;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.repository.JoinAssignmentFilesRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,17 +36,17 @@ public class JoinAssignmentFilesService {
         joinAssignmentFilesRepository.deleteBySubmitAssignment(submitAssignment);  // 해당 Lecture에 연관된 모든 JoinLectureFiles 삭제
     }
 
-    public List<JoinAssignmentFiles> getAllFiles() {
+    public List<JoinAssignmentFiles> findAllJoinAssignmentFiles() {
         return joinAssignmentFilesRepository.findAll();
     }
 
-    public JoinAssignmentFiles getFileById(Long id) {
+    public JoinAssignmentFiles findJoinAssignmentFilesById(Long id) {
         return joinAssignmentFilesRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
     }
 
     @Transactional
-    public void deleteFile(Long id) {
+    public void deleteJoinAssignmentFiles(Long id) {
         JoinAssignmentFiles joinAssignmentFiles = joinAssignmentFilesRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         joinAssignmentFilesRepository.delete(joinAssignmentFiles);

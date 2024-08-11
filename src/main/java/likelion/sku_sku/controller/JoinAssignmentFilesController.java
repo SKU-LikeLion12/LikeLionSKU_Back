@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class AssignmentFilesController {
+public class JoinAssignmentFilesController {
     private final JoinAssignmentFilesService assigmentFileService;
 }

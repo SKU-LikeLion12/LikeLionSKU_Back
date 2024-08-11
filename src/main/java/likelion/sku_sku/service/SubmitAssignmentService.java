@@ -1,11 +1,7 @@
 package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Assignment;
-import likelion.sku_sku.domain.JoinAssignmentFiles;
 import likelion.sku_sku.domain.SubmitAssignment;
-import likelion.sku_sku.domain.enums.PassNonePass;
-import likelion.sku_sku.domain.enums.SubmitStatus;
-import likelion.sku_sku.domain.enums.TrackType;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.repository.SubmitAssignmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +23,8 @@ public class SubmitAssignmentService {
     @Transactional
     public SubmitAssignment createSubmitAssignment(String bearer, Long assignmentId, List<MultipartFile> files) throws IOException {
         String writer = lionService.tokenToLionName(bearer.substring(7));
-        Assignment assignment = assignmentService.getAssignmentById(assignmentId);
-        SubmitAssignment submitAssignment = new SubmitAssignment(assignment, writer);
+        Assignment assignment = assignmentService.findAssignmentById(assignmentId);
+        SubmitAssignment submitAssignment = new SubmitAssignment(assignment.getTrack(), assignment, writer);
         submitAssignmentRepository.save(submitAssignment);
 
         joinAssignmentFilesService.uploadJoinAssignmentFiles(submitAssignment, files);
@@ -47,17 +43,17 @@ public class SubmitAssignmentService {
         return submitAssignment;
     }
 
-    public List<SubmitAssignment> getAllSubmissions() {
+    public List<SubmitAssignment> findAllSubmitAssignment() {
         return submitAssignmentRepository.findAll();
     }
 
-    public SubmitAssignment getSubmissionById(Long id) {
+    public SubmitAssignment findSubmitAssignmentById(Long id) {
         return submitAssignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
     }
 
     @Transactional
-    public void deleteSubmission(Long id) {
+    public void deleteSubmitAssignment(Long id) {
         SubmitAssignment submitAssignment = submitAssignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         submitAssignmentRepository.delete(submitAssignment);

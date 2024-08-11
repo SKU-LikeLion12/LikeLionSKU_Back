@@ -22,11 +22,11 @@ public class AssignmentService {
         return assignmentRepository.save(assignment);
     }
 
-    public List<Assignment> getAllAssignments() {
+    public List<Assignment> findAllAssignment() {
         return assignmentRepository.findAll();
     }
 
-    public Assignment getAssignmentById(Long id) {
+    public Assignment findAssignmentById(Long id) {
         return assignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
     }

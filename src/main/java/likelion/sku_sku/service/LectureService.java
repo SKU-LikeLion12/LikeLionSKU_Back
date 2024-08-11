@@ -22,19 +22,11 @@ import static likelion.sku_sku.dto.LectureDTO.createLectureRequest;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LectureService {
     private final LectureRepository lectureRepository;
-    private final JoinLectureFilesRepository joinLectureFilesRepository;
     private final LionService lionService;
-
-    private List<JoinLectureFiles> createJoinLectureFiles(Lecture lecture, List<MultipartFile> files) throws IOException {
-        List<JoinLectureFiles> joinLectureFilesList = new ArrayList<>();
-        for (MultipartFile file : files) {
-            JoinLectureFiles joinLectureFiles = new JoinLectureFiles(lecture, file);
-            joinLectureFilesList.add(joinLectureFiles);
-        }
-        return joinLectureFilesList;
-    }
+    private final JoinLectureFilesService joinLectureFilesService;  // 새로운 서비스 의존성 주입
 
     @Transactional
     public List<Lecture> createLecture(String bearer, createLectureRequest request) throws IOException {
@@ -42,8 +34,7 @@ public class LectureService {
         Lecture lecture = new Lecture(request.getTrackType(), request.getTitle(), writer);
         lectureRepository.save(lecture);
 
-        List<JoinLectureFiles> joinLectureFiles = createJoinLectureFiles(lecture, request.getFiles());
-        joinLectureFilesRepository.saveAll(joinLectureFiles);
+        joinLectureFilesService.createJoinLectureFiles(lecture, request.getFiles());
 
         return List.of(lecture);
     }
@@ -59,9 +50,8 @@ public class LectureService {
         lecture.update(newTrack, newTitle, newWriter);
 
         if (request.getFiles() != null && !request.getFiles().isEmpty()) {
-            joinLectureFilesRepository.deleteByLecture(lecture);
-            List<JoinLectureFiles> updatedLectureFiles = createJoinLectureFiles(lecture, request.getFiles());
-            joinLectureFilesRepository.saveAll(updatedLectureFiles);
+            joinLectureFilesService.deleteByLecture(lecture);
+            joinLectureFilesService.createJoinLectureFiles(lecture, request.getFiles());
         }
 
         return lecture;
@@ -79,7 +69,6 @@ public class LectureService {
                             lecture.getWriter(),
                             lecture.getViewCount(),
                             lecture.getCreateDate(),
-                            lecture.getUpdatedDate(),
                             lecture.getJoinLectureFiles().stream()
                                     .map(CreateJoinLectureFilesRequest::new)
                                     .collect(Collectors.toCollection(ArrayList::new)));
@@ -88,7 +77,7 @@ public class LectureService {
     }
 
     public List<Lecture> findAllLecture() {
-        return lectureRepository.findAllWithFiles();
+        return lectureRepository.findAll();
     }
 
     @Transactional

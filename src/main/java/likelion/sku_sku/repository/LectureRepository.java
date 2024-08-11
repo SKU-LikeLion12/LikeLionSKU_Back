@@ -11,5 +11,5 @@ public interface LectureRepository extends JpaRepository<Lecture, Long> {
     @EntityGraph(attributePaths = {"joinLectureFiles"})
     Optional<Lecture> findById(Long id);
     @EntityGraph(attributePaths = {"joinLectureFiles"})
-    List<Lecture> findAllWithFiles();
+    List<Lecture> findAll();
 }

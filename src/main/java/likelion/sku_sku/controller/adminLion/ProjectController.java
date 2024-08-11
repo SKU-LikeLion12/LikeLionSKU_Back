@@ -1,4 +1,4 @@
-package likelion.sku_sku.controller;
+package likelion.sku_sku.controller.adminLion;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

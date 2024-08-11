@@ -14,15 +14,15 @@ import java.io.IOException;
 @Entity
 @NoArgsConstructor
 @Getter // 과제 파일 제출
-public class JoinAssigmentFile {
+public class JoinAssignmentFiles {
     @Id @GeneratedValue
     private Long id;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "submit_assignment_id")
+    @JoinColumn(name = "submitAssignment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private SubmitAssignment assignment;
+    private SubmitAssignment submitAssignment;
 
     private String fileName;
 
@@ -33,8 +33,8 @@ public class JoinAssigmentFile {
     @Lob @Column(name = "file", columnDefinition = "LONGBLOB")
     private byte[] file;
 
-    public JoinAssigmentFile(SubmitAssignment assignment, MultipartFile file) throws IOException {
-        this.assignment = assignment;
+    public JoinAssignmentFiles(SubmitAssignment submitAssignment, MultipartFile file) throws IOException {
+        this.submitAssignment = submitAssignment;
         this.fileName = file.getOriginalFilename();
         this.fileType = file.getContentType();
         this.size = file.getSize();

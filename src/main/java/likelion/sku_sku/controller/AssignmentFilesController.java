@@ -1,11 +1,11 @@
 package likelion.sku_sku.controller;
 
-import likelion.sku_sku.service.AssignmentService;
+import likelion.sku_sku.service.JoinAssignmentFilesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class AssigmentController {
-    private final AssignmentService assignmentService;
+public class AssignmentFilesController {
+    private final JoinAssignmentFilesService assigmentFileService;
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Entity // 과제 안내
 @NoArgsConstructor
-public class Assigment {
+public class Assignment {
     @Id @GeneratedValue
     private Long id;
 
@@ -36,7 +36,7 @@ public class Assigment {
 
     private LocalDate createDate; // YYYY-MM-DD
 
-    public Assigment(TrackType track, String title, String description) {
+    public Assignment(TrackType track, String title, String description) {
         this.track = track;
         this.title = title;
         this.description = description;

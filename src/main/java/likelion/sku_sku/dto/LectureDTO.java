@@ -50,8 +50,6 @@ public class LectureDTO {
         private int views;
         @Schema(description = "강의 작성 시간", example = "YYYY-MM-DD")
         private LocalDate createDate;
-        @Schema(description = "강의 수정 시간", example = "YYYY-MM-DD")
-        private LocalDate updatedDate;
         @Schema(description = "강의 파일", example = """
                                                     {
                                                         "id": 1,

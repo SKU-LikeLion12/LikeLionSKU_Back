@@ -36,7 +36,7 @@ public class LectureController {
     @Operation(summary = "(민규) 강의자료 수정", description = "Headers에 Bearer token 필요, 강의 ID와 수정할 정보를 body에 form-data로 포함시켜야 함",
             responses = {@ApiResponse(responseCode = "200", description = "수정 성공"),
                     @ApiResponse(responseCode = "404", description = "해당 Id의 강의를 찾을 수 없음")})
-    @PutMapping("/update}")
+    @PutMapping("/update")
     public ResponseEntity<?> updateLecture(@RequestHeader("Authorization") String bearer,
                                            updateLectureRequest request) throws IOException {
         Lecture updatedLecture = lectureService.updateLecture(bearer, request);

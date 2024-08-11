@@ -25,9 +25,9 @@ public class SubmitAssignment {
     private TrackType track;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assigment_id")
+    @JoinColumn(name = "assignment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Assigment assigment;
+    private Assignment assignment;
 
     private String writer;
 
@@ -37,18 +37,18 @@ public class SubmitAssignment {
     @Enumerated(EnumType.STRING)
     private PassNonePass passNonePass = PassNonePass.FAIL;
 
-    @OneToMany(mappedBy = "submit_assignment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Feedback> feedback = new ArrayList<>();
 
-    @OneToMany(mappedBy = "submit_assignment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<JoinAssigmentFile> joinAssigmentFile = new ArrayList<>();
+    @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<JoinAssignmentFiles> joinAssignmentFiles = new ArrayList<>();
 
     private LocalDate createDate; // YYYY-MM-DD
-    public SubmitAssignment(TrackType track,Assigment assigment, String writer, SubmitStatus submitStatus, PassNonePass passNonePass) {
+    public SubmitAssignment(TrackType track, Assignment assignment, String writer, SubmitStatus submitStatus, PassNonePass passNonePass) {
         this.track = track;
-        this.assigment = assigment;
+        this.assignment = assignment;
         this.writer = writer;
         this.submitStatus = submitStatus;
         this.passNonePass = passNonePass;

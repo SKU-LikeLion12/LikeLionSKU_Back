@@ -14,7 +14,7 @@ public class Feedback {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "submit_assignment_id")
+    @JoinColumn(name = "submitAssignment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private SubmitAssignment submitAssignment;
 

@@ -2,6 +2,10 @@ package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Assignment;
 import likelion.sku_sku.domain.SubmitAssignment;
+import likelion.sku_sku.domain.enums.AssignmentStatus;
+import likelion.sku_sku.domain.enums.PassNonePass;
+import likelion.sku_sku.domain.enums.SubmitStatus;
+import likelion.sku_sku.domain.enums.TrackType;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.repository.SubmitAssignmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
 
 @Service
 @RequiredArgsConstructor
@@ -43,13 +51,58 @@ public class SubmitAssignmentService {
         return submitAssignment;
     }
 
-    public List<SubmitAssignment> findAllSubmitAssignment() {
-        return submitAssignmentRepository.findAll();
+    @Transactional
+    public SubmitAssignment decidePassStatus(Long submitAssignmentId) {
+        SubmitAssignment submitAssignment = submitAssignmentRepository.findById(submitAssignmentId)
+                .orElseThrow(InvalidIdException::new);
+        submitAssignment.decidePassStatus();
+        return submitAssignmentRepository.save(submitAssignment);
+    }
+
+
+    public List<SubmitAssignment> findAssignmentsByWriter(String writer) {
+        return submitAssignmentRepository.findByWriter(writer);
+    }
+
+    public Map<String, List<SubmitAssignment>> findAllAssignmentsByWriter(String writer) {
+        List<SubmitAssignment> todayAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.TODAY);
+        List<SubmitAssignment> ingAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.ING);
+        List<SubmitAssignment> doneAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.DONE);
+
+        Map<String, List<SubmitAssignment>> result = new HashMap<>();
+        result.put("today", todayAssignments);
+        result.put("ing", ingAssignments);
+        result.put("done", doneAssignments);
+
+        return result;
+    }
+
+    public List<SubmitAssignment> findAssignmentsByWriterAndStatus(String writer, AssignmentStatus status) {
+        return submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, status);
+    }
+
+    public List<SubmitAssignment> findAssignmentsByTrackType(TrackType trackType) {
+        return submitAssignmentRepository.findByAssignment_Track(trackType);
     }
 
     public SubmitAssignment findSubmitAssignmentById(Long id) {
         return submitAssignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
+    }
+
+    public ResponseAssignmentCount countAssignmentsByWriter(String writer) {
+        int submittedTodayCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, AssignmentStatus.TODAY, SubmitStatus.SUBMITTED);
+        int todayCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.TODAY);
+
+        int submittedIngCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, AssignmentStatus.ING, SubmitStatus.SUBMITTED);
+        int ingCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.ING);
+
+        int doneCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.DONE);
+        return new ResponseAssignmentCount(writer, submittedTodayCount, todayCount, submittedIngCount, ingCount, doneCount);
+    }
+
+    public List<SubmitAssignment> findAllSubmitAssignment() {
+        return submitAssignmentRepository.findAll();
     }
 
     @Transactional

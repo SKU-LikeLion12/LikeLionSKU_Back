@@ -53,6 +53,11 @@ public class SubmitAssignment {
         this.track = track;
         this.assignment = assignment;
         this.writer = writer;
+        this.submitStatus = SubmitStatus.SUBMITTED; // 과제 제출 시 상태를 SUBMITTED로 변경
         this.createDate = LocalDateTime.now();
+    }
+
+    public void decidePassStatus() {
+        this.passNonePass = PassNonePass.PASS;
     }
 }

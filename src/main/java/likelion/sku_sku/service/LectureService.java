@@ -2,8 +2,7 @@ package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.JoinLectureFiles;
 import likelion.sku_sku.domain.Lecture;
-import likelion.sku_sku.dto.JoinLectureFilesDTO;
-import likelion.sku_sku.dto.LectureDTO;
+import likelion.sku_sku.domain.enums.TrackType;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.repository.JoinLectureFilesRepository;
 import likelion.sku_sku.repository.LectureRepository;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 
 import static likelion.sku_sku.dto.JoinLectureFilesDTO.*;
 import static likelion.sku_sku.dto.LectureDTO.*;
-import static likelion.sku_sku.dto.LectureDTO.uploadLectureRequest;
+import static likelion.sku_sku.dto.LectureDTO.createLectureRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -27,39 +26,69 @@ public class LectureService {
     private final LectureRepository lectureRepository;
     private final JoinLectureFilesRepository joinLectureFilesRepository;
     private final LionService lionService;
-    @Transactional
-    public List<Lecture> uploadLectureFiles(String bearer, uploadLectureRequest request) throws IOException {
-        String writer = lionService.tokenToLionName(bearer.substring(7));
-        Lecture lecture = new Lecture(request.getTitle(), writer);
-        lectureRepository.save(lecture);
 
+    private List<JoinLectureFiles> createJoinLectureFiles(Lecture lecture, List<MultipartFile> files) throws IOException {
         List<JoinLectureFiles> joinLectureFilesList = new ArrayList<>();
-        for (MultipartFile file : request.getFiles()) {
+        for (MultipartFile file : files) {
             JoinLectureFiles joinLectureFiles = new JoinLectureFiles(lecture, file);
             joinLectureFilesList.add(joinLectureFiles);
         }
-        joinLectureFilesRepository.saveAll(joinLectureFilesList);
+        return joinLectureFilesList;
+    }
+
+    @Transactional
+    public List<Lecture> createLecture(String bearer, createLectureRequest request) throws IOException {
+        String writer = lionService.tokenToLionName(bearer.substring(7));
+        Lecture lecture = new Lecture(request.getTrackType(), request.getTitle(), writer);
+        lectureRepository.save(lecture);
+
+        List<JoinLectureFiles> joinLectureFiles = createJoinLectureFiles(lecture, request.getFiles());
+        joinLectureFilesRepository.saveAll(joinLectureFiles);
+
         return List.of(lecture);
+    }
+
+    @Transactional
+    public Lecture updateLecture(String bearer, updateLectureRequest request) throws IOException {
+        String newWriter = lionService.tokenToLionName(bearer.substring(7));
+        Lecture lecture = lectureRepository.findById(request.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 강의를 찾을 수 없습니다."));
+
+        TrackType newTrack = (request.getTrackType() != null ? request.getTrackType() : lecture.getTrack());
+        String newTitle = (request.getTitle() != null && !request.getTitle().isEmpty() ? request.getTitle() : lecture.getTitle());
+        lecture.update(newTrack, newTitle, newWriter);
+
+        if (request.getFiles() != null && !request.getFiles().isEmpty()) {
+            joinLectureFilesRepository.deleteByLecture(lecture);
+            List<JoinLectureFiles> updatedLectureFiles = createJoinLectureFiles(lecture, request.getFiles());
+            joinLectureFilesRepository.saveAll(updatedLectureFiles);
+        }
+
+        return lecture;
     }
 
     public ResponseLecture finaLectureById(Long lectureId) {
         return lectureRepository.findById(lectureId)
-                .map(lecture -> new ResponseLecture(
-                        lecture.getId(),
-                        lecture.getTitle(),
-                        lecture.getWriter(),
-                        lecture.getViews(),
-                        lecture.getCreateDate(),
-                        lecture.getUpdatedDate(),
-                        lecture.getJoinLectureFiles().stream()
-                                .map(CreateJoinLectureFilesRequest::new)
-                                .collect(Collectors.toCollection(ArrayList::new))))
+                .map(lecture -> {
+                    lecture.incrementViewCount();
+                    lectureRepository.save(lecture);
+                    return new ResponseLecture(
+                            lecture.getId(),
+                            lecture.getTrack(),
+                            lecture.getTitle(),
+                            lecture.getWriter(),
+                            lecture.getViewCount(),
+                            lecture.getCreateDate(),
+                            lecture.getUpdatedDate(),
+                            lecture.getJoinLectureFiles().stream()
+                                    .map(CreateJoinLectureFilesRequest::new)
+                                    .collect(Collectors.toCollection(ArrayList::new)));
+                })
                 .orElseThrow(InvalidIdException::new);
-
     }
 
     public List<Lecture> findAllLecture() {
-        return lectureRepository.findAll();
+        return lectureRepository.findAllWithFiles();
     }
 
     @Transactional

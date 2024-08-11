@@ -54,9 +54,9 @@ public class LionController {
     @Operation(summary = "(민규) id로 Lion 개별 정보 조회", description = "Headers에 Bearer token 필요, Lion의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 Lion 이름, 이메일, 역할이 출력."),
                     @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없")})
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseLionUpdate> findLionById(@PathVariable("id") Long id) {
-        ResponseLionUpdate responseLion = lionService.findLionById(id);
+    @GetMapping("")
+    public ResponseEntity<ResponseLionUpdate> findLionById(@RequestParam Long lionId) {
+        ResponseLionUpdate responseLion = lionService.findLionById(lionId);
         if (responseLion != null) {
             return ResponseEntity.status(HttpStatus.OK).body(responseLion);
         } else {
@@ -79,9 +79,9 @@ public class LionController {
     @Operation(summary = "(민규) Lion 삭제", description = "Headers에 Bearer token 필요, Lion의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "Lion 삭제 성공"),
                     @ApiResponse(responseCode = "404", description = "그런 id 가진 Lion 없")})
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteLion(@PathVariable("id") Long id) {
-        lionService.deleteLionById(id);
+    @DeleteMapping("")
+    public ResponseEntity<String> deleteLion(@RequestParam Long lionId) {
+        lionService.deleteLionById(lionId);
         return ResponseEntity.ok("Lion 삭제 성공");
     }
 }

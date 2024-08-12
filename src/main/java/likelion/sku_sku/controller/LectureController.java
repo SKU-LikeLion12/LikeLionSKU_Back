@@ -4,51 +4,31 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.sku_sku.domain.Lecture;
+import likelion.sku_sku.dto.LectureDTO;
 import likelion.sku_sku.service.LectureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
-
-import static likelion.sku_sku.dto.LectureDTO.*;
-import static likelion.sku_sku.dto.LectureDTO.createLectureRequest;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/lecture")
-@Tag(name = "관리자 페이지: Lecture 관련")
+@Tag(name = "강의자료 관련")
 public class LectureController {
-
     private final LectureService lectureService;
 
-    @Operation(summary = "(민규) 강의자료 추가", description = "Headers에 Bearer token 필요, 강의의 trackType, title, 강의자료 필요, body에 form-data로 넣어야 함",
-            responses = {@ApiResponse(responseCode = "201", description = "생성")})
-    @PostMapping("/add")
-    public ResponseEntity<?> uploadFiles(@RequestHeader("Authorization") String bearer,
-                                         createLectureRequest request) throws IOException {
-        Lecture lectureFiles = lectureService.createLecture(bearer, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(lectureFiles);
-    }
-
-    @Operation(summary = "(민규) 강의자료 수정", description = "Headers에 Bearer token 필요, 강의 ID와 수정할 정보를 body에 form-data로 포함시켜야 함",
-            responses = {@ApiResponse(responseCode = "201", description = "수정 성공"),
-                    @ApiResponse(responseCode = "404", description = "해당 Id의 강의를 찾을 수 없음")})
-    @PutMapping("/update")
-    public ResponseEntity<?> updateLecture(@RequestHeader("Authorization") String bearer,
-                                           updateLectureRequest request) throws IOException {
-        Lecture updatedLecture = lectureService.updateLecture(bearer, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(updatedLecture);
-    }
-
-    @Operation(summary = "(민규) id로 강의자료 개별 조회", description = "Headers에 Bearer token 필요, Project의 ID 필요",
+    @Operation(summary = "(민규) id로 강의자료 개별 조회", description = "Headers에 Bearer token 필요, lecture의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 강의 trackType, 제목, 작성자, 조회수, 작성 시간, 수정 시간, 강의자료 나옴"),
                     @ApiResponse(responseCode = "404", description = "그런 id 가진 강의 없")})
     @GetMapping("")
-    public ResponseEntity<ResponseLecture> findLectureById(@RequestParam Long lectureId) {
-        ResponseLecture responseLecture = lectureService.finaLectureById(lectureId);
+    public ResponseEntity<LectureDTO.ResponseLecture> findLectureById(@RequestParam Long id) {
+        LectureDTO.ResponseLecture responseLecture = lectureService.finaLectureById(id);
         return ResponseEntity.status(HttpStatus.OK).body(responseLecture);
     }
 
@@ -63,15 +43,4 @@ public class LectureController {
         }
         return ResponseEntity.ok(lectureFiles);
     }
-
-    @Operation(summary = "(민규) 강의자료 삭제", description = "Headers에 Bearer token 필요, 삭제할 강의의 ID 필요",
-            responses = {@ApiResponse(responseCode = "200", description = "강의자료 삭제 성공"),
-                    @ApiResponse(responseCode = "404", description = "그런 id 가진 강의 없")})
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteLecture(@RequestHeader("Authorization") String bearer,
-                                           @RequestParam Long lectureId) {
-        lectureService.deleteLecture(lectureId);
-        return ResponseEntity.status(HttpStatus.OK).body("강의자료 삭제 성공");
-    }
-
 }

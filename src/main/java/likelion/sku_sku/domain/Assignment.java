@@ -30,9 +30,9 @@ public class Assignment {
     private String description;
 
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SubmitAssignment> submitAssignment = new ArrayList<>();
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<SubmitAssignment> submitAssignment = new ArrayList<>();
 
     private LocalDate createDate; // YYYY-MM-DD
 
@@ -41,5 +41,10 @@ public class Assignment {
         this.title = title;
         this.description = description;
         this.createDate = LocalDate.now();
+    }
+
+    public void update(String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 }

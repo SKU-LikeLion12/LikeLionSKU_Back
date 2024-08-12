@@ -17,10 +17,10 @@ import static likelion.sku_sku.dto.ProjectDTO.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/project")
+@RequestMapping("/admin/project")
 //@PreAuthorize("hasRole('ADMIN_LION')")
-@Tag(name = "관리자 페이지: Project 관련")
-public class ProjectController {
+@Tag(name = "운영진 페이지: 프로젝트 관련")
+public class ProjectAdminController {
 
     private final ProjectService projectService;
 
@@ -78,8 +78,8 @@ public class ProjectController {
     @Operation(summary = "(민규) Project 삭제", description = "Headers에 Bearer token 필요, Project의 id 필요",
               responses = {@ApiResponse(responseCode = "200", description = "프로젝트 삭제 성공"),
         @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없")})
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProject(@PathVariable("id") Long id) {
+    @DeleteMapping("")
+    public ResponseEntity<String> deleteProject(@RequestParam Long id) {
             projectService.deleteProject(id);
             return ResponseEntity.ok("Project 삭제 성공");
     }

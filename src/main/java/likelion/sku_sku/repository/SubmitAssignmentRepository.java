@@ -16,4 +16,11 @@ public interface SubmitAssignmentRepository extends JpaRepository<SubmitAssignme
     int countByWriterAndAssignment_AssignmentStatus(String writer, AssignmentStatus assignmentStatus);
     int countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(String writer, AssignmentStatus assignmentStatus, SubmitStatus submitStatus);
 
+    List<SubmitAssignment> findByAssignment_TrackAndWriter(TrackType track, String writer);
+    List<SubmitAssignment> findDistinctWriterByAssignment_Track(TrackType track);
+
+
+    int countByAssignment_TrackAndWriterAndAssignment_AssignmentStatus(TrackType track, String writer, AssignmentStatus assignmentStatus);
+    int countByAssignment_TrackAndWriterAndAssignment_AssignmentStatusAndSubmitStatus(TrackType track, String writer, AssignmentStatus assignmentStatus, SubmitStatus submitStatus);
+
 }

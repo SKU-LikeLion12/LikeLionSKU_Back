@@ -40,13 +40,13 @@ public class SubmitAssignment {
     @Enumerated(EnumType.STRING)
     private PassNonePass passNonePass = PassNonePass.FAIL;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Feedback> feedback = new ArrayList<>();
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<JoinAssignmentFiles> joinAssignmentFiles = new ArrayList<>();
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Feedback> feedback = new ArrayList<>();
+//
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<JoinAssignmentFiles> joinAssignmentFiles = new ArrayList<>();
 
     private LocalDateTime createDate; // YYYY-MM-DD HH:MM:SS.nnnnnn
     public SubmitAssignment(TrackType track, Assignment assignment, String writer) {

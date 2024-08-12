@@ -16,7 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "관리자 페이지: Google OAuth 관련")
+@Tag(name = "관리자 페이지: 구글 로그인 세션 관련")
 public class AuthController {
 
     private final AuthService authService;

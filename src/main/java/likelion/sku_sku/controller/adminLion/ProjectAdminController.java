@@ -19,7 +19,7 @@ import static likelion.sku_sku.dto.ProjectDTO.*;
 @RequiredArgsConstructor
 @RequestMapping("/admin/project")
 //@PreAuthorize("hasRole('ADMIN_LION')")
-@Tag(name = "운영진 페이지: 프로젝트 관련")
+@Tag(name = "관리자 기능: 프로젝트 관련")
 public class ProjectAdminController {
 
     private final ProjectService projectService;
@@ -41,7 +41,7 @@ public class ProjectAdminController {
     @Operation(summary = "(민규) Project 수정", description = "Headers에 Bearer token 필요, Project의 id, title, subTitle 필요, image는 안바꾸고 싶으면 안넣으면 됨, , body에 form-data로 넣어야 함",
             responses = {@ApiResponse(responseCode = "201", description = "수정 성공 후 변경된 정보를 포함한 객체 생성"),
                     @ApiResponse(responseCode = "409", description = "그 title 이미 있"),
-                    @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없")})
+                    @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @PutMapping("/update")
     public ResponseEntity<?> updateProject(ProjectUpdateRequest request) throws IOException {
             Project project = projectService.updateProject(
@@ -56,7 +56,7 @@ public class ProjectAdminController {
 
     @Operation(summary = "(민규) id로 Project 개별 정보 조회", description = "Headers에 Bearer token 필요, Project의 ID 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 프로젝트 제목, 프로젝트 부제목, 프로젝트 사진이 출력."),
-                    @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없")})
+                    @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @GetMapping("")
     public ResponseEntity<ResponseProjectUpdate> findProjectById(@RequestParam Long projectId) {
         ResponseProjectUpdate responseProject = projectService.findProjectById(projectId);
@@ -77,7 +77,7 @@ public class ProjectAdminController {
 
     @Operation(summary = "(민규) Project 삭제", description = "Headers에 Bearer token 필요, Project의 id 필요",
               responses = {@ApiResponse(responseCode = "200", description = "프로젝트 삭제 성공"),
-        @ApiResponse(responseCode = "404", description = "그런 id 가진 Project 없")})
+        @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @DeleteMapping("")
     public ResponseEntity<String> deleteProject(@RequestParam Long id) {
             projectService.deleteProject(id);

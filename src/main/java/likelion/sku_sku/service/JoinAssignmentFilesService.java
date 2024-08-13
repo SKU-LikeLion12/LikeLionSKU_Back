@@ -36,6 +36,11 @@ public class JoinAssignmentFilesService {
         joinAssignmentFilesRepository.deleteBySubmitAssignment(submitAssignment);  // 해당 Lecture에 연관된 모든 JoinLectureFiles 삭제
     }
 
+    List<JoinAssignmentFiles> findBySubmitAssignment(SubmitAssignment submitAssignment) {
+        return joinAssignmentFilesRepository.findBySubmitAssignment(submitAssignment);
+    }
+
+
     public List<JoinAssignmentFiles> findAllJoinAssignmentFiles() {
         return joinAssignmentFilesRepository.findAll();
     }

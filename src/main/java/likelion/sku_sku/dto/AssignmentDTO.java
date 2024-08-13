@@ -1,14 +1,17 @@
 package likelion.sku_sku.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import likelion.sku_sku.domain.Assignment;
+import likelion.sku_sku.domain.JoinAssignmentFiles;
+import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.TrackType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
 
 public class AssignmentDTO {
 
@@ -41,30 +44,21 @@ public class AssignmentDTO {
     }
 
     @Data
-    @AllArgsConstructor
-    public static class ResponseAssignment {
-        @Schema(description = "강의 id", example = "1")
+    public static class AssignmentAllDTO {
         private Long id;
-        @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
-        private TrackType trackType;
-        @Schema(description = "강의 제목", example = "백엔드 3주차")
         private String title;
-        @Schema(description = "강의 작성자", example = "한민규")
-        private String writer;
-        @Schema(description = "강의 조회수", example = "21")
-        private int views;
-        @Schema(description = "강의 작성 시간", example = "YYYY-MM-DD")
+        private String description;
         private LocalDate createDate;
-        @Schema(description = "강의 파일", example = """
-                                                    {
-                                                        "id": 1,
-                                                        "fileName": "Spring.pdf",
-                                                        "fileType": "application/pdf",
-                                                        "size": 65362,
-                                                        "file": "base64 인코딩 값"
-                                                    }
-                                                    """)
-        private List<JoinLectureFilesDTO.CreateJoinLectureFilesRequest> joinLectureFiles;
+        private SubmitAssignmentAllDTO submitAssignmentAllDTO;
+
+        public AssignmentAllDTO(Assignment assignment, SubmitAssignmentAllDTO submitAssignmentAllDTO) {
+            this.id = assignment.getId();
+            this.title = assignment.getTitle();
+            this.description = assignment.getDescription();
+            this.createDate = assignment.getCreateDate();
+            this.submitAssignmentAllDTO = submitAssignmentAllDTO;
+        }
     }
+
 
 }

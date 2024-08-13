@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static likelion.sku_sku.dto.JoinLectureFilesDTO.*;
+import static likelion.sku_sku.dto.JoinLectureFilesDTO.CreateJoinLectureFilesRequest;
 import static likelion.sku_sku.dto.LectureDTO.*;
-import static likelion.sku_sku.dto.LectureDTO.createLectureRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ import static likelion.sku_sku.dto.LectureDTO.createLectureRequest;
 public class LectureService {
     private final LectureRepository lectureRepository;
     private final LionService lionService;
-    private final JoinLectureFilesService joinLectureFilesService;  // 새로운 서비스 의존성 주입
+    private final JoinLectureFilesService joinLectureFilesService;
 
     @Transactional
     public Lecture createLecture(String bearer, createLectureRequest request) throws IOException {

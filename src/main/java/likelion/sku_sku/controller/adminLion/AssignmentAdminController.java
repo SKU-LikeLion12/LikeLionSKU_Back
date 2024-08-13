@@ -10,14 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
-import static likelion.sku_sku.dto.AssignmentDTO.*;
+import static likelion.sku_sku.dto.AssignmentDTO.createAssignmentRequest;
+import static likelion.sku_sku.dto.AssignmentDTO.updateAssignmentRequest;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/assignment")
-@Tag(name = "운영진 페이지: 과제 안내 관련")
+@Tag(name = "관리자 기능: 과제 안내물 관련")
 public class AssignmentAdminController {
     private final AssignmentService assignmentService;
 
@@ -45,7 +44,7 @@ public class AssignmentAdminController {
 
     @Operation(summary = "(민규) 과제 안내물 삭제", description = "Headers에 Bearer token 필요, 과제 안내물의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "과제 안내물 삭제 성공"),
-                    @ApiResponse(responseCode = "404", description = "그런 id 가진 과제 안내물 없")})
+                    @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @DeleteMapping("")
     public ResponseEntity<String> deleteAssignment(@RequestParam Long id) {
         assignmentService.deleteAssignment(id);

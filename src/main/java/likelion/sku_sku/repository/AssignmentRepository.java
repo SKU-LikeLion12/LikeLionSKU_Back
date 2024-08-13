@@ -1,11 +1,9 @@
 package likelion.sku_sku.repository;
 
 import likelion.sku_sku.domain.Assignment;
-import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.TrackType;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

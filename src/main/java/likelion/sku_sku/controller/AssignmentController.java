@@ -8,11 +8,14 @@ import likelion.sku_sku.service.AssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static likelion.sku_sku.dto.AssignmentDTO.*;
+import static likelion.sku_sku.dto.AssignmentDTO.FindTrackStatus;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +30,7 @@ public class AssignmentController {
     @GetMapping("") // 트랙과 과제 상태를 넣으면 그에 알맞는 결과가 나옴
     public ResponseEntity<?> getAssignments(@ModelAttribute FindTrackStatus request) {
         List<Assignment> assignment = assignmentService.getAssignmentsByTrackAndStatus(request.getTrack(), request.getStatus());
-        if (assignment == null || assignment.isEmpty()) {
+        if (assignment.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("아무것도 없");
         }
         return ResponseEntity.status(HttpStatus.OK).body(assignment);

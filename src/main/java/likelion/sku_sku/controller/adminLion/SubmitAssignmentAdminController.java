@@ -19,7 +19,7 @@ import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/submit")
-@Tag(name = "운영진 페이지: 과제 관련")
+@Tag(name = "관리자 기능: 과제 관련")
 public class SubmitAssignmentAdminController {
     private final SubmitAssignmentService submitAssignmentService;
 

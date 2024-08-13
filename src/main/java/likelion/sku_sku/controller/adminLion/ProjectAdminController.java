@@ -19,7 +19,7 @@ import static likelion.sku_sku.dto.ProjectDTO.*;
 @RequiredArgsConstructor
 @RequestMapping("/admin/project")
 //@PreAuthorize("hasRole('ADMIN_LION')")
-@Tag(name = "운영진 페이지: 프로젝트 관련")
+@Tag(name = "관리자 기능: 프로젝트 관련")
 public class ProjectAdminController {
 
     private final ProjectService projectService;

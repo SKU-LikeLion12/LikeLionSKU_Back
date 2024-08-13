@@ -92,6 +92,17 @@ public class SubmitAssignmentService {
         return submitAssignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
     }
+    public ResponseSubmit findSubmitById(Long id) {
+        return submitAssignmentRepository.findById(id)
+                .map(submitAssignment -> new ResponseSubmit(
+                    submitAssignment.getId(),
+                    submitAssignment.getTrack(),
+                    submitAssignment.getAssignment().getId(),
+                    submitAssignment.getWriter(),
+                    submitAssignment.getSubmitStatus(),
+                    submitAssignment.getPassNonePass()))
+                .orElseThrow(InvalidIdException::new);
+    }
 
     public ResponseAssignmentCount countAssignmentsByWriter(String writer) {
         int submittedTodayCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, AssignmentStatus.TODAY, SubmitStatus.SUBMITTED);

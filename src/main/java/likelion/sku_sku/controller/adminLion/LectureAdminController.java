@@ -18,7 +18,7 @@ import static likelion.sku_sku.dto.LectureDTO.createLectureRequest;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/lecture")
-@Tag(name = "운영진 페이지: 강의자료 관련")
+@Tag(name = "관리자 기능: 강의자료 관련")
 public class LectureAdminController {
 
     private final LectureService lectureService;

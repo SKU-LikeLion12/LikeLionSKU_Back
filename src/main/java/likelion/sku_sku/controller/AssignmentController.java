@@ -27,7 +27,7 @@ public class AssignmentController {
     @GetMapping("") // 트랙과 과제 상태를 넣으면 그에 알맞는 결과가 나옴
     public ResponseEntity<?> getAssignments(@ModelAttribute FindTrackStatus request) {
         List<Assignment> assignment = assignmentService.getAssignmentsByTrackAndStatus(request.getTrack(), request.getStatus());
-        if (assignment == null || assignment.isEmpty()) {
+        if (assignment.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("아무것도 없");
         }
         return ResponseEntity.status(HttpStatus.OK).body(assignment);

@@ -1,11 +1,16 @@
 package likelion.sku_sku.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import likelion.sku_sku.domain.Assignment;
 import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.PassNonePass;
+import likelion.sku_sku.domain.enums.SubmitStatus;
+import likelion.sku_sku.domain.enums.TrackType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -62,4 +67,20 @@ public class SubmitAssignmentDTO {
         private int doneCount;
     }
 
+    @Data
+    @AllArgsConstructor
+    public static class ResponseSubmit {
+        @Schema(description = "과제 id", example = "1")
+        private Long id;
+        @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
+        private TrackType trackType;
+        @Schema(description = "강의 안내물 id", example = "1")
+        private Long assignmentId;
+        @Schema(description = "과제 작성자", example = "한민규")
+        private String writer;
+        @Schema(description = "과제 제출 상태", example = "SUBMITTED or UNSUBMITTED")
+        private SubmitStatus submitStatus;
+        @Schema(description = "과제 통과 상태", example = "PASS or FAIL")
+        private PassNonePass passNonePass;
+    }
 }

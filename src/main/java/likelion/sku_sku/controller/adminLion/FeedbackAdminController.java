@@ -17,7 +17,7 @@ import static likelion.sku_sku.dto.FeedbackDTO.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/feedback")
-@Tag(name = "운영진 페이지: 피드백 관련")
+@Tag(name = "관리자 기능: 피드백 관련")
 public class FeedbackAdminController {
     private final FeedbackService feedbackService;
 

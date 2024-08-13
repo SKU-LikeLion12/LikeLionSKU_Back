@@ -2,9 +2,6 @@ package likelion.sku_sku.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import likelion.sku_sku.domain.JoinAssignmentFiles;
-import likelion.sku_sku.domain.JoinLectureFiles;
-import likelion.sku_sku.domain.SubmitAssignment;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 public class JoinAssignmentFilesDTO {

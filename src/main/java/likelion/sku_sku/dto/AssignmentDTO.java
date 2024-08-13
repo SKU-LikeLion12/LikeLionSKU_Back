@@ -1,14 +1,17 @@
 package likelion.sku_sku.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import likelion.sku_sku.domain.Assignment;
+import likelion.sku_sku.domain.JoinAssignmentFiles;
+import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.TrackType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
 
 public class AssignmentDTO {
 
@@ -40,6 +43,22 @@ public class AssignmentDTO {
         private AssignmentStatus status;
     }
 
+    @Data
+    public static class AssignmentAllDTO {
+        private Long id;
+        private String title;
+        private String description;
+        private LocalDate createDate;
+        private SubmitAssignmentAllDTO submitAssignmentAllDTO;
+
+        public AssignmentAllDTO(Assignment assignment, SubmitAssignmentAllDTO submitAssignmentAllDTO) {
+            this.id = assignment.getId();
+            this.title = assignment.getTitle();
+            this.description = assignment.getDescription();
+            this.createDate = assignment.getCreateDate();
+            this.submitAssignmentAllDTO = submitAssignmentAllDTO;
+        }
+    }
 
 
 }

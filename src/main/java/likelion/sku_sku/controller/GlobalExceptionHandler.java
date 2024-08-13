@@ -1,8 +1,5 @@
 package likelion.sku_sku.controller;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import likelion.sku_sku.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

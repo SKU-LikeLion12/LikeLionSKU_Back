@@ -1,8 +1,6 @@
 package likelion.sku_sku.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import likelion.sku_sku.domain.enums.RoleType;
-import likelion.sku_sku.domain.enums.TrackType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

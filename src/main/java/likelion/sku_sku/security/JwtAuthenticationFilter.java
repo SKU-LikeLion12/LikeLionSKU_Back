@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import likelion.sku_sku.exception.JwtValidationException;
-import likelion.sku_sku.security.JwtUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,9 +26,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String token = resolveToken(request);
-            if (token == null) {
-                throw new JwtValidationException("JWT token empty");
-            }
+//            if (token == null) {
+//                throw new JwtValidationException("JWT token empty");
+//            }
             if (token != null && jwtUtility.validateToken(token)) {
                 Authentication auth = getAuthentication(token);
                 if (auth != null) {

@@ -10,9 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
-import static likelion.sku_sku.dto.AssignmentDTO.*;
+import static likelion.sku_sku.dto.AssignmentDTO.createAssignmentRequest;
+import static likelion.sku_sku.dto.AssignmentDTO.updateAssignmentRequest;
 
 @RestController
 @RequiredArgsConstructor

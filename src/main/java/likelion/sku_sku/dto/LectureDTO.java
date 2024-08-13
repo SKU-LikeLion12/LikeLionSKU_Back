@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.List;
 
-import static likelion.sku_sku.dto.JoinLectureFilesDTO.*;
+import static likelion.sku_sku.dto.JoinLectureFilesDTO.CreateJoinLectureFilesRequest;
 
 public class LectureDTO {
 

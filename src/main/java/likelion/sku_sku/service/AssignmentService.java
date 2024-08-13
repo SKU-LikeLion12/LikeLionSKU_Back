@@ -1,7 +1,6 @@
 package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Assignment;
-import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.TrackType;
 import likelion.sku_sku.exception.InvalidIdException;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,4 +64,7 @@ public class AssignmentService {
                 .orElseThrow(InvalidIdException::new);
         assignmentRepository.delete(assignment);
     }
+
+
+
 }

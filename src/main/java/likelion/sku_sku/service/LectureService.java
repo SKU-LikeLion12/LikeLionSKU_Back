@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static likelion.sku_sku.dto.JoinLectureFilesDTO.*;
+import static likelion.sku_sku.dto.JoinLectureFilesDTO.CreateJoinLectureFilesRequest;
 import static likelion.sku_sku.dto.LectureDTO.*;
-import static likelion.sku_sku.dto.LectureDTO.createLectureRequest;
 
 @Service
 @RequiredArgsConstructor

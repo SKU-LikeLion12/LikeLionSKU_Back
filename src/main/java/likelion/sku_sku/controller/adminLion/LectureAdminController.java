@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-import static likelion.sku_sku.dto.LectureDTO.*;
 import static likelion.sku_sku.dto.LectureDTO.createLectureRequest;
+import static likelion.sku_sku.dto.LectureDTO.updateLectureRequest;
 
 @RestController
 @RequiredArgsConstructor

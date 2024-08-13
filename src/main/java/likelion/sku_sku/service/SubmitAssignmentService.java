@@ -175,28 +175,33 @@ public class SubmitAssignmentService {
 
 
     public ResponseAssignmentDetails getAssignmentDetailsByWriter(String writer) {
-        int submittedTodayCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, AssignmentStatus.TODAY, SubmitStatus.SUBMITTED);
-        int todayCount = assignmentService.countByAssignmentStatus(AssignmentStatus.TODAY);
+        int submittedTodayCount = getSubmittedCountByStatus(writer, AssignmentStatus.TODAY);
+        int todayCount = getCountByStatus(AssignmentStatus.TODAY);
 
-        int submittedIngCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, AssignmentStatus.ING, SubmitStatus.SUBMITTED);
-        int ingCount = assignmentService.countByAssignmentStatus(AssignmentStatus.ING);
+        int submittedIngCount = getSubmittedCountByStatus(writer, AssignmentStatus.ING);
+        int ingCount = getCountByStatus(AssignmentStatus.ING);
 
-        int doneCount = assignmentService.countByAssignmentStatus(AssignmentStatus.DONE);
-
-        List<Assignment> todayAssignments = assignmentService.findAssignmentsByStatus(AssignmentStatus.TODAY);
-        List<Assignment> ingAssignments = assignmentService.findAssignmentsByStatus(AssignmentStatus.ING);
-        List<Assignment> doneAssignments = assignmentService.findAssignmentsByStatus(AssignmentStatus.DONE);
+        int doneCount = getCountByStatus(AssignmentStatus.DONE);
 
         Map<String, List<AssignmentAllDTO>> assignments = new HashMap<>();
-        assignments.put("today", convertAssignmentsToDTO(todayAssignments, writer));
-        assignments.put("ing", convertAssignmentsToDTO(ingAssignments, writer));
-        assignments.put("done", convertAssignmentsToDTO(doneAssignments, writer));
+        assignments.put("today", convertAssignmentsToDTO(AssignmentStatus.TODAY, writer));
+        assignments.put("ing", convertAssignmentsToDTO(AssignmentStatus.ING, writer));
+        assignments.put("done", convertAssignmentsToDTO(AssignmentStatus.DONE, writer));
 
         return new ResponseAssignmentDetails(writer, submittedTodayCount, todayCount, submittedIngCount, ingCount, doneCount, assignments);
     }
 
-    private List<AssignmentAllDTO> convertAssignmentsToDTO(List<Assignment> assignments, String writer) {
+    private int getSubmittedCountByStatus(String writer, AssignmentStatus status) {
+        return submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, status, SubmitStatus.SUBMITTED);
+    }
+
+    private int getCountByStatus(AssignmentStatus status) {
+        return assignmentService.countByAssignmentStatus(status);
+    }
+    private List<AssignmentAllDTO> convertAssignmentsToDTO(AssignmentStatus status, String writer) {
+        List<Assignment> assignments = assignmentService.findAssignmentsByStatus(status);
         List<AssignmentAllDTO> dtoList = new ArrayList<>();
+
         for (Assignment assignment : assignments) {
             SubmitAssignment submitAssignment = submitAssignmentRepository.findByWriterAndAssignment(writer, assignment)
                     .orElse(null);
@@ -205,6 +210,7 @@ public class SubmitAssignmentService {
             AssignmentAllDTO dto = new AssignmentAllDTO(assignment, submitAssignmentAllDTO);
             dtoList.add(dto);
         }
+
         return dtoList;
     }
 

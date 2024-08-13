@@ -60,14 +60,9 @@ public class SubmitAssignmentController {
     }
 
     @Operation(summary = "(민규) 과제 상태별 완료한 개수 및 전체 조회", description = "Headers에 Bearer token 필요, 조회하고자 하는 아기사자 이름 필요",
-            responses = {@ApiResponse(responseCode = "201", description = "조회 성공"),
+            responses = {@ApiResponse(responseCode = "200", description = "조회 성공"),
                     @ApiResponse(responseCode = "404", description = "")})
     @GetMapping("/details")
-    public ResponseEntity<ResponseAssignmentDetails> getAssignmentDetails(@RequestParam String writer) {
-        ResponseAssignmentDetails assignmentDetails = submitAssignmentService.getAssignmentDetailsByWriter(writer);
-        return ResponseEntity.ok(assignmentDetails);
-    }
-    @GetMapping("/detail")
     public ResponseEntity<ResponseAssignmentDetails> getAssignmentDetailsByWriter(@RequestParam String writer) {
         ResponseAssignmentDetails response = submitAssignmentService.getAssignmentDetailsByWriter(writer);
         return ResponseEntity.ok(response);

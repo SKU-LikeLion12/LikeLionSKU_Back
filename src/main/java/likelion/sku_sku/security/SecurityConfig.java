@@ -22,6 +22,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 //                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/admin/project/all").permitAll()
                                 .requestMatchers("/lion/**").hasAnyRole("ADMIN_LION", "BABY_LION")
 //                                .requestMatchers("/project/**").hasRole("ADMIN_LION")
 //                                .requestMatchers("/lion/**").hasAnyRole("ADMIN_LION", "BABY_LION")

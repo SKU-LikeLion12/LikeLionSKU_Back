@@ -25,6 +25,8 @@ public class Assignment {
 
     private String title;
 
+    private String subTitle;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -35,15 +37,17 @@ public class Assignment {
 
     private LocalDate createDate; // YYYY-MM-DD
 
-    public Assignment(TrackType track, String title, String description) {
+    public Assignment(TrackType track, String title, String subTitle, String description) {
         this.track = track;
         this.title = title;
+        this.subTitle = subTitle;
         this.description = description;
         this.createDate = LocalDate.now();
     }
 
-    public void update(String title, String description) {
+    public void update(String title, String subTitle, String description) {
         this.title = title;
+        this.subTitle = subTitle;
         this.description = description;
     }
 }

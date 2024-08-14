@@ -24,7 +24,7 @@ public class ProjectAdminController {
 
     private final ProjectService projectService;
 
-    @Operation(summary = "(민규) Project 추가", description = "Headers에 Bearer token 필요, Project의 title, subTitle, image 필요, body에 form-data로 넣어야 함",
+    @Operation(summary = "(민규) Project 추가", description = "Headers에 Bearer token 필요, body에 form-data로 Project의 title, subTitle, image 필요",
             responses = {@ApiResponse(responseCode = "201", description = "생성"),
                     @ApiResponse(responseCode = "409", description = "그 title 이미 있")})
     @PostMapping("/add")
@@ -38,7 +38,7 @@ public class ProjectAdminController {
             return ResponseEntity.status(HttpStatus.CREATED).body(project);
     }
 
-    @Operation(summary = "(민규) Project 수정", description = "Headers에 Bearer token 필요, Project의 id, title, subTitle 필요, image는 안바꾸고 싶으면 안넣으면 됨, , body에 form-data로 넣어야 함",
+    @Operation(summary = "(민규) Project 수정", description = "Headers에 Bearer token 필요, body에 form-data로 Project의 id와 수정하고 싶은 값만 넣으면 됨",
             responses = {@ApiResponse(responseCode = "201", description = "수정 성공 후 변경된 정보를 포함한 객체 생성"),
                     @ApiResponse(responseCode = "409", description = "그 title 이미 있"),
                     @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
@@ -54,7 +54,7 @@ public class ProjectAdminController {
             return ResponseEntity.status(HttpStatus.CREATED).body(project);
     }
 
-    @Operation(summary = "(민규) id로 Project 개별 정보 조회", description = "Headers에 Bearer token 필요, Project의 ID 필요",
+    @Operation(summary = "(민규) id로 Project 개별 정보 조회", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 Project의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 프로젝트 제목, 프로젝트 부제목, 프로젝트 사진이 출력."),
                     @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @GetMapping("")
@@ -63,7 +63,7 @@ public class ProjectAdminController {
             return ResponseEntity.status(HttpStatus.OK).body(responseProject);
     }
 
-    @Operation(summary = "(민규) 모든 Project 정보 조회", description = "Headers에 Bearer token 필요",
+    @Operation(summary = "(민규) 모든 Project 정보 조회", description = "",
             responses = {@ApiResponse(responseCode = "200", description = "모든 프로젝트 조회 성공"),
                     @ApiResponse(responseCode = "404", description = "Project 하나도 없")})
     @GetMapping("/all")
@@ -75,7 +75,7 @@ public class ProjectAdminController {
         return ResponseEntity.status(HttpStatus.OK).body(responseIdProjectUpdate);
     }
 
-    @Operation(summary = "(민규) Project 삭제", description = "Headers에 Bearer token 필요, Project의 id 필요",
+    @Operation(summary = "(민규) Project 삭제", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 Project의 id 필요",
               responses = {@ApiResponse(responseCode = "200", description = "프로젝트 삭제 성공"),
         @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @DeleteMapping("")

@@ -34,7 +34,16 @@ public class GlobalExceptionHandler {
 
 
     // Assignment
+    @ExceptionHandler(InvalidListIdException.class)
+    public ResponseEntity<String> invalidListId(InvalidListIdException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("삭제할 과제 안내물 id 목록이 비어 있");
+    }
 
+    // SubmitAssignment
+    @ExceptionHandler(InvalidSubmitAssignmentException.class)
+    public ResponseEntity<String> InvalidSubmitAssignment(InvalidSubmitAssignmentException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("그 제출한 과제 없");
+    }
 
     // LectureFile
     @ExceptionHandler(InvalidLectureFileException.class)

@@ -1,7 +1,7 @@
 package likelion.sku_sku.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
+import likelion.sku_sku.domain.Feedback;
 import lombok.Data;
 
 public class FeedbackDTO {
@@ -26,9 +26,14 @@ public class FeedbackDTO {
 
     // Response
     @Data
-    @AllArgsConstructor
     public static class ResponseFeedback {
         @Schema(description = "피드백 내용", example = "하면 되지")
         private String content;
+
+        public ResponseFeedback(Feedback feedback) {
+            this.content = feedback.getContent();
+        }
     }
+
+
 }

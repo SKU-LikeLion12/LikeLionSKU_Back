@@ -63,7 +63,7 @@ public class ProjectAdminController {
             return ResponseEntity.status(HttpStatus.OK).body(responseProject);
     }
 
-    @Operation(summary = "(민규) 모든 Project 정보 조회", description = "Headers에 Bearer token 필요",
+    @Operation(summary = "(민규) 모든 Project 정보 조회", description = "",
             responses = {@ApiResponse(responseCode = "200", description = "모든 프로젝트 조회 성공"),
                     @ApiResponse(responseCode = "404", description = "Project 하나도 없")})
     @GetMapping("/all")

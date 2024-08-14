@@ -6,7 +6,10 @@ import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
+import likelion.sku_sku.dto.AssignmentDTO;
 import likelion.sku_sku.exception.InvalidIdException;
+import likelion.sku_sku.exception.InvalidSubmitAssignmentException;
+import likelion.sku_sku.repository.FeedbackRepository;
 import likelion.sku_sku.repository.SubmitAssignmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,8 +21,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static likelion.sku_sku.dto.AssignmentDTO.*;
+import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAllDTO;
+import static likelion.sku_sku.dto.FeedbackDTO.ResponseFeedback;
+import static likelion.sku_sku.dto.JoinAssignmentFilesDTO.ResponseJoinAss;
 import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
 
 @Service
@@ -30,6 +36,8 @@ public class SubmitAssignmentService {
     private final LionService lionService;
     private final JoinAssignmentFilesService joinAssignmentFilesService;
     private final AssignmentService assignmentService;
+    private final FeedbackRepository feedbackRepository;
+
     @Transactional // 과제 제출
     public SubmitAssignment createSubmitAssignment(String bearer, Long assignmentId, List<MultipartFile> files) throws IOException {
         String writer = lionService.tokenToLionName(bearer.substring(7));
@@ -99,13 +107,13 @@ public class SubmitAssignmentService {
         List<ResponseAssignmentCount> responseList = new ArrayList<>();
 
         for (String writer : writers) {
-            int submittedTodayCount = submitAssignmentRepository.countByAssignment_TrackAndWriterAndAssignment_AssignmentStatusAndSubmitStatus(track, writer, AssignmentStatus.TODAY, SubmitStatus.SUBMITTED);
-            int todayCount = submitAssignmentRepository.countByAssignment_TrackAndWriterAndAssignment_AssignmentStatus(track, writer, AssignmentStatus.TODAY);
+            int submittedTodayCount = getSubmittedCountByStatus(writer, AssignmentStatus.TODAY);
+            int todayCount = getCountByStatusAndTrack(AssignmentStatus.TODAY, track);
 
-            int submittedIngCount = submitAssignmentRepository.countByAssignment_TrackAndWriterAndAssignment_AssignmentStatusAndSubmitStatus(track, writer, AssignmentStatus.ING, SubmitStatus.SUBMITTED);
-            int ingCount = submitAssignmentRepository.countByAssignment_TrackAndWriterAndAssignment_AssignmentStatus(track, writer, AssignmentStatus.ING);
+            int submittedIngCount = getSubmittedCountByStatus(writer, AssignmentStatus.ING);
+            int ingCount = getCountByStatusAndTrack(AssignmentStatus.ING, track);
 
-            int doneCount = submitAssignmentRepository.countByAssignment_TrackAndWriterAndAssignment_AssignmentStatus(track, writer, AssignmentStatus.DONE);
+            int doneCount = getCountByStatusAndTrack(AssignmentStatus.DONE, track);
 
             responseList.add(new ResponseAssignmentCount(writer, submittedTodayCount, todayCount, submittedIngCount, ingCount, doneCount));
         }
@@ -157,4 +165,32 @@ public class SubmitAssignmentService {
         }
         return dtoList;
     }
+
+    public AssignmentDTO.AssignmentAll getAssignmentWithSubmissions(Long assignmentId, String writer) {
+        Assignment assignment = assignmentService.findAssignmentById(assignmentId);
+
+        SubmitAssignment submitAssignment = submitAssignmentRepository.findByWriterAndAssignment(writer, assignment)
+                .orElseThrow(InvalidSubmitAssignmentException::new);
+
+        // JoinAssignmentFiles 조회 및 DTO 변환
+        List<ResponseJoinAss> filesDTO = joinAssignmentFilesService.findBySubmitAssignment(submitAssignment)
+                .stream()
+                .map(ResponseJoinAss::new)
+                .collect(Collectors.toList());
+
+        // Feedback 조회 및 DTO 변환
+        List<ResponseFeedback> feedbacksDTO = feedbackRepository.findFeedbackBySubmitAssignment(submitAssignment)
+                .stream()
+                .map(ResponseFeedback::new)
+                .collect(Collectors.toList());
+
+        // AssignSubmitFeed DTO 조립
+        AssignSubmitFeed assignSubmitFeed = new AssignSubmitFeed(submitAssignment, filesDTO, feedbacksDTO);
+
+        // AssignmentAll DTO 반환
+        return new AssignmentDTO.AssignmentAll(assignment, assignSubmitFeed);
+    }
+
+
+
 }

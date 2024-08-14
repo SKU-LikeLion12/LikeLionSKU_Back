@@ -4,6 +4,7 @@ import likelion.sku_sku.domain.Assignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.TrackType;
 import likelion.sku_sku.exception.InvalidIdException;
+import likelion.sku_sku.exception.InvalidListIdException;
 import likelion.sku_sku.repository.AssignmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -64,5 +65,19 @@ public class AssignmentService {
         Assignment assignment = assignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         assignmentRepository.delete(assignment);
+    }
+
+    @Transactional
+    public void deleteAssignmentsByIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            throw new InvalidListIdException();
+        }
+        for (Long id : ids) {
+            Assignment assignment = assignmentRepository.findById(id)
+                    .orElseThrow(InvalidIdException::new);
+            assignmentRepository.delete(assignment);
+
+        }
+
     }
 }

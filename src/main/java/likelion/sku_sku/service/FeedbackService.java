@@ -41,6 +41,10 @@ public class FeedbackService {
                 .orElseThrow(InvalidIdException::new);
     }
 
+    public List<Feedback> findFeedbackBySubmitAssignment(SubmitAssignment submitAssignment) {
+        return feedbackRepository.findFeedbackBySubmitAssignment(submitAssignment);
+    }
+
     @Transactional
     public void deleteFeedback(Long id) {
         Feedback feedback = feedbackRepository.findById(id)

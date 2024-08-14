@@ -1,7 +1,6 @@
 package likelion.sku_sku.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import likelion.sku_sku.domain.Assignment;
 import likelion.sku_sku.domain.JoinAssignmentFiles;
 import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.PassNonePass;
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import static likelion.sku_sku.dto.AssignmentDTO.*;
+import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAllDTO;
 
 public class SubmitAssignmentDTO {
 
@@ -39,6 +38,13 @@ public class SubmitAssignmentDTO {
     public static class DecidePassStatusRequest {
         @Schema(description = "제출한 과제 id", example = "1")
         private Long submitAssignmentId;
+    }
+
+    @Data
+    public static class assignmentWriter {
+        @Schema(description = "제출한 과제 id", example = "1")
+        private Long assignmentId;
+        private String writer;
     }
 
     @Data
@@ -138,4 +144,30 @@ public class SubmitAssignmentDTO {
             this.files = files;
         }
     }
+
+    @Data
+    public static class AssignSubmitFeed {
+        private Long id;
+        private TrackType track;
+        private String writer;
+        private SubmitStatus submitStatus;
+        private PassNonePass passNonePass;
+        private LocalDateTime createDate;
+        private List<JoinAssignmentFilesDTO.ResponseJoinAss> files;
+        private List<FeedbackDTO.ResponseFeedback> feedbacks; // 피드백 리스트 추가
+
+        public AssignSubmitFeed(SubmitAssignment submitAssignment,
+                                List<JoinAssignmentFilesDTO.ResponseJoinAss> files,
+                                List<FeedbackDTO.ResponseFeedback> feedbacks) {
+            this.id = submitAssignment.getId();
+            this.track = submitAssignment.getTrack();
+            this.writer = submitAssignment.getWriter();
+            this.submitStatus = submitAssignment.getSubmitStatus();
+            this.passNonePass = submitAssignment.getPassNonePass();
+            this.createDate = submitAssignment.getCreateDate();
+            this.files = files;
+            this.feedbacks = feedbacks; // 피드백 리스트 초기화
+        }
+    }
+
 }

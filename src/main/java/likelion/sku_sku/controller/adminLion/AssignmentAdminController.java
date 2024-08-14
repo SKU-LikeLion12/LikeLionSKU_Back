@@ -26,7 +26,7 @@ public class AssignmentAdminController {
         Assignment assignment = assignmentService.addAssignment(
                 request.getTrackType(),
                 request.getTitle(),
-                request.getSubtitle(),
+                request.getSubTitle(),
                 request.getDescription());
         return ResponseEntity.status(HttpStatus.CREATED).body(assignment);
     }
@@ -38,7 +38,7 @@ public class AssignmentAdminController {
         Assignment assignment = assignmentService.updateAssignment(
                 request.getId(),
                 request.getTitle(),
-                request.getSubtitle(),
+                request.getSubTitle(),
                 request.getDescription());
         return ResponseEntity.status(HttpStatus.CREATED).body(assignment);
     }

@@ -53,7 +53,7 @@ public class SubmitAssignment {
         this.createDate = LocalDateTime.now();
     }
 
-    public void decidePassStatus() {
-        this.passNonePass = PassNonePass.PASS;
+    public void update(PassNonePass passNonePass) {
+        this.passNonePass = passNonePass;
     }
 }

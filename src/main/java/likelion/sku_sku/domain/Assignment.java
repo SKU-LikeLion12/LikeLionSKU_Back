@@ -30,7 +30,6 @@ public class Assignment {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-
 //    @JsonManagedReference
 //    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<SubmitAssignment> submitAssignment = new ArrayList<>();

@@ -61,13 +61,13 @@ public class SubmitAssignmentService {
         return submitAssignment;
     }
 
-    @Transactional // 과제 통과 여부
-    public SubmitAssignment decidePassStatus(Long submitAssignmentId) {
-        SubmitAssignment submitAssignment = submitAssignmentRepository.findById(submitAssignmentId)
-                .orElseThrow(InvalidIdException::new);
-        submitAssignment.decidePassStatus();
-        return submitAssignmentRepository.save(submitAssignment);
-    }
+//    @Transactional // 과제 통과 여부
+//    public SubmitAssignment decidePassStatus(Long submitAssignmentId) {
+//        SubmitAssignment submitAssignment = submitAssignmentRepository.findById(submitAssignmentId)
+//                .orElseThrow(InvalidIdException::new);
+//        submitAssignment.decidePassStatus();
+//        return submitAssignmentRepository.save(submitAssignment);
+//    }
 
     public Map<String, List<SubmitAssignment>> findAllAssignmentsByWriter(String writer) {
         List<SubmitAssignment> todayAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.TODAY);
@@ -126,8 +126,8 @@ public class SubmitAssignmentService {
         SubmitAssignment submitAssignment = submitAssignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         submitAssignmentRepository.delete(submitAssignment);
-
-    }public ResponseAssignmentDetails getAssignmentDetailsByWriter(String writer, TrackType track) {
+    }
+    public ResponseAssignmentDetails getAssignmentDetailsByWriter(String writer, TrackType track) {
         int submittedTodayCount = getSubmittedCountByStatus(writer, AssignmentStatus.TODAY);
         int todayCount = getCountByStatusAndTrack(AssignmentStatus.TODAY, track);
 
@@ -172,22 +172,18 @@ public class SubmitAssignmentService {
         SubmitAssignment submitAssignment = submitAssignmentRepository.findByWriterAndAssignment(writer, assignment)
                 .orElseThrow(InvalidSubmitAssignmentException::new);
 
-        // JoinAssignmentFiles 조회 및 DTO 변환
         List<ResponseJoinAss> filesDTO = joinAssignmentFilesService.findBySubmitAssignment(submitAssignment)
                 .stream()
                 .map(ResponseJoinAss::new)
-                .collect(Collectors.toList());
+                .toList();
 
-        // Feedback 조회 및 DTO 변환
         List<ResponseFeedback> feedbacksDTO = feedbackRepository.findFeedbackBySubmitAssignment(submitAssignment)
                 .stream()
                 .map(ResponseFeedback::new)
-                .collect(Collectors.toList());
+                .toList();
 
-        // AssignSubmitFeed DTO 조립
         AssignSubmitFeed assignSubmitFeed = new AssignSubmitFeed(submitAssignment, filesDTO, feedbacksDTO);
 
-        // AssignmentAll DTO 반환
         return new AssignmentDTO.AssignmentAll(assignment, assignSubmitFeed);
     }
 

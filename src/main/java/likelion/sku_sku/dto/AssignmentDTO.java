@@ -20,7 +20,7 @@ public class AssignmentDTO {
         @Schema(description = "과제 안내물 제목", example = "백엔드 과제 안내")
         private String title;
         @Schema(description = "과제 안내물 서브제목", example = "[발표1]")
-        private String subtitle;
+        private String subTitle;
         @Schema(description = "과제 안내물 설명", example = "Article domain 작성해오기")
         private String description;
     }
@@ -32,7 +32,7 @@ public class AssignmentDTO {
         @Schema(description = "과제 안내물 제목", example = "백엔드 과제 안내 [3주차]")
         private String title;
         @Schema(description = "과제 안내물 서브제목", example = "[발표1]")
-        private String subtitle;
+        private String subTitle;
         @Schema(description = "과제 안내물 설명", example = "Article domain 작성해오기")
         private String description;
     }

@@ -20,7 +20,7 @@ import static likelion.sku_sku.dto.FeedbackDTO.UpdateFeedbackRequest;
 public class FeedbackAdminController {
     private final FeedbackService feedbackService;
 
-    @Operation(summary = "(민규) 피드백 추가", description = "Headers에 Bearer token 필요, 과제물 id, 피드백 내용 필요, body에 json으로 넣어야 함",
+    @Operation(summary = "(민규) 피드백 추가", description = "Headers에 Bearer token 필요, body에 json 형태로 과제 안내물 id, 피드백 내용 필요",
             responses = {@ApiResponse(responseCode = "201", description = "생성")})
     @PostMapping("/add")
     public ResponseEntity<?> createFeedback(@RequestBody CreateFeedbackRequest request) {
@@ -28,7 +28,7 @@ public class FeedbackAdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(feedback);
     }
 
-    @Operation(summary = "(민규) 피드백 수정", description = "Headers에 Bearer token 필요, 피드백 id와 피드백 내용 필요, body에 json으로 넣어야 함",
+    @Operation(summary = "(민규) 피드백 수정", description = "Headers에 Bearer token 필요, body에 json 형태로 피드백 id, 피드백 내용 필요",
             responses = {@ApiResponse(responseCode = "201", description = "수정 성공"),
                     @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @PutMapping("/update")

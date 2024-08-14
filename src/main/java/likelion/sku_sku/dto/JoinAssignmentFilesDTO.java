@@ -8,6 +8,7 @@ public class JoinAssignmentFilesDTO {
 
     @Data
     public static class ResponseJoinAss {
+        @Schema(description = "제출한 과제 id", example = "1")
         private Long submitAssignmentId;
         @Schema(description = "파일 이름", example = "Spring.pdf")
         private String fileName;

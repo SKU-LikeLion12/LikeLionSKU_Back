@@ -20,18 +20,19 @@ public class AssignmentService {
     private final AssignmentRepository assignmentRepository;
 
     @Transactional
-    public Assignment addAssignment(TrackType trackType, String title, String description) {
-        Assignment assignment = new Assignment(trackType, title, description);
+    public Assignment addAssignment(TrackType trackType, String title, String subTitle, String description) {
+        Assignment assignment = new Assignment(trackType, title, subTitle, description);
         return assignmentRepository.save(assignment);
     }
 
     @Transactional
-    public Assignment updateAssignment(Long id, String title, String description) {
+    public Assignment updateAssignment(Long id, String title, String subTitle, String description) {
         Assignment assignment = assignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         String newTitle = (title != null && !title.isEmpty() ? title : assignment.getTitle());
+        String newSubTitle = (subTitle != null && !subTitle.isEmpty() ? subTitle : assignment.getSubTitle());
         String newDescription = (description != null && !description.isEmpty() ? description : assignment.getDescription());
-        assignment.update(newTitle, newDescription);
+        assignment.update(newTitle, newSubTitle, newDescription);
         return assignment;
     }
 

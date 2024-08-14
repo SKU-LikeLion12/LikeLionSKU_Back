@@ -8,7 +8,7 @@ public class FeedbackDTO {
 
     @Data
     public static class CreateFeedbackRequest {
-        @Schema(description = "과제 제출 id", example = "1")
+        @Schema(description = "제출한 과제 id", example = "1")
         private Long submitAssignmentId;
 
         @Schema(description = "피드백 내용", example = "하면 되지")

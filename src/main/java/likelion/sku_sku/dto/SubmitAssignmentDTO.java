@@ -21,35 +21,49 @@ public class SubmitAssignmentDTO {
 
     @Data
     public static class CreateSubmitRequest {
+        @Schema(description = "과제 안내물 id", example = "1")
         private Long assignmentId;
+        @Schema(description = "제출한 과제 파일들", example = "")
         private List<MultipartFile> files;
     }
 
     @Data
     public static class UpdateSubmitRequest {
-        private Long submitAssignmentId;
+        @Schema(description = "제출한 과제 id", example = "1")
+        Long submitAssignmentId;
+        @Schema(description = "제출한 과제 파일들", example = "")
         private List<MultipartFile> files;
     }
 
     @Data
     public static class DecidePassStatusRequest {
+        @Schema(description = "제출한 과제 id", example = "1")
         private Long submitAssignmentId;
     }
 
     @Data
     public static class WriterAndTrack {
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
         private String writer;
+        @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
         private TrackType track;
     }
 
     @Data
     public static class ResponseAssignmentDetails {
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
         private String writer;
+        @Schema(description = "제출한 오늘의 과제 개수", example = "1")
         private int submittedTodayCount;
+        @Schema(description = "해당 트랙 오늘의 과제 종 개수", example = "3")
         private int todayCount;
+        @Schema(description = "제출한 진행중인 과제 개수", example = "1")
         private int submittedIngCount;
+        @Schema(description = "해당 트랙 진행중인 과제 종 개수", example = "3")
         private int ingCount;
+        @Schema(description = "해당 트랙 완료된 과제 종 개수", example = "3")
         private int doneCount;
+        @Schema(description = "과제 안내물", example = "")
         private Map<String, List<AssignmentAllDTO>> assignments;
 
         public ResponseAssignmentDetails(String writer, int submittedTodayCount, int todayCount, int submittedIngCount, int ingCount, int doneCount, Map<String, List<AssignmentAllDTO>> assignments) {
@@ -66,26 +80,30 @@ public class SubmitAssignmentDTO {
     @Data
     @AllArgsConstructor
     public static class ResponseAssignmentCount {
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
         private String writer;
+        @Schema(description = "제출한 오늘의 과제 개수", example = "1")
         private int submittedTodayCount;
+        @Schema(description = "해당 트랙 오늘의 과제 종 개수", example = "3")
         private int todayCount;
-
+        @Schema(description = "제출한 진행중인 과제 개수", example = "1")
         private int submittedIngCount;
+        @Schema(description = "해당 트랙 진행중인 과제 종 개수", example = "3")
         private int ingCount;
-
+        @Schema(description = "해당 트랙 완료된 과제 종 개수", example = "3")
         private int doneCount;
     }
 
     @Data
     @AllArgsConstructor
     public static class ResponseSubmit {
-        @Schema(description = "과제 id", example = "1")
+        @Schema(description = "제출한 과제 id", example = "1")
         private Long id;
         @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
         private TrackType trackType;
         @Schema(description = "강의 안내물 id", example = "1")
         private Long assignmentId;
-        @Schema(description = "과제 작성자", example = "한민규")
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
         private String writer;
         @Schema(description = "과제 제출 상태", example = "SUBMITTED or UNSUBMITTED")
         private SubmitStatus submitStatus;
@@ -94,25 +112,21 @@ public class SubmitAssignmentDTO {
     }
 
     @Data
-    public static class SubmitAssignmentDetails {
-        private SubmitAssignment submitAssignment;
-        private List<JoinAssignmentFiles> files;
-
-        public SubmitAssignmentDetails(SubmitAssignment submitAssignment, List<JoinAssignmentFiles> files) {
-            this.submitAssignment = submitAssignment;
-            this.files = files;
-        }
-    }
-
-    @Data
-    public static class SubmitAssignmentAllDTO {  // 리팩토링된 클래스 이름
+    public static class SubmitAssignmentAllDTO {
+        @Schema(description = "제출한 과제 id", example = "1")
         private Long id;
+        @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
         private TrackType track;
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
         private String writer;
+        @Schema(description = "과제 제출 상태", example = "SUBMITTED or UNSUBMITTED")
         private SubmitStatus submitStatus;
+        @Schema(description = "제출한 과제 통과 상태", example = "PASS or FAIL")
         private PassNonePass passNonePass;
+        @Schema(description = "제출한 과제 제출 시간", example = "PASS or FAIL")
         private LocalDateTime createDate;
-        private List<JoinAssignmentFiles> files;  // files를 여기 포함
+        @Schema(description = "제출한 과제 파일들", example = "")
+        private List<JoinAssignmentFiles> files;
 
         public SubmitAssignmentAllDTO(SubmitAssignment submitAssignment, List<JoinAssignmentFiles> files) {
             this.id = submitAssignment.getId();

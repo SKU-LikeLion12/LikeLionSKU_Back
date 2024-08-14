@@ -24,7 +24,7 @@ import static likelion.sku_sku.dto.LectureDTO.ResponseLecture;
 public class LectureController {
     private final LectureService lectureService;
 
-    @Operation(summary = "(민규) id로 강의자료 개별 조회", description = "Headers에 Bearer token 필요, lecture의 id 필요",
+    @Operation(summary = "(민규) id로 강의자료 개별 조회", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 강의자료의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회를 하면 강의 trackType, 제목, 작성자, 조회수, 작성 시간, 수정 시간, 강의자료 나옴"),
                     @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @GetMapping("")

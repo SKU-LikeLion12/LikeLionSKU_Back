@@ -21,7 +21,7 @@ import static likelion.sku_sku.dto.SubmitAssignmentDTO.DecidePassStatusRequest;
 public class SubmitAssignmentAdminController {
     private final SubmitAssignmentService submitAssignmentService;
 
-    @Operation(summary = "(민규) 제출한 과제 통과 여부 결정", description = "Headers에 Bearer token 필요, 제출한 과제 id 필요",
+    @Operation(summary = "(민규) 제출한 과제 통과 여부 결정", description = "Headers에 Bearer token 필요, body에 json 형태로 제출한 과제 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "통과 여부 변경 성공"),
                     @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @PutMapping("/decidePass")

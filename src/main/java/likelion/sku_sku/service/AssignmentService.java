@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,20 +35,18 @@ public class AssignmentService {
         return assignment;
     }
 
-    public List<Assignment> getAssignmentsByTrackAndStatus(TrackType track, AssignmentStatus assignmentStatus) {
-        return assignmentRepository.findByTrackAndAssignmentStatus(track, assignmentStatus);
-    }
+    public Map<String, Object> getAssignmentsAndCountByTrackAndStatus(TrackType track, AssignmentStatus assignmentStatus) {
+        List<Assignment> assignments = assignmentRepository.findByTrackAndAssignmentStatus(track, assignmentStatus);
+        int assignmentCount = assignments.size();
 
-    public List<Assignment> findAssignmentsByTrack(TrackType track) {
-        return assignmentRepository.findByTrack(track);
-    }
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", assignmentCount);
+        result.put("assignments", assignments);
 
-    public List<Assignment> findAssignmentsByStatus(AssignmentStatus status) {
-        return assignmentRepository.findByAssignmentStatus(status);
+        return result;
     }
-
-    public List<Assignment> findAllAssignment() {
-        return assignmentRepository.findAll();
+ public List<Assignment> findAssignmentsByAssignmentStatusAndTrack(AssignmentStatus status, TrackType track) {
+        return assignmentRepository.findAssignmentsByAssignmentStatusAndTrack(status, track);
     }
 
     public Assignment findAssignmentById(Long id) {
@@ -54,8 +54,8 @@ public class AssignmentService {
                 .orElseThrow(InvalidIdException::new);
     }
 
-    public int countByAssignmentStatus(AssignmentStatus assignmentStatus) {
-        return assignmentRepository.countByAssignmentStatus(assignmentStatus);
+    public int countByAssignmentStatusAndTrack(AssignmentStatus assignmentStatus, TrackType track) {
+        return assignmentRepository.countByAssignmentStatusAndTrack(assignmentStatus, track);
     }
 
     @Transactional
@@ -64,7 +64,4 @@ public class AssignmentService {
                 .orElseThrow(InvalidIdException::new);
         assignmentRepository.delete(assignment);
     }
-
-
-
 }

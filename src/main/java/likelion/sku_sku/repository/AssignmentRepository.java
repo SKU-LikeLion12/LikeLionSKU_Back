@@ -9,10 +9,11 @@ import java.util.List;
 
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     List<Assignment> findByTrackAndAssignmentStatus(TrackType track, AssignmentStatus assignmentStatus);
+    int countByTrackAndAssignmentStatus(TrackType track, AssignmentStatus status);
 
     List<Assignment> findByTrack(TrackType trackType);
-    List<Assignment> findByAssignmentStatus(AssignmentStatus status);
-    int countByAssignmentStatus(AssignmentStatus assignmentStatus);
+    List<Assignment> findAssignmentsByAssignmentStatusAndTrack(AssignmentStatus status, TrackType track);
+    int countByAssignmentStatusAndTrack(AssignmentStatus assignmentStatus, TrackType track);
 
 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 import static likelion.sku_sku.dto.AssignmentDTO.FindTrackStatus;
 
@@ -29,10 +30,13 @@ public class AssignmentController {
                     @ApiResponse(responseCode = "404", description = "아무것도 없")})
     @GetMapping("") // 트랙과 과제 상태를 넣으면 그에 알맞는 결과가 나옴
     public ResponseEntity<?> getAssignments(@ModelAttribute FindTrackStatus request) {
-        List<Assignment> assignment = assignmentService.getAssignmentsByTrackAndStatus(request.getTrack(), request.getStatus());
-        if (assignment.isEmpty()) {
+        Map<String, Object> response = assignmentService.getAssignmentsAndCountByTrackAndStatus(request.getTrack(), request.getStatus());
+        int assignmentCount = (int) response.get("count");
+
+        if (assignmentCount == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("아무것도 없");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(assignment);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

@@ -6,8 +6,6 @@ import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
-import likelion.sku_sku.dto.AssignmentDTO;
-import likelion.sku_sku.dto.SubmitAssignmentDTO;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.repository.SubmitAssignmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,11 +61,6 @@ public class SubmitAssignmentService {
         return submitAssignmentRepository.save(submitAssignment);
     }
 
-
-    public List<SubmitAssignment> findSubmittedAssignmentsByWriter(String writer) {
-        return submitAssignmentRepository.findByWriter(writer);
-    }
-
     public Map<String, List<SubmitAssignment>> findAllAssignmentsByWriter(String writer) {
         List<SubmitAssignment> todayAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.TODAY);
         List<SubmitAssignment> ingAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.ING);
@@ -79,15 +72,6 @@ public class SubmitAssignmentService {
         result.put("done", doneAssignments);
 
         return result;
-    }
-
-    public List<SubmitAssignment> findAssignmentsByWriterAndStatus(String writer, AssignmentStatus status) {
-        return submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, status);
-    }
-
-
-    public List<SubmitAssignment> findAssignmentsByTrackType(TrackType trackType) {
-        return submitAssignmentRepository.findByAssignment_Track(trackType);
     }
 
     public SubmitAssignment findSubmitAssignmentById(Long id) {
@@ -104,17 +88,6 @@ public class SubmitAssignmentService {
                     submitAssignment.getSubmitStatus(),
                     submitAssignment.getPassNonePass()))
                 .orElseThrow(InvalidIdException::new);
-    }
-
-    public ResponseAssignmentCount countAssignmentsByWriter(String writer) {
-        int submittedTodayCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, AssignmentStatus.TODAY, SubmitStatus.SUBMITTED);
-        int todayCount = assignmentService.countByAssignmentStatus(AssignmentStatus.TODAY);
-
-        int submittedIngCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, AssignmentStatus.ING, SubmitStatus.SUBMITTED);
-        int ingCount = assignmentService.countByAssignmentStatus(AssignmentStatus.ING);
-
-        int doneCount = assignmentService.countByAssignmentStatus(AssignmentStatus.DONE);
-        return new ResponseAssignmentCount(writer, submittedTodayCount, todayCount, submittedIngCount, ingCount, doneCount);
     }
 
     public List<ResponseAssignmentCount> countAssignmentsByTrack(TrackType track) {
@@ -140,53 +113,25 @@ public class SubmitAssignmentService {
         return responseList;
     }
 
-
-    public List<SubmitAssignment> findAllSubmitAssignment() {
-        return submitAssignmentRepository.findAll();
-    }
-
     @Transactional
     public void deleteSubmitAssignment(Long id) {
         SubmitAssignment submitAssignment = submitAssignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         submitAssignmentRepository.delete(submitAssignment);
-    }
 
-//    public ResponseAssignmentDetails getAssignmentDetailsByWriter(String writer) {
-//        int submittedTodayCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, AssignmentStatus.TODAY, SubmitStatus.SUBMITTED);
-//        int todayCount = assignmentService.countByAssignmentStatus(AssignmentStatus.TODAY);
-//
-//        int submittedIngCount = submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, AssignmentStatus.ING, SubmitStatus.SUBMITTED);
-//        int ingCount = assignmentService.countByAssignmentStatus(AssignmentStatus.ING);
-//
-//        int doneCount = assignmentService.countByAssignmentStatus(AssignmentStatus.DONE);
-//
-//        List<SubmitAssignment> todayAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.TODAY);
-//        List<SubmitAssignment> ingAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.ING);
-//        List<SubmitAssignment> doneAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.DONE);
-//
-//        Map<String, List<SubmitAssignment>> assignments = new HashMap<>();
-//        assignments.put("today", todayAssignments);
-//        assignments.put("ing", ingAssignments);
-//        assignments.put("done", doneAssignments);
-//
-//        return new ResponseAssignmentDetails(writer, submittedTodayCount, todayCount, submittedIngCount, ingCount, doneCount, assignments);
-//    }
-
-
-    public ResponseAssignmentDetails getAssignmentDetailsByWriter(String writer) {
+    }public ResponseAssignmentDetails getAssignmentDetailsByWriter(String writer, TrackType track) {
         int submittedTodayCount = getSubmittedCountByStatus(writer, AssignmentStatus.TODAY);
-        int todayCount = getCountByStatus(AssignmentStatus.TODAY);
+        int todayCount = getCountByStatusAndTrack(AssignmentStatus.TODAY, track);
 
         int submittedIngCount = getSubmittedCountByStatus(writer, AssignmentStatus.ING);
-        int ingCount = getCountByStatus(AssignmentStatus.ING);
+        int ingCount = getCountByStatusAndTrack(AssignmentStatus.ING, track);
 
-        int doneCount = getCountByStatus(AssignmentStatus.DONE);
+        int doneCount = getCountByStatusAndTrack(AssignmentStatus.DONE, track);
 
         Map<String, List<AssignmentAllDTO>> assignments = new HashMap<>();
-        assignments.put("today", convertAssignmentsToDTO(AssignmentStatus.TODAY, writer));
-        assignments.put("ing", convertAssignmentsToDTO(AssignmentStatus.ING, writer));
-        assignments.put("done", convertAssignmentsToDTO(AssignmentStatus.DONE, writer));
+        assignments.put("today", convertAssignmentsToDTOByTrack(AssignmentStatus.TODAY, writer, track));
+        assignments.put("ing", convertAssignmentsToDTOByTrack(AssignmentStatus.ING, writer, track));
+        assignments.put("done", convertAssignmentsToDTOByTrack(AssignmentStatus.DONE, writer, track));
 
         return new ResponseAssignmentDetails(writer, submittedTodayCount, todayCount, submittedIngCount, ingCount, doneCount, assignments);
     }
@@ -194,12 +139,12 @@ public class SubmitAssignmentService {
     private int getSubmittedCountByStatus(String writer, AssignmentStatus status) {
         return submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndSubmitStatus(writer, status, SubmitStatus.SUBMITTED);
     }
-
-    private int getCountByStatus(AssignmentStatus status) {
-        return assignmentService.countByAssignmentStatus(status);
+    private int getCountByStatusAndTrack(AssignmentStatus status, TrackType track) {
+        return assignmentService.countByAssignmentStatusAndTrack(status, track);
     }
-    private List<AssignmentAllDTO> convertAssignmentsToDTO(AssignmentStatus status, String writer) {
-        List<Assignment> assignments = assignmentService.findAssignmentsByStatus(status);
+
+    private List<AssignmentAllDTO> convertAssignmentsToDTOByTrack(AssignmentStatus status, String writer, TrackType track) {
+        List<Assignment> assignments = assignmentService.findAssignmentsByAssignmentStatusAndTrack(status, track);
         List<AssignmentAllDTO> dtoList = new ArrayList<>();
 
         for (Assignment assignment : assignments) {
@@ -210,10 +155,6 @@ public class SubmitAssignmentService {
             AssignmentAllDTO dto = new AssignmentAllDTO(assignment, submitAssignmentAllDTO);
             dtoList.add(dto);
         }
-
         return dtoList;
     }
-
-
-
 }

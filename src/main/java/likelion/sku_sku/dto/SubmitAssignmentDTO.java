@@ -37,6 +37,12 @@ public class SubmitAssignmentDTO {
     }
 
     @Data
+    public static class WriterAndTrack {
+        private String writer;
+        private TrackType track;
+    }
+
+    @Data
     public static class ResponseAssignmentDetails {
         private String writer;
         private int submittedTodayCount;

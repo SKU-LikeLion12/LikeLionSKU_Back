@@ -63,8 +63,8 @@ public class SubmitAssignmentController {
             responses = {@ApiResponse(responseCode = "200", description = "조회 성공"),
                     @ApiResponse(responseCode = "404", description = "")})
     @GetMapping("/details")
-    public ResponseEntity<ResponseAssignmentDetails> getAssignmentDetailsByWriter(@RequestParam String writer) {
-        ResponseAssignmentDetails response = submitAssignmentService.getAssignmentDetailsByWriter(writer);
+    public ResponseEntity<ResponseAssignmentDetails> getAssignmentDetailsByWriter(@ModelAttribute WriterAndTrack request) {
+        ResponseAssignmentDetails response = submitAssignmentService.getAssignmentDetailsByWriter(request.getWriter(), request.getTrack());
         return ResponseEntity.ok(response);
     }
 }

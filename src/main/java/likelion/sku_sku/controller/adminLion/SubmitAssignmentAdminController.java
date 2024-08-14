@@ -23,14 +23,14 @@ import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
 public class SubmitAssignmentAdminController {
     private final SubmitAssignmentService submitAssignmentService;
 
-    @Operation(summary = "(민규) 제출한 과제 통과 여부 결정", description = "Headers에 Bearer token 필요, body에 json 형태로 제출한 과제 id 필요",
-            responses = {@ApiResponse(responseCode = "200", description = "통과 여부 변경 성공"),
-                    @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
-    @PutMapping("/decidePass")
-    public ResponseEntity<?> decidePassStatus(@RequestBody DecidePassStatusRequest request) {
-        SubmitAssignment submitAssignment = submitAssignmentService.decidePassStatus(request.getSubmitAssignmentId());
-        return ResponseEntity.ok(submitAssignment);
-    }
+//    @Operation(summary = "(민규) 제출한 과제 통과 여부 결정", description = "Headers에 Bearer token 필요, body에 json 형태로 제출한 과제 id 필요",
+//            responses = {@ApiResponse(responseCode = "200", description = "통과 여부 변경 성공"),
+//                    @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
+//    @PutMapping("/decidePass")
+//    public ResponseEntity<?> decidePassStatus(@RequestBody DecidePassStatusRequest request) {
+//        SubmitAssignment submitAssignment = submitAssignmentService.decidePassStatus(request.getSubmitAssignmentId());
+//        return ResponseEntity.ok(submitAssignment);
+//    }
     @Operation(summary = "(민규) 사람별 과제 현황 전체 조회", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 조회하고자 하는 아기사자 이름 필요",
             responses = {@ApiResponse(responseCode = "201", description = "조회 성공"),
                     @ApiResponse(responseCode = "404", description = "")})
@@ -59,7 +59,7 @@ public class SubmitAssignmentAdminController {
 
     @Operation(summary = "(민규) 제출한 과제 개별 조회", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 과제 안내물 id, 제출한 과제 작성자 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회 성공"),
-                    @ApiResponse(responseCode = "404", description = "")})
+                    @ApiResponse(responseCode = "404", description = "그 제출한 과제 없")})
     @GetMapping("/assignment")
     public ResponseEntity<AssignmentAll> getAssignmentWithSubmissions(@ModelAttribute assignmentWriter request) {
         AssignmentAll assignmentAll = submitAssignmentService.getAssignmentWithSubmissions(request.getAssignmentId(), request.getWriter());

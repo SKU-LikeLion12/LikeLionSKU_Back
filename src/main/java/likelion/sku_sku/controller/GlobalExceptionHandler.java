@@ -42,12 +42,12 @@ public class GlobalExceptionHandler {
     // SubmitAssignment
     @ExceptionHandler(InvalidSubmitAssignmentException.class)
     public ResponseEntity<String> InvalidSubmitAssignment(InvalidSubmitAssignmentException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("그 제출한 과제 없");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그 제출한 과제 없");
     }
 
     // LectureFile
     @ExceptionHandler(InvalidLectureFileException.class)
     public ResponseEntity<String> invalidLectureFile(InvalidLectureFileException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("그 강의자료 없");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그 강의자료 없");
     }
 }

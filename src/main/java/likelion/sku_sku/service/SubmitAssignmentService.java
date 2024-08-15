@@ -98,13 +98,15 @@ public class SubmitAssignmentService {
                 .orElseThrow(InvalidIdException::new);
     }
 
-    public List<ResponseAssignmentCount> countAssignmentsByTrack(TrackType track) {
-        List<SubmitAssignment> assignments  = submitAssignmentRepository.findDistinctWriterByAssignment_Track(track); // 트랙에 해당하는 모든 작성자 목록을 가져옴
+    public ResponseAssignmentSummary countAssignmentsByTrack(TrackType track) {
+        List<SubmitAssignment> assignments = submitAssignmentRepository.findDistinctWriterByAssignment_Track(track); // 트랙에 해당하는 모든 작성자 목록을 가져옴
         List<String> writers = assignments.stream()
                 .map(SubmitAssignment::getWriter)
                 .distinct()
                 .toList();
         List<ResponseAssignmentCount> responseList = new ArrayList<>();
+
+        int totalAssignmentsByTrack = getTotalAssignmentsByTrack(track); // 트랙에 해당하는 과제의 총 개수
 
         for (String writer : writers) {
             int submittedTodayCount = getSubmittedCountByStatus(writer, AssignmentStatus.TODAY);
@@ -118,8 +120,13 @@ public class SubmitAssignmentService {
             responseList.add(new ResponseAssignmentCount(writer, submittedTodayCount, todayCount, submittedIngCount, ingCount, doneCount));
         }
 
-        return responseList;
+        return new ResponseAssignmentSummary(totalAssignmentsByTrack, responseList);
     }
+
+    private int getTotalAssignmentsByTrack(TrackType track) {
+        return assignmentService.countByTrack(track);
+    }
+
 
     @Transactional
     public void deleteSubmitAssignment(Long id) {

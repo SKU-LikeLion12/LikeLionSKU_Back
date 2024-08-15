@@ -44,7 +44,7 @@ public class SubmitAssignmentAdminController {
             responses = {@ApiResponse(responseCode = "200", description = "조회 성공"),
                     @ApiResponse(responseCode = "404", description = "")})
     @GetMapping("/trackcnt")
-    public ResponseEntity<List<ResponseAssignmentCount>> getAssignmentCountsByTrack(@RequestParam TrackType track) {
+    public ResponseEntity<ResponseAssignmentSummary> getAssignmentCountsByTrack(@RequestParam TrackType track) {
         return ResponseEntity.ok(submitAssignmentService.countAssignmentsByTrack(track));
     }
 

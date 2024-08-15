@@ -60,6 +60,10 @@ public class AssignmentService {
         return assignmentRepository.countByAssignmentStatusAndTrack(assignmentStatus, track);
     }
 
+    public int countByTrack(TrackType trackType) {
+        return assignmentRepository.countByTrack(trackType);
+    }
+
     @Transactional
     public void deleteAssignment(Long id) {
         Assignment assignment = assignmentRepository.findById(id)

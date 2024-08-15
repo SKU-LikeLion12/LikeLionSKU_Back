@@ -53,6 +53,7 @@ public class LectureService {
         return lecture;
     }
 
+    @Transactional
     public ResponseLecture finaLectureById(Long lectureId) {
         return lectureRepository.findById(lectureId)
                 .map(lecture -> {
@@ -75,6 +76,24 @@ public class LectureService {
     public List<Lecture> findAllLecture() {
         return lectureRepository.findAll();
     }
+
+    public List<ResponseLectureWithoutFiles> findAllLectureByTrack(TrackType trackType) {
+        List<Lecture> lectures = lectureRepository.findByTrack(trackType);
+        return lectures.stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
+    private ResponseLectureWithoutFiles convertToDTO(Lecture lecture) {
+        return new ResponseLectureWithoutFiles(
+                lecture.getId(),
+                lecture.getTitle(),
+                lecture.getWriter(),
+                lecture.getViewCount(),
+                lecture.getCreateDate()
+        );
+    }
+
 
     @Transactional
     public void deleteLecture(Long id) {

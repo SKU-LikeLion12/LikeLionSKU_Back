@@ -170,4 +170,11 @@ public class SubmitAssignmentDTO {
         }
     }
 
+    @Data
+    @AllArgsConstructor
+    public static class ResponseAssignmentSummary {
+        private int totalAssignmentsByTrack;
+        private List<ResponseAssignmentCount> assignmentCounts;
+    }
+
 }

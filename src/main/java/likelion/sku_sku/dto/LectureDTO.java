@@ -53,4 +53,19 @@ public class LectureDTO {
         @Schema(description = "강의자료 파일", example = "")
         private List<CreateJoinLectureFilesRequest> joinLectureFiles;
     }
+
+    @Data
+    @AllArgsConstructor
+    public static class ResponseLectureWithoutFiles {
+        @Schema(description = "강의자료 id", example = "1")
+        private Long id;
+        @Schema(description = "강의자료 제목", example = "백엔드 3주차")
+        private String title;
+        @Schema(description = "강의자료 작성자", example = "한민규")
+        private String writer;
+        @Schema(description = "강의자료 조회수", example = "21")
+        private int views;
+        @Schema(description = "강의자료 작성 시간", example = "YYYY-MM-DD")
+        private LocalDate createDate;
+    }
 }

@@ -45,6 +45,6 @@ public class Lecture {
     }
 
     public void incrementViewCount() {
-        this.viewCount++;
+        this.viewCount+=1;
     }
 }

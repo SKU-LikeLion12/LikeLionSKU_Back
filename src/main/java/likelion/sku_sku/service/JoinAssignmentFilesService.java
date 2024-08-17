@@ -33,7 +33,7 @@ public class JoinAssignmentFilesService {
 
     @Transactional
     public void deleteBySubmitAssignment(SubmitAssignment submitAssignment) {
-        joinAssignmentFilesRepository.deleteBySubmitAssignment(submitAssignment);  // 해당 Lecture에 연관된 모든 JoinLectureFiles 삭제
+        joinAssignmentFilesRepository.deleteBySubmitAssignment(submitAssignment);
     }
 
     List<JoinAssignmentFiles> findBySubmitAssignment(SubmitAssignment submitAssignment) {

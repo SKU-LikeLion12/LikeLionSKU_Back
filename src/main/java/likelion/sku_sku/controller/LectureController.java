@@ -3,9 +3,7 @@ package likelion.sku_sku.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import likelion.sku_sku.domain.Lecture;
 import likelion.sku_sku.domain.enums.TrackType;
-import likelion.sku_sku.dto.LectureDTO;
 import likelion.sku_sku.service.LectureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static likelion.sku_sku.dto.LectureDTO.*;
 import static likelion.sku_sku.dto.LectureDTO.ResponseLecture;
+import static likelion.sku_sku.dto.LectureDTO.ResponseLectureWithoutFiles;
 
 @RestController
 @RequiredArgsConstructor

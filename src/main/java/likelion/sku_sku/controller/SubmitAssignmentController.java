@@ -22,7 +22,8 @@ import static likelion.sku_sku.dto.SubmitAssignmentDTO.UpdateSubmitRequest;
 public class SubmitAssignmentController {
     private final SubmitAssignmentService submitAssignmentService;
     @Operation(summary = "(민규) 과제 제출", description = "Headers에 Bearer token 필요, body에 form-data로 강의 안내물의 id 필요",
-            responses = {@ApiResponse(responseCode = "201", description = "생성")})
+            responses = {@ApiResponse(responseCode = "201", description = "생성"),
+                    @ApiResponse(responseCode = "409", description = "이미 제출한 과제")})
     @PostMapping("/add")
     public ResponseEntity<SubmitAssignment> createSubmitAssignment(@RequestHeader("Authorization") String bearer, CreateSubmitRequest request) throws IOException {
         SubmitAssignment submitAssignment = submitAssignmentService.createSubmitAssignment(bearer, request.getAssignmentId(), request.getFiles());
@@ -37,6 +38,4 @@ public class SubmitAssignmentController {
         SubmitAssignment submitAssignment = submitAssignmentService.updateSubmitAssignment(request.getSubmitAssignmentId(), request.getFiles());
         return ResponseEntity.ok(submitAssignment);
     }
-
-
 }

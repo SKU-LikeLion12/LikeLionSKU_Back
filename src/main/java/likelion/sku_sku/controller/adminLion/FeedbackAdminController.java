@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.sku_sku.domain.Feedback;
-import likelion.sku_sku.dto.FeedbackDTO;
 import likelion.sku_sku.service.FeedbackService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-import static likelion.sku_sku.dto.FeedbackDTO.*;
+import static likelion.sku_sku.dto.FeedbackDTO.FeedBackPassStatus;
 import static likelion.sku_sku.dto.FeedbackDTO.UpdateFeedbackRequest;
 
 @RestController

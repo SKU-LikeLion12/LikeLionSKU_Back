@@ -36,7 +36,6 @@ public class JoinLectureFiles {
 
     private LocalDateTime createDate; // YYYY-MM-DD HH:MM:SS.nnnnnn
 
-
     public JoinLectureFiles(Lecture lecture, MultipartFile file) throws IOException {
         this.lecture = lecture;
         this.fileName = file.getOriginalFilename();

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAllDTO;
+import static likelion.sku_sku.dto.FeedbackDTO.ResponseFeedback;
 
 public class SubmitAssignmentDTO {
 
@@ -154,11 +155,11 @@ public class SubmitAssignmentDTO {
         private PassNonePass passNonePass;
         private LocalDateTime createDate;
         private List<JoinAssignmentFilesDTO.ResponseJoinAss> files;
-        private List<FeedbackDTO.ResponseFeedback> feedbacks; // 피드백 리스트 추가
+        private ResponseFeedback feedbacks;
 
         public AssignSubmitFeed(SubmitAssignment submitAssignment,
                                 List<JoinAssignmentFilesDTO.ResponseJoinAss> files,
-                                List<FeedbackDTO.ResponseFeedback> feedbacks) {
+                                ResponseFeedback feedbacks) {
             this.id = submitAssignment.getId();
             this.track = submitAssignment.getTrack();
             this.writer = submitAssignment.getWriter();
@@ -166,7 +167,7 @@ public class SubmitAssignmentDTO {
             this.passNonePass = submitAssignment.getPassNonePass();
             this.createDate = submitAssignment.getCreateDate();
             this.files = files;
-            this.feedbacks = feedbacks; // 피드백 리스트 초기화
+            this.feedbacks = feedbacks;
         }
     }
 

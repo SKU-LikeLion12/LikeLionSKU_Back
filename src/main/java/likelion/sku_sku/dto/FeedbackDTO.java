@@ -17,10 +17,11 @@ public class FeedbackDTO {
     }
 
     @Data
-    public static class UpdateFeedbackRequest {
+    public static class UpdateFeedBackPassStatust {
         @Schema(description = "피드백 id", example = "1")
         private Long feedBackId;
-
+        @Schema(description = "제출한 과제 통과 여부", example = "FAIL or PASS")
+        private PassNonePass passNonePass;
         @Schema(description = "변경할 피드백 내용", example = "뭐든지 하면 되지")
         private String content;
     }
@@ -28,9 +29,13 @@ public class FeedbackDTO {
     // Response
     @Data
     public static class ResponseFeedback {
+        @Schema(description = "피드백 id", example = "1")
+        private Long feedBackId;
+
         @Schema(description = "피드백 내용", example = "하면 되지")
         private String content;
         public ResponseFeedback(Feedback feedback) {
+            this.feedBackId = feedback.getId();
             this.content = feedback.getContent();
         }
     }
@@ -44,5 +49,4 @@ public class FeedbackDTO {
         @Schema(description = "제출한 과제 통과 여부", example = "FAIL or PASS")
         private PassNonePass passNonePass;
     }
-
 }

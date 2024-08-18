@@ -54,4 +54,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> invalidLectureFile(InvalidLectureFileException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그 강의자료 없");
     }
+
+    // Feedback
+    @ExceptionHandler(AlreadyFeedbackException.class)
+    public ResponseEntity<String> AlreadyFeedback(AlreadyFeedbackException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 피드백이 작성된 과제");
+    }
 }

@@ -30,10 +30,6 @@ public class Assignment {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-//    @JsonManagedReference
-//    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<SubmitAssignment> submitAssignment = new ArrayList<>();
-
     private LocalDate createDate; // YYYY-MM-DD
 
     public Assignment(TrackType track, String title, String subTitle, String description) {
@@ -49,4 +45,9 @@ public class Assignment {
         this.subTitle = subTitle;
         this.description = description;
     }
+
+    public void updateAssignmentStatus(AssignmentStatus newStatus) {
+        this.assignmentStatus = newStatus;
+    }
+
 }

@@ -1,12 +1,12 @@
 package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Assignment;
+import likelion.sku_sku.domain.Feedback;
 import likelion.sku_sku.domain.JoinAssignmentFiles;
 import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
-import likelion.sku_sku.dto.AssignmentDTO;
 import likelion.sku_sku.exception.AlreadySubmittedException;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.exception.InvalidSubmitAssignmentException;
@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAll;
 import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAllDTO;
 import static likelion.sku_sku.dto.FeedbackDTO.ResponseFeedback;
 import static likelion.sku_sku.dto.JoinAssignmentFilesDTO.ResponseJoinAss;
@@ -168,7 +169,7 @@ public class SubmitAssignmentService {
         return dtoList;
     }
 
-    public AssignmentDTO.AssignmentAll getAssignmentWithSubmissions(Long assignmentId, String writer) {
+    public AssignmentAll getAssignmentWithSubmissions(Long assignmentId, String writer) {
         Assignment assignment = assignmentService.findAssignmentById(assignmentId);
 
         SubmitAssignment submitAssignment = submitAssignmentRepository.findByWriterAndAssignment(writer, assignment)
@@ -179,14 +180,13 @@ public class SubmitAssignmentService {
                 .map(ResponseJoinAss::new)
                 .toList();
 
-        List<ResponseFeedback> feedbacksDTO = feedbackRepository.findFeedbackBySubmitAssignment(submitAssignment)
-                .stream()
-                .map(ResponseFeedback::new)
-                .toList();
+        Feedback feedback = feedbackRepository.findFeedbackBySubmitAssignment(submitAssignment);
 
-        AssignSubmitFeed assignSubmitFeed = new AssignSubmitFeed(submitAssignment, filesDTO, feedbacksDTO);
+        ResponseFeedback responseFeedback = (feedback != null) ? new ResponseFeedback(feedback) : null;
 
-        return new AssignmentDTO.AssignmentAll(assignment, assignSubmitFeed);
+        AssignSubmitFeed assignSubmitFeed = new AssignSubmitFeed(submitAssignment, filesDTO, responseFeedback);
+
+        return new AssignmentAll(assignment, assignSubmitFeed);
     }
 
 

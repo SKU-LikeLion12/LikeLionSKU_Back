@@ -36,20 +36,12 @@ public class SubmitAssignment {
     @Enumerated(EnumType.STRING)
     private PassNonePass passNonePass = PassNonePass.FAIL;
 
-//    @JsonManagedReference
-//    @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Feedback> feedback = new ArrayList<>();
-//
-//    @JsonManagedReference
-//    @OneToMany(mappedBy = "submitAssignment", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<JoinAssignmentFiles> joinAssignmentFiles = new ArrayList<>();
-
     private LocalDateTime createDate; // YYYY-MM-DD HH:MM:SS.nnnnnn
     public SubmitAssignment(TrackType track, Assignment assignment, String writer) {
         this.track = track;
         this.assignment = assignment;
         this.writer = writer;
-        this.submitStatus = SubmitStatus.SUBMITTED; // 과제 제출 시 상태를 SUBMITTED로 변경
+        this.submitStatus = SubmitStatus.SUBMITTED;
         this.createDate = LocalDateTime.now();
     }
 

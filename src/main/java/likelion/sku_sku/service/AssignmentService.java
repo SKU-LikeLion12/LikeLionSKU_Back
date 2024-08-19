@@ -59,6 +59,15 @@ public class AssignmentService {
         return assignment;
     }
 
+    @Transactional
+    public void updateAssignmentStatusToDone(Long assignmentId, AssignmentStatus assignmentStatus) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(InvalidIdException::new);
+
+        assignment.updateAssignmentStatus(assignmentStatus);
+        assignmentRepository.save(assignment);
+    }
+
     public Map<String, Object> getAssignmentsAndCountByTrackAndStatus(TrackType track, AssignmentStatus assignmentStatus) {
         List<Assignment> assignments = assignmentRepository.findByTrackAndAssignmentStatus(track, assignmentStatus);
         int assignmentCount = assignments.size();
@@ -80,8 +89,9 @@ public class AssignmentService {
     public  List<Assignment> findAssignmentsByTrack(TrackType trackType) {
         return assignmentRepository.findAssignmentsByTrack(trackType);
     }
-
-
+    public List<Assignment> findByTrackOrderByIdDesc(TrackType track) {
+        return assignmentRepository.findByTrackOrderByIdDesc(track);
+    }
     public int countByAssignmentStatusAndTrack(AssignmentStatus assignmentStatus, TrackType track) {
         return assignmentRepository.countByAssignmentStatusAndTrack(assignmentStatus, track);
     }

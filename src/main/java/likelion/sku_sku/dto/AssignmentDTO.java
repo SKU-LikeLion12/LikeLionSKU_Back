@@ -47,6 +47,14 @@ public class AssignmentDTO {
     }
 
     @Data
+    public static class AssignmentIdStatus {
+        @Schema(description = "과제 안내물 id", example = "1")
+        private Long id;
+        @Schema(description = "과제 안내물 상태", example = "TODAY or ING or DONE")
+        private AssignmentStatus assignmentStatus;
+    }
+
+    @Data
     public static class AssignmentStatusDTO {
         @Schema(description = "과제 안내물 id", example = "1")
         private Long assignmentId;

@@ -200,7 +200,7 @@ public class SubmitAssignmentService {
 
     // @GetMapping("/submit/status")
     public AssignmentStatusGroupedDTO findAssignmentsByWriterAndTrackGroupedByStatus(String writer, TrackType track) {
-        List<Assignment> assignments = assignmentService.findAssignmentsByTrack(track);
+        List<Assignment> assignments = assignmentService.findByTrackOrderByIdDesc(track);
 
         List<AssignmentStatusDTO> todayAssignments = new ArrayList<>();
         List<AssignmentStatusDTO> ingAssignments = new ArrayList<>();

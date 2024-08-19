@@ -51,7 +51,7 @@ public class LectureController {
                     @ApiResponse(responseCode = "404", description = "강의 자료 하나도 없")})
     @GetMapping("/all")
     public ResponseEntity<?> getAllLectureByTrack(@RequestParam TrackType track) {
-        List<ResponseLectureWithoutFiles> lectureFiles = lectureService.findAllLectureByTrack(track);
+        List<ResponseLectureWithoutFiles> lectureFiles = lectureService.findAllLectureByTrackOrderByIdDesc(track);
         if (lectureFiles.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("강의 자료 하나도 없");
         }

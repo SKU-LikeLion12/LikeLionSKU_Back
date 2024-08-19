@@ -15,6 +15,7 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     List<Assignment> findAssignmentsByAssignmentStatusAndTrack(AssignmentStatus status, TrackType track);
     int countByAssignmentStatusAndTrack(AssignmentStatus assignmentStatus, TrackType track);
 
+    List<Assignment> findAssignmentsByTrack(TrackType trackType);
     int countByTrack(TrackType trackType);
 
 }

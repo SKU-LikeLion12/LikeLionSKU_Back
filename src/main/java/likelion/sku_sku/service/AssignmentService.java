@@ -7,12 +7,9 @@ import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.exception.InvalidListIdException;
 import likelion.sku_sku.repository.AssignmentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,25 +20,25 @@ import java.util.Map;
 public class AssignmentService {
     private final AssignmentRepository assignmentRepository;
 
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 매일 자정에 실행
-    @Transactional
-    public void updateAssignmentStatus() {
-        LocalDate now = LocalDate.now(ZoneId.of("Asia/Seoul"));
-
-        // TODAY인 상태 && 2일이 지난 과제
-        List<Assignment> todayAssignments = assignmentRepository.findByAssignmentStatusAndCreateDateBefore(
-                AssignmentStatus.TODAY, now.minusDays(2));
-        todayAssignments.forEach(assignment -> assignment.updateAssignmentStatus(AssignmentStatus.ING));
-
-        // ING인 상태 && 7일이 지난 과제
-        List<Assignment> ingAssignments = assignmentRepository.findByAssignmentStatusAndCreateDateBefore(
-                AssignmentStatus.ING, now.minusDays(7));
-        ingAssignments.forEach(assignment -> assignment.updateAssignmentStatus(AssignmentStatus.DONE));
-
-        // 상태 변경된 엔티티 저장
-        assignmentRepository.saveAll(todayAssignments);
-        assignmentRepository.saveAll(ingAssignments);
-    }
+//    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 매일 자정에 실행
+//    @Transactional
+//    public void updateAssignmentStatus() {
+//        LocalDate now = LocalDate.now(ZoneId.of("Asia/Seoul"));
+//
+//        // TODAY인 상태 && 2일이 지난 과제
+//        List<Assignment> todayAssignments = assignmentRepository.findByAssignmentStatusAndCreateDateBefore(
+//                AssignmentStatus.TODAY, now.minusDays(2));
+//        todayAssignments.forEach(assignment -> assignment.updateAssignmentStatus(AssignmentStatus.ING));
+//
+//        // ING인 상태 && 7일이 지난 과제
+//        List<Assignment> ingAssignments = assignmentRepository.findByAssignmentStatusAndCreateDateBefore(
+//                AssignmentStatus.ING, now.minusDays(7));
+//        ingAssignments.forEach(assignment -> assignment.updateAssignmentStatus(AssignmentStatus.DONE));
+//
+//        // 상태 변경된 엔티티 저장
+//        assignmentRepository.saveAll(todayAssignments);
+//        assignmentRepository.saveAll(ingAssignments);
+//    }
 
     @Transactional
     public Assignment addAssignment(TrackType trackType, String title, String subTitle, String description) {
@@ -70,7 +67,7 @@ public class AssignmentService {
 
         return result;
     }
- public List<Assignment> findAssignmentsByAssignmentStatusAndTrack(AssignmentStatus status, TrackType track) {
+    public List<Assignment> findAssignmentsByAssignmentStatusAndTrack(AssignmentStatus status, TrackType track) {
         return assignmentRepository.findAssignmentsByAssignmentStatusAndTrack(status, track);
     }
 
@@ -78,6 +75,10 @@ public class AssignmentService {
         return assignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
     }
+    public  List<Assignment> findAssignmentsByTrack(TrackType trackType) {
+        return assignmentRepository.findAssignmentsByTrack(trackType);
+    }
+
 
     public int countByAssignmentStatusAndTrack(AssignmentStatus assignmentStatus, TrackType track) {
         return assignmentRepository.countByAssignmentStatusAndTrack(assignmentStatus, track);

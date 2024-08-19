@@ -22,7 +22,7 @@ public class AssignmentAdminController {
     @Operation(summary = "(민규) 과제 안내물 추가", description = "Headers에 Bearer token 필요, body에 json 형태로 과제 안내물의 trackType, title, subTitile, description",
             responses = {@ApiResponse(responseCode = "201", description = "생성")})
     @PostMapping("/add")
-    public ResponseEntity<?> addAssignment(@RequestBody createAssignmentRequest request) {
+    public ResponseEntity<Assignment> addAssignment(@RequestBody createAssignmentRequest request) {
         Assignment assignment = assignmentService.addAssignment(
                 request.getTrackType(),
                 request.getTitle(),
@@ -34,7 +34,7 @@ public class AssignmentAdminController {
     @Operation(summary = "(민규) 과제 안내물 수정", description = "Headers에 Bearer token 필요, body에 json 형태로 과제 안내물의 id와 수정하고 싶은 값만 넣으면 됨",
             responses = {@ApiResponse(responseCode = "201", description = "수정 완료")})
     @PutMapping("/update")
-    public ResponseEntity<?> updateAssignment(@RequestBody updateAssignmentRequest request) {
+    public ResponseEntity<Assignment> updateAssignment(@RequestBody updateAssignmentRequest request) {
         Assignment assignment = assignmentService.updateAssignment(
                 request.getId(),
                 request.getTitle(),

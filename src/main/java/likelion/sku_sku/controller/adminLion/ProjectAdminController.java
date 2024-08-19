@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 import static likelion.sku_sku.dto.ProjectDTO.*;
 
@@ -28,7 +27,7 @@ public class ProjectAdminController {
             responses = {@ApiResponse(responseCode = "201", description = "생성"),
                     @ApiResponse(responseCode = "409", description = "그 title 이미 있")})
     @PostMapping("/add")
-    public ResponseEntity<?> addProject(ProjectCreateRequest request) throws IOException {
+    public ResponseEntity<Project> addProject(ProjectCreateRequest request) throws IOException {
             Project project = projectService.addProject(
                     request.getClassTh(),
                     request.getTitle(),
@@ -43,7 +42,7 @@ public class ProjectAdminController {
                     @ApiResponse(responseCode = "409", description = "그 title 이미 있"),
                     @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @PutMapping("/update")
-    public ResponseEntity<?> updateProject(ProjectUpdateRequest request) throws IOException {
+    public ResponseEntity<Project> updateProject(ProjectUpdateRequest request) throws IOException {
             Project project = projectService.updateProject(
                     request.getId(),
                     request.getClassTh(),
@@ -61,18 +60,6 @@ public class ProjectAdminController {
     public ResponseEntity<ResponseProjectUpdate> findProjectById(@RequestParam Long projectId) {
         ResponseProjectUpdate responseProject = projectService.findProjectById(projectId);
             return ResponseEntity.status(HttpStatus.OK).body(responseProject);
-    }
-
-    @Operation(summary = "(민규) 모든 Project 정보 조회", description = "",
-            responses = {@ApiResponse(responseCode = "200", description = "모든 프로젝트 조회 성공"),
-                    @ApiResponse(responseCode = "404", description = "Project 하나도 없")})
-    @GetMapping("/all")
-    public ResponseEntity<List<ResponseIdProjectUpdate>> findProjectAll() {
-        List<ResponseIdProjectUpdate> responseIdProjectUpdate = projectService.findProjectAllIdDesc();
-        if (responseIdProjectUpdate.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(responseIdProjectUpdate);
     }
 
     @Operation(summary = "(민규) Project 삭제", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 Project의 id 필요",

@@ -3,6 +3,7 @@ package likelion.sku_sku.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import likelion.sku_sku.domain.JoinAssignmentFiles;
 import likelion.sku_sku.domain.SubmitAssignment;
+import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.PassNonePass;
 import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAllDTO;
+import static likelion.sku_sku.dto.AssignmentDTO.AssignmentStatusDTO;
 import static likelion.sku_sku.dto.FeedbackDTO.ResponseFeedback;
 
 public class SubmitAssignmentDTO {
@@ -117,7 +119,6 @@ public class SubmitAssignmentDTO {
         @Schema(description = "과제 통과 상태", example = "PASS or FAIL")
         private PassNonePass passNonePass;
     }
-
     @Data
     public static class SubmitAssignmentAllDTO {
         @Schema(description = "제출한 과제 id", example = "1")
@@ -143,6 +144,36 @@ public class SubmitAssignmentDTO {
             this.passNonePass = submitAssignment.getPassNonePass();
             this.createDate = submitAssignment.getCreateDate();
             this.files = files;
+        }
+    }
+
+    @Data
+    public static class SubmitAssignmentWithoutDTO {
+        @Schema(description = "제출한 과제 id", example = "1")
+        private Long submitAssignmentId;
+        @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
+        private TrackType track;
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
+        private String writer;
+        @Schema(description = "과제 제출 상태", example = "SUBMITTED or UNSUBMITTED")
+        private SubmitStatus submitStatus;
+        @Schema(description = "제출한 과제 통과 상태", example = "PASS or FAIL")
+        private PassNonePass passNonePass;
+        @Schema(description = "제출한 과제에 대한 피드백", example = "")
+        private ResponseFeedback responseFeedback;
+        @Schema(description = "제출한 과제 파일들", example = "")
+        private List<JoinAssignmentFiles> files;
+
+
+        public SubmitAssignmentWithoutDTO(SubmitAssignment submitAssignment, List<JoinAssignmentFiles> files, ResponseFeedback responseFeedback) {
+            this.submitAssignmentId = submitAssignment.getId();
+            this.track = submitAssignment.getTrack();
+            this.writer = submitAssignment.getWriter();
+            this.submitStatus = submitAssignment.getSubmitStatus();
+            this.passNonePass = submitAssignment.getPassNonePass();
+            this.responseFeedback = responseFeedback;
+            this.files = files;
+
         }
     }
 
@@ -177,5 +208,60 @@ public class SubmitAssignmentDTO {
         private int totalAssignmentsByTrack;
         private List<ResponseAssignmentCount> assignmentCounts;
     }
+
+
+    @Data
+    public static class ResponseAssignmentDetail {
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
+        private String writer;
+        @Schema(description = "제출한 오늘의 과제 개수", example = "1")
+        private int submittedTodayCount;
+        @Schema(description = "해당 트랙 오늘의 과제 종 개수", example = "3")
+        private int todayCount;
+        @Schema(description = "제출한 진행중인 과제 개수", example = "1")
+        private int submittedIngCount;
+        @Schema(description = "해당 트랙 진행중인 과제 종 개수", example = "3")
+        private int ingCount;
+        @Schema(description = "해당 트랙 완료된 과제 종 개수", example = "3")
+        private int doneCount;
+        @Schema(description = "과제 안내물", example = "")
+        private Map<AssignmentStatus, List<AssignmentAllDTO>> assignments;
+
+        public ResponseAssignmentDetail(String writer, int submittedTodayCount, int todayCount, int submittedIngCount, int ingCount, int doneCount, Map<AssignmentStatus, List<AssignmentAllDTO>> assignments) {
+            this.writer = writer;
+            this.submittedTodayCount = submittedTodayCount;
+            this.todayCount = todayCount;
+            this.submittedIngCount = submittedIngCount;
+            this.ingCount = ingCount;
+            this.doneCount = doneCount;
+            this.assignments = assignments;
+        }
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class AssignmentStatusGroupedDTO {
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
+        private String writer;
+
+        @Schema(description = "아직 제출하지 않은 과제 안내물 개수", example = "1")
+        private int todayCount;
+
+        @Schema(description = "제출하지 않은 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"submitAssignmentWithoutDTO\": null}]")
+        private List<AssignmentStatusDTO> today;
+
+        @Schema(description = "제출한 과제 안내물 개수", example = "1")
+        private int ingCount;
+
+        @Schema(description = "제출한 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"submitAssignmentWithoutDTO\": {\"submitAssignmentId\": 452, \"track\": \"BACKEND\", \"writer\": \"한민규\", \"submitStatus\": \"SUBMITTED or UNSUBMITTED\", \"passNonePass\": \"PASS or FAIL\", \"responseFeedback\": {\"feedBackId\": 302, \"content\": \"이게 최선이야?\"}, \"files\": [{\"id\": 452, \"fileName\": \"swagger.pdf\", \"fileType\": \"application/pdf\", \"size\": 199922, \"file\": \"base64 fileString\"}]}}]")
+        private List<AssignmentStatusDTO> ing;
+
+        @Schema(description = "끝난 과제 안내물 개수", example = "1")
+        private int doneCount;
+
+        @Schema(description = "끝난 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"submitAssignmentWithoutDTO\": {\"submitAssignmentId\": 452, \"track\": \"BACKEND\", \"writer\": \"한민규\", \"submitStatus\": \"SUBMITTED or UNSUBMITTED\", \"passNonePass\": \"PASS or FAIL\", \"responseFeedback\": {\"feedBackId\": 302, \"content\": \"이게 최선이야?\"}, \"files\": [{\"id\": 452, \"fileName\": \"swagger.pdf\", \"fileType\": \"application/pdf\", \"size\": 199922, \"file\": \"base64 fileString\"}]}}]")
+        private List<AssignmentStatusDTO> done;
+    }
+
 
 }

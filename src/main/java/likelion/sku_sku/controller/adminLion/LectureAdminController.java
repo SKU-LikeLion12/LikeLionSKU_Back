@@ -20,13 +20,12 @@ import static likelion.sku_sku.dto.LectureDTO.updateLectureRequest;
 @RequestMapping("/admin/lecture")
 @Tag(name = "관리자 기능: 강의자료 관련")
 public class LectureAdminController {
-
     private final LectureService lectureService;
 
     @Operation(summary = "(민규) 강의자료 추가", description = "Headers에 Bearer token 필요, body에 form-data로 강의자료의 trackType, title, files 필요",
             responses = {@ApiResponse(responseCode = "201", description = "생성")})
     @PostMapping("/add")
-    public ResponseEntity<?> uploadFiles(@RequestHeader("Authorization") String bearer,
+    public ResponseEntity<Lecture> uploadFiles(@RequestHeader("Authorization") String bearer,
                                          createLectureRequest request) throws IOException {
         Lecture lectureFiles = lectureService.createLecture(bearer, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(lectureFiles);
@@ -36,7 +35,7 @@ public class LectureAdminController {
             responses = {@ApiResponse(responseCode = "201", description = "수정 성공"),
                     @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @PutMapping("/update")
-    public ResponseEntity<?> updateLecture(@RequestHeader("Authorization") String bearer,
+    public ResponseEntity<Lecture> updateLecture(@RequestHeader("Authorization") String bearer,
                                            updateLectureRequest request) throws IOException {
         Lecture updatedLecture = lectureService.updateLecture(bearer, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(updatedLecture);
@@ -46,8 +45,7 @@ public class LectureAdminController {
             responses = {@ApiResponse(responseCode = "200", description = "강의자료 삭제 성공"),
                     @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteLecture(@RequestHeader("Authorization") String bearer,
-                                           @RequestParam Long lectureId) {
+    public ResponseEntity<?> deleteLecture(@RequestParam Long lectureId) {
         lectureService.deleteLecture(lectureId);
         return ResponseEntity.status(HttpStatus.OK).body("강의자료 삭제 성공");
     }

@@ -16,6 +16,8 @@ public interface SubmitAssignmentRepository extends JpaRepository<SubmitAssignme
 
     Optional<SubmitAssignment> findByWriterAndAssignment_Id(String writer, Long assignmentId);
     List<SubmitAssignment> findDistinctWriterByAssignment_Track(TrackType track);
+    List<SubmitAssignment> findByAssignmentId(Long assignmentId);
+
 
     Optional<SubmitAssignment> findByWriterAndAssignment(String writer, Assignment assignment);
 }

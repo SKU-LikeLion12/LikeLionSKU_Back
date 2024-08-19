@@ -8,8 +8,7 @@ import lombok.Data;
 
 import java.util.List;
 
-import static likelion.sku_sku.dto.SubmitAssignmentDTO.AssignSubmitFeed;
-import static likelion.sku_sku.dto.SubmitAssignmentDTO.SubmitAssignmentAllDTO;
+import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
 
 public class AssignmentDTO {
 
@@ -43,6 +42,27 @@ public class AssignmentDTO {
     }
 
     @Data
+    public static class AssignmentStatusDTO {
+        private Long assignmentId;
+        private TrackType track;
+        private AssignmentStatus assignmentStatus;
+        private String title;
+        private String subTitle;
+        private String description;
+        private SubmitAssignmentWithoutDTO submitAssignmentWithoutDTO;
+
+        public AssignmentStatusDTO(Assignment assignment, AssignmentStatus assignmentStatus, SubmitAssignmentWithoutDTO submitAssignmentWithoutDTO) {
+            this.assignmentId = assignment.getId();
+            this.track = assignment.getTrack();
+            this.title = assignment.getTitle();
+            this.subTitle = assignment.getSubTitle();
+            this.description = assignment.getDescription();
+            this.assignmentStatus = assignmentStatus;
+            this.submitAssignmentWithoutDTO = submitAssignmentWithoutDTO;
+        }
+    }
+
+    @Data
     public static class FindTrackStatus {
         @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
         private TrackType track;
@@ -71,6 +91,28 @@ public class AssignmentDTO {
             this.submitAssignmentAllDTO = submitAssignmentAllDTO;
         }
     }
+
+//    @Data
+//    public static class AssignmentWithoutDTO {
+//        @Schema(description = "과제 안내물 id", example = "1")
+//        private Long id;
+//        @Schema(description = "과제 안내물 제목", example = "백엔드 과제 안내 [3주차]")
+//        private String title;
+//        @Schema(description = "과제 안내물 서브제목", example = "[발표1]")
+//        private String subTitle;
+//        @Schema(description = "과제 안내물 설명", example = "Article domain 작성해오기")
+//        private String description;
+//        @Schema(description = "해당 과제 안내물에 대해 제출한 과제", example = "")
+//        private SubmitAssignmentWithoutDTO submitAssignmentWithoutDTO;
+//
+//        public AssignmentWithoutDTO(Assignment assignment, SubmitAssignmentWithoutDTO submitAssignmentWithoutDTO) {
+//            this.id = assignment.getId();
+//            this.title = assignment.getTitle();
+//            this.subTitle = assignment.getSubTitle();
+//            this.description = assignment.getDescription();
+//            this.submitAssignmentWithoutDTO = submitAssignmentWithoutDTO;
+//        }
+//    }
 
     @Data
     public static class AssignmentAll {

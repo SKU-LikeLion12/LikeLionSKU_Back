@@ -2,6 +2,7 @@ package likelion.sku_sku.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.PassNonePass;
 import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
@@ -37,12 +38,16 @@ public class SubmitAssignment {
     private PassNonePass passNonePass = PassNonePass.FAIL;
 
     private LocalDateTime createDate; // YYYY-MM-DD HH:MM:SS.nnnnnn
+    @Enumerated(EnumType.STRING)
+    private AssignmentStatus StatusAssignment = AssignmentStatus.TODAY;
+
     public SubmitAssignment(TrackType track, Assignment assignment, String writer) {
         this.track = track;
         this.assignment = assignment;
         this.writer = writer;
         this.submitStatus = SubmitStatus.SUBMITTED;
         this.createDate = LocalDateTime.now();
+        this.StatusAssignment = AssignmentStatus.ING;
     }
 
     public void update(PassNonePass passNonePass) {

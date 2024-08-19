@@ -7,24 +7,20 @@ import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
-import likelion.sku_sku.exception.AlreadySubmittedException;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.exception.InvalidSubmitAssignmentException;
-import likelion.sku_sku.repository.FeedbackRepository;
 import likelion.sku_sku.repository.SubmitAssignmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAll;
-import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAllDTO;
+import static likelion.sku_sku.dto.AssignmentDTO.*;
 import static likelion.sku_sku.dto.FeedbackDTO.ResponseFeedback;
 import static likelion.sku_sku.dto.JoinAssignmentFilesDTO.ResponseJoinAss;
 import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
@@ -36,14 +32,16 @@ public class SubmitAssignmentService {
     private final SubmitAssignmentRepository submitAssignmentRepository;
     private final LionService lionService;
     private final JoinAssignmentFilesService joinAssignmentFilesService;
+    private final FeedbackService feedbackService;
     private final AssignmentService assignmentService;
-    private final FeedbackRepository feedbackRepository;
+
 
     @Transactional // 과제 제출
-    public SubmitAssignment createSubmitAssignment(String bearer, Long assignmentId, List<MultipartFile> files) throws IOException {
+    public ResponseEntity<SubmitAssignment> createSubmitAssignment(String bearer, Long assignmentId, List<MultipartFile> files) throws IOException {
         String writer = lionService.tokenToLionName(bearer.substring(7));
-        if (submitAssignmentRepository.findByWriterAndAssignment_Id(writer, assignmentId).isPresent()) {
-            throw new AlreadySubmittedException();
+        Optional<SubmitAssignment> existSumnitAssignment = submitAssignmentRepository.findByWriterAndAssignment_Id(writer, assignmentId);
+        if (existSumnitAssignment.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(existSumnitAssignment.get());
         }
         Assignment assignment = assignmentService.findAssignmentById(assignmentId);
         SubmitAssignment submitAssignment = new SubmitAssignment(assignment.getTrack(), assignment, writer);
@@ -51,7 +49,7 @@ public class SubmitAssignmentService {
 
         joinAssignmentFilesService.uploadJoinAssignmentFiles(submitAssignment, files);
 
-        return submitAssignment;
+        return ResponseEntity.status(HttpStatus.CREATED).body(submitAssignment);
     }
 
     @Transactional // 과제 수정
@@ -77,6 +75,14 @@ public class SubmitAssignmentService {
 
         return result;
     }
+    public List<SubmitAssignment> findByAssignmentId(Long assignmentId) {
+        return submitAssignmentRepository.findByAssignmentId(assignmentId);
+    }
+
+    public Optional<SubmitAssignment> findByWriterAndAssignment_Id(String writer, Long assignmentId) {
+        return submitAssignmentRepository.findByWriterAndAssignment_Id(writer, assignmentId);
+    }
+
 
     public SubmitAssignment findSubmitAssignmentById(Long id) {
         return submitAssignmentRepository.findById(id)
@@ -123,13 +129,14 @@ public class SubmitAssignmentService {
         return assignmentService.countByTrack(track);
     }
 
-
     @Transactional
     public void deleteSubmitAssignment(Long id) {
         SubmitAssignment submitAssignment = submitAssignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         submitAssignmentRepository.delete(submitAssignment);
     }
+
+    // @GetMapping("/admin/submit/details")
     public ResponseAssignmentDetails getAssignmentDetailsByWriter(String writer, TrackType track) {
         int submittedTodayCount = getSubmittedCountByStatus(writer, AssignmentStatus.TODAY, track);
         int todayCount = getCountByStatusAndTrack(AssignmentStatus.TODAY, track);
@@ -169,6 +176,7 @@ public class SubmitAssignmentService {
         return dtoList;
     }
 
+    // @GetMapping("/admin/submit/assignment")
     public AssignmentAll getAssignmentWithSubmissions(Long assignmentId, String writer) {
         Assignment assignment = assignmentService.findAssignmentById(assignmentId);
 
@@ -180,7 +188,8 @@ public class SubmitAssignmentService {
                 .map(ResponseJoinAss::new)
                 .toList();
 
-        Feedback feedback = feedbackRepository.findFeedbackBySubmitAssignment(submitAssignment);
+        Feedback feedback = feedbackService.findFeedbackBySubmitAssignment(submitAssignment)
+                .orElse(null);
 
         ResponseFeedback responseFeedback = (feedback != null) ? new ResponseFeedback(feedback) : null;
 
@@ -189,6 +198,54 @@ public class SubmitAssignmentService {
         return new AssignmentAll(assignment, assignSubmitFeed);
     }
 
+    // @GetMapping("/submit/status")
+    public AssignmentStatusGroupedDTO findAssignmentsByWriterAndTrackGroupedByStatus(String writer, TrackType track) {
+        List<Assignment> assignments = assignmentService.findAssignmentsByTrack(track);
 
+        List<AssignmentStatusDTO> todayAssignments = new ArrayList<>();
+        List<AssignmentStatusDTO> ingAssignments = new ArrayList<>();
+        List<AssignmentStatusDTO> doneAssignments = new ArrayList<>();
+
+        for (Assignment assignment : assignments) {
+            AssignmentStatus status = determineStatus(assignment, writer);
+            AssignmentStatusDTO assignmentStatusDTO = createAssignmentStatusDTO(assignment, status, writer);
+
+            switch (status) {
+                case TODAY -> todayAssignments.add(assignmentStatusDTO);
+                case ING -> ingAssignments.add(assignmentStatusDTO);
+                case DONE -> doneAssignments.add(assignmentStatusDTO);
+            }
+        }
+
+        return new AssignmentStatusGroupedDTO(
+                writer,
+                todayAssignments.size(), todayAssignments,
+                ingAssignments.size(), ingAssignments,
+                doneAssignments.size(), doneAssignments
+        );
+    }
+
+    private AssignmentStatus determineStatus(Assignment assignment, String writer) {
+        if (assignment.getAssignmentStatus() == AssignmentStatus.DONE) {
+            return AssignmentStatus.DONE;
+        }
+        SubmitAssignment submitAssignment = submitAssignmentRepository.findByWriterAndAssignment(writer, assignment).orElse(null);
+        return (submitAssignment != null) ? submitAssignment.getStatusAssignment() : AssignmentStatus.TODAY;
+    }
+
+    private AssignmentStatusDTO createAssignmentStatusDTO(Assignment assignment, AssignmentStatus status, String writer) {
+        SubmitAssignment submitAssignment = submitAssignmentRepository.findByWriterAndAssignment(writer, assignment).orElse(null);
+        List<JoinAssignmentFiles> files = (submitAssignment != null) ? joinAssignmentFilesService.findBySubmitAssignment(submitAssignment) : new ArrayList<>();
+
+        SubmitAssignmentWithoutDTO submitAssignmentWithoutDTO = (submitAssignment != null) ?
+                new SubmitAssignmentWithoutDTO(
+                        submitAssignment,
+                        files,
+                        feedbackService.findFeedbackBySubmitAssignment(submitAssignment).map(ResponseFeedback::new).orElse(null)
+                )
+                : null;
+
+        return new AssignmentStatusDTO(assignment, status, submitAssignmentWithoutDTO);
+    }
 
 }

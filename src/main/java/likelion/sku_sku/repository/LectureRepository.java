@@ -15,5 +15,5 @@ public interface LectureRepository extends JpaRepository<Lecture, Long> {
     List<Lecture> findAll();
 
     @EntityGraph(attributePaths = {"joinLectureFiles"})
-    List<Lecture> findByTrack(TrackType trackType);
+    List<Lecture> findByTrackOrderByIdDesc(TrackType trackType);
 }

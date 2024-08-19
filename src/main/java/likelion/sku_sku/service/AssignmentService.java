@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,20 +42,30 @@ public class AssignmentService {
 //    }
 
     @Transactional
-    public Assignment addAssignment(TrackType trackType, String title, String subTitle, String description) {
-        Assignment assignment = new Assignment(trackType, title, subTitle, description);
+    public Assignment addAssignment(TrackType trackType, String title, String subTitle, String description, LocalDate dueDate) {
+        Assignment assignment = new Assignment(trackType, title, subTitle, description, dueDate);
         return assignmentRepository.save(assignment);
     }
 
     @Transactional
-    public Assignment updateAssignment(Long id, String title, String subTitle, String description) {
+    public Assignment updateAssignment(Long id, String title, String subTitle, String description, LocalDate dueDate) {
         Assignment assignment = assignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         String newTitle = (title != null && !title.isEmpty() ? title : assignment.getTitle());
         String newSubTitle = (subTitle != null && !subTitle.isEmpty() ? subTitle : assignment.getSubTitle());
         String newDescription = (description != null && !description.isEmpty() ? description : assignment.getDescription());
-        assignment.update(newTitle, newSubTitle, newDescription);
+        LocalDate newDueDate = (dueDate != null ? dueDate : assignment.getDueDate());
+        assignment.update(newTitle, newSubTitle, newDescription, newDueDate);
         return assignment;
+    }
+
+    @Transactional
+    public void updateAssignmentStatusToDone(Long assignmentId, AssignmentStatus assignmentStatus) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(InvalidIdException::new);
+
+        assignment.updateAssignmentStatus(assignmentStatus);
+        assignmentRepository.save(assignment);
     }
 
     public Map<String, Object> getAssignmentsAndCountByTrackAndStatus(TrackType track, AssignmentStatus assignmentStatus) {
@@ -78,8 +89,9 @@ public class AssignmentService {
     public  List<Assignment> findAssignmentsByTrack(TrackType trackType) {
         return assignmentRepository.findAssignmentsByTrack(trackType);
     }
-
-
+    public List<Assignment> findByTrackOrderByIdDesc(TrackType track) {
+        return assignmentRepository.findByTrackOrderByIdDesc(track);
+    }
     public int countByAssignmentStatusAndTrack(AssignmentStatus assignmentStatus, TrackType track) {
         return assignmentRepository.countByAssignmentStatusAndTrack(assignmentStatus, track);
     }

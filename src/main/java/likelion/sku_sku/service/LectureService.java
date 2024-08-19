@@ -77,8 +77,8 @@ public class LectureService {
         return lectureRepository.findAll();
     }
 
-    public List<ResponseLectureWithoutFiles> findAllLectureByTrack(TrackType trackType) {
-        List<Lecture> lectures = lectureRepository.findByTrack(trackType);
+    public List<ResponseLectureWithoutFiles> findAllLectureByTrackOrderByIdDesc(TrackType trackType) {
+        List<Lecture> lectures = lectureRepository.findByTrackOrderByIdDesc(trackType);
         return lectures.stream()
                 .map(this::convertToDTO)
                 .toList();

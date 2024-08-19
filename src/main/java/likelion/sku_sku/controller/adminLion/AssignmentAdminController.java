@@ -27,7 +27,8 @@ public class AssignmentAdminController {
                 request.getTrackType(),
                 request.getTitle(),
                 request.getSubTitle(),
-                request.getDescription());
+                request.getDescription(),
+                request.getDueDate());
         return ResponseEntity.status(HttpStatus.CREATED).body(assignment);
     }
 
@@ -39,10 +40,19 @@ public class AssignmentAdminController {
                 request.getId(),
                 request.getTitle(),
                 request.getSubTitle(),
-                request.getDescription());
+                request.getDescription(),
+                request.getDueDate());
         return ResponseEntity.status(HttpStatus.CREATED).body(assignment);
     }
 
+    @Operation(summary = "(민규) 과제 안내물 상태 변경", description = "Headers에 Bearer token 필요, body에 json 형태로 과제 안내물의 id와 과제 안내물 상태 넣으면 됨",
+            responses = {@ApiResponse(responseCode = "201", description = "수정 완료")})
+    @PutMapping("/update-status/")
+    public ResponseEntity<Void> updateAssignmentStatusToDone(@RequestBody AssignmentIdStatus request) {
+        assignmentService.updateAssignmentStatusToDone(request.getId(), request.getAssignmentStatus());
+        return ResponseEntity.ok().build();
+    }
+    
     @Operation(summary = "(민규) 과제 안내물 삭제", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 과제 안내물의 id 필요",
             responses = {@ApiResponse(responseCode = "200", description = "과제 안내물 삭제 성공"),
                     @ApiResponse(responseCode = "404", description = "그 id에 해당하는 값 없")})

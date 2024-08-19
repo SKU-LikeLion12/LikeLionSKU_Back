@@ -27,7 +27,8 @@ public class AssignmentAdminController {
                 request.getTrackType(),
                 request.getTitle(),
                 request.getSubTitle(),
-                request.getDescription());
+                request.getDescription(),
+                request.getDueDate());
         return ResponseEntity.status(HttpStatus.CREATED).body(assignment);
     }
 
@@ -39,7 +40,8 @@ public class AssignmentAdminController {
                 request.getId(),
                 request.getTitle(),
                 request.getSubTitle(),
-                request.getDescription());
+                request.getDescription(),
+                request.getDueDate());
         return ResponseEntity.status(HttpStatus.CREATED).body(assignment);
     }
 

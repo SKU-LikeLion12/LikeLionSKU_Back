@@ -6,6 +6,7 @@ import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.TrackType;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
@@ -22,6 +23,8 @@ public class AssignmentDTO {
         private String subTitle;
         @Schema(description = "과제 안내물 설명", example = "Article domain 작성해오기")
         private String description;
+        @Schema(description = "과제 안내물 마감일", example = "2024-08-24")
+        private LocalDate dueDate;
     }
 
     @Data
@@ -34,6 +37,8 @@ public class AssignmentDTO {
         private String subTitle;
         @Schema(description = "과제 안내물 설명", example = "Article domain 작성해오기")
         private String description;
+        @Schema(description = "과제 안내물 마감일", example = "2024-08-24")
+        private LocalDate dueDate;
     }
 
     @Data
@@ -43,12 +48,21 @@ public class AssignmentDTO {
 
     @Data
     public static class AssignmentStatusDTO {
+        @Schema(description = "과제 안내물 id", example = "1")
         private Long assignmentId;
+        @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
         private TrackType track;
+        @Schema(description = "과제 안내물 상태", example = "TODAY or ING or DONE")
         private AssignmentStatus assignmentStatus;
+        @Schema(description = "과제 안내물 제목", example = "백엔드 과제 안내 [3주차]")
         private String title;
+        @Schema(description = "과제 안내물 서브제목", example = "[발표1]")
         private String subTitle;
+        @Schema(description = "과제 안내물 설명", example = "Article domain 작성해오기")
         private String description;
+        @Schema(description = "과제 안내물 마감일", example = "2024-08-24")
+        private LocalDate dueDate;
+        @Schema(description = "해당 과제 안내물에 대해 제출한 과제", example = "")
         private SubmitAssignmentWithoutDTO submitAssignmentWithoutDTO;
 
         public AssignmentStatusDTO(Assignment assignment, AssignmentStatus assignmentStatus, SubmitAssignmentWithoutDTO submitAssignmentWithoutDTO) {
@@ -57,6 +71,7 @@ public class AssignmentDTO {
             this.title = assignment.getTitle();
             this.subTitle = assignment.getSubTitle();
             this.description = assignment.getDescription();
+            this.dueDate = assignment.getDueDate();
             this.assignmentStatus = assignmentStatus;
             this.submitAssignmentWithoutDTO = submitAssignmentWithoutDTO;
         }
@@ -80,6 +95,8 @@ public class AssignmentDTO {
         private String subTitle;
         @Schema(description = "과제 안내물 설명", example = "Article domain 작성해오기")
         private String description;
+        @Schema(description = "과제 안내물 마감일", example = "2024-08-24")
+        private LocalDate dueDate;
         @Schema(description = "해당 과제 안내물에 대해 제출한 과제", example = "")
         private SubmitAssignmentAllDTO submitAssignmentAllDTO;
 
@@ -88,6 +105,7 @@ public class AssignmentDTO {
             this.title = assignment.getTitle();
             this.subTitle = assignment.getSubTitle();
             this.description = assignment.getDescription();
+            this.dueDate = assignment.getDueDate();
             this.submitAssignmentAllDTO = submitAssignmentAllDTO;
         }
     }
@@ -124,6 +142,8 @@ public class AssignmentDTO {
         private String subTitle;
         @Schema(description = "과제 안내물 설명", example = "Article domain 작성해오기")
         private String description;
+        @Schema(description = "과제 안내물 마감일", example = "2024-08-24")
+        private LocalDate dueDate;
         @Schema(description = "해당 과제 안내물에 대해 제출한 과제", example = "")
         private AssignSubmitFeed assignSubmitFeed;
 
@@ -132,6 +152,7 @@ public class AssignmentDTO {
             this.title = assignment.getTitle();
             this.subTitle = assignment.getSubTitle();
             this.description = assignment.getDescription();
+            this.dueDate = assignment.getDueDate();
             this.assignSubmitFeed = assignSubmitFeed;
         }
     }

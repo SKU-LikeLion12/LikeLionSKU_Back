@@ -3,6 +3,7 @@ package likelion.sku_sku.repository;
 import likelion.sku_sku.domain.Assignment;
 import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
+import likelion.sku_sku.domain.enums.PassNonePass;
 import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +19,8 @@ public interface SubmitAssignmentRepository extends JpaRepository<SubmitAssignme
     List<SubmitAssignment> findDistinctWriterByAssignment_Track(TrackType track);
     List<SubmitAssignment> findByAssignmentId(Long assignmentId);
 
+    int countByWriterAndAssignment_Track(String writer, TrackType track); // 제출한 과제 수
 
+    int countByWriterAndAssignment_TrackAndPassNonePass(String writer, TrackType trackType, PassNonePass passNonePass);
     Optional<SubmitAssignment> findByWriterAndAssignment(String writer, Assignment assignment);
 }

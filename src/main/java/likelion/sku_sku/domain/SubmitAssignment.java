@@ -39,7 +39,7 @@ public class SubmitAssignment {
 
     private LocalDateTime createDate; // YYYY-MM-DD HH:MM:SS.nnnnnn
     @Enumerated(EnumType.STRING)
-    private AssignmentStatus StatusAssignment = AssignmentStatus.TODAY;
+    private AssignmentStatus statusAssignment = AssignmentStatus.TODAY;
 
     public SubmitAssignment(TrackType track, Assignment assignment, String writer) {
         this.track = track;
@@ -47,10 +47,13 @@ public class SubmitAssignment {
         this.writer = writer;
         this.submitStatus = SubmitStatus.SUBMITTED;
         this.createDate = LocalDateTime.now();
-        this.StatusAssignment = AssignmentStatus.ING;
+        this.statusAssignment = AssignmentStatus.ING;
     }
 
-    public void update(PassNonePass passNonePass) {
+    public void updatePassNonePass(PassNonePass passNonePass) {
         this.passNonePass = passNonePass;
+    }
+    public void updateStatusAssignment(AssignmentStatus statusAssignment) {
+        this.statusAssignment = statusAssignment;
     }
 }

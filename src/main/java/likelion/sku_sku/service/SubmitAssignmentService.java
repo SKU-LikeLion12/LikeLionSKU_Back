@@ -98,9 +98,9 @@ public class SubmitAssignmentService {
         for (String writer : writers) {
             int totalTodayAssignments = assignmentService.countByAssignmentStatusAndTrack(AssignmentStatus.TODAY, track);
 
-            int submittedCount = submitAssignmentRepository.countByWriterAndAssignment_Track(writer, track);
+            int submittedCount = submitAssignmentRepository.countByWriterAndAssignment_TrackAndPassNonePass(writer, track, PassNonePass.FAIL);
             int passCount = submitAssignmentRepository.countByWriterAndAssignment_TrackAndPassNonePass(writer, track, PassNonePass.PASS);
-            int unsubmittedCount = totalTodayAssignments - submittedCount;
+            int unsubmittedCount = totalTodayAssignments - submittedCount - passCount;
 
             responseList.add(new ResponseAssignmentCount(writer, unsubmittedCount, submittedCount, passCount));
         }
@@ -180,7 +180,7 @@ public class SubmitAssignmentService {
 
         List<AssignmentStatusDTO> todayAssignments = new ArrayList<>();
         List<AssignmentStatusDTO> ingAssignments = new ArrayList<>();
-        List<AssignmentStatusDTO> doneAssignments = new ArrayList<>();
+//        List<AssignmentStatusDTO> doneAssignments = new ArrayList<>();
 
         for (Assignment assignment : assignments) {
             AssignmentStatus status = adminDetermineStatus(assignment, writer);
@@ -193,8 +193,11 @@ public class SubmitAssignmentService {
             }
         }
 
+        int submittedCount = submitAssignmentRepository.countByWriterAndAssignment_TrackAndPassNonePass(writer, track, PassNonePass.FAIL);
+        int passCount = submitAssignmentRepository.countByWriterAndAssignment_TrackAndPassNonePass(writer, track, PassNonePass.PASS);
+
         return new AssignmentStatusGrouped(
-                writer,
+                writer, submittedCount, passCount,
                 todayAssignments.size(), todayAssignments,
                 ingAssignments.size(), ingAssignments
 //                doneAssignments.size(), doneAssignments

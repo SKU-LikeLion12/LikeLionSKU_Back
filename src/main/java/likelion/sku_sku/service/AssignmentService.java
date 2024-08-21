@@ -21,6 +21,7 @@ import java.util.Map;
 public class AssignmentService {
     private final AssignmentRepository assignmentRepository;
 
+    // @PostMapping("/admin/assignment/add")
     @Transactional
     public Assignment addAssignment(TrackType trackType, String title, String subTitle, String description, LocalDate dueDate) {
         Assignment assignment = new Assignment(trackType, title, subTitle, description, dueDate);
@@ -85,10 +86,6 @@ public class AssignmentService {
     public Assignment findAssignmentById(Long id) {
         return assignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
-    }
-
-    public  List<Assignment> findAssignmentsByTrack(TrackType trackType) {
-        return assignmentRepository.findAssignmentsByTrack(trackType);
     }
 
     public List<Assignment> findByTrackOrderByIdDesc(TrackType track) {

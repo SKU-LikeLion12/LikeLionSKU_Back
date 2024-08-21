@@ -36,6 +36,7 @@ public class SubmitAssignmentService {
     private final FeedbackService feedbackService;
     private final AssignmentService assignmentService;
 
+    // @PostMapping("/submit/add")
     @Transactional // 과제 제출
     public ResponseEntity<SubmitAssignment> createSubmitAssignment(String bearer, Long assignmentId, List<MultipartFile> files) throws IOException {
         String writer = lionService.tokenToLionName(bearer.substring(7));
@@ -52,6 +53,7 @@ public class SubmitAssignmentService {
         return ResponseEntity.status(HttpStatus.CREATED).body(submitAssignment);
     }
 
+    // @PutMapping("/submit/update")
     @Transactional // 과제 수정
     public SubmitAssignment updateSubmitAssignment(Long id, List<MultipartFile> files) throws IOException {
         SubmitAssignment submitAssignment = submitAssignmentRepository.findById(id)
@@ -63,6 +65,7 @@ public class SubmitAssignmentService {
         return submitAssignment;
     }
 
+    // @GetMapping("/admin/submit/all")
     public Map<String, List<SubmitAssignment>> findAllAssignmentsByWriter(String writer) {
         List<SubmitAssignment> todayAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.TODAY);
         List<SubmitAssignment> ingAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.ING);
@@ -81,6 +84,7 @@ public class SubmitAssignmentService {
                 .orElseThrow(InvalidIdException::new);
     }
 
+    // @GetMapping("/admin/submit/trackcnt")
     public ResponseAssignmentSummary countAssignmentsByTrack(TrackType track) {
         List<SubmitAssignment> assignments = submitAssignmentRepository.findDistinctWriterByAssignment_Track(track);
         List<String> writers = assignments.stream()
@@ -171,7 +175,7 @@ public class SubmitAssignmentService {
     }
 
     // @GetMapping("/admin/submit/status")
-    public AssignmentStatusGroupedDTO findAssignmentsByWriterAndTrackGroupedByStatus(String writer, TrackType track) {
+    public AssignmentStatusGrouped findAssignmentsByWriterAndTrackGroupedByStatus(String writer, TrackType track) {
         List<Assignment> assignments = assignmentService.findByTrackOrderByIdDesc(track);
 
         List<AssignmentStatusDTO> todayAssignments = new ArrayList<>();
@@ -185,24 +189,30 @@ public class SubmitAssignmentService {
             switch (status) {
                 case TODAY -> todayAssignments.add(assignmentStatusDTO);
                 case ING -> ingAssignments.add(assignmentStatusDTO);
-                case DONE -> doneAssignments.add(assignmentStatusDTO);
+//                case DONE -> doneAssignments.add(assignmentStatusDTO);
             }
         }
 
-        return new AssignmentStatusGroupedDTO(
+        return new AssignmentStatusGrouped(
                 writer,
                 todayAssignments.size(), todayAssignments,
-                ingAssignments.size(), ingAssignments,
-                doneAssignments.size(), doneAssignments
+                ingAssignments.size(), ingAssignments
+//                doneAssignments.size(), doneAssignments
         );
     }
 
     private AssignmentStatus adminDetermineStatus(Assignment assignment, String writer) {
-        if (assignment.getAssignmentStatus() == AssignmentStatus.DONE) {
-            return AssignmentStatus.DONE;
-        }
+//        if (assignment.getAssignmentStatus() == AssignmentStatus.DONE) {
+//            return AssignmentStatus.DONE;
+//        }
         SubmitAssignment submitAssignment = submitAssignmentRepository.findByWriterAndAssignment(writer, assignment).orElse(null);
-        return (submitAssignment != null) ? submitAssignment.getStatusAssignment() : AssignmentStatus.TODAY;
+
+        if (submitAssignment == null) {
+            return AssignmentStatus.TODAY;
+        } else if (submitAssignment.getStatusAssignment() == AssignmentStatus.ING || submitAssignment.getStatusAssignment() == AssignmentStatus.DONE) {
+            return AssignmentStatus.ING;
+        }
+        return AssignmentStatus.TODAY;
     }
 
     private AssignmentStatusDTO createAssignmentStatusDTO(Assignment assignment, AssignmentStatus status, String writer) {

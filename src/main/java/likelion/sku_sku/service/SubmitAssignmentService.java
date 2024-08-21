@@ -36,7 +36,6 @@ public class SubmitAssignmentService {
     private final FeedbackService feedbackService;
     private final AssignmentService assignmentService;
 
-
     @Transactional // 과제 제출
     public ResponseEntity<SubmitAssignment> createSubmitAssignment(String bearer, Long assignmentId, List<MultipartFile> files) throws IOException {
         String writer = lionService.tokenToLionName(bearer.substring(7));
@@ -76,28 +75,9 @@ public class SubmitAssignmentService {
 
         return result;
     }
-    public List<SubmitAssignment> findByAssignmentId(Long assignmentId) {
-        return submitAssignmentRepository.findByAssignmentId(assignmentId);
-    }
-
-    public Optional<SubmitAssignment> findByWriterAndAssignment_Id(String writer, Long assignmentId) {
-        return submitAssignmentRepository.findByWriterAndAssignment_Id(writer, assignmentId);
-    }
-
 
     public SubmitAssignment findSubmitAssignmentById(Long id) {
         return submitAssignmentRepository.findById(id)
-                .orElseThrow(InvalidIdException::new);
-    }
-    public ResponseSubmit findSubmitById(Long id) {
-        return submitAssignmentRepository.findById(id)
-                .map(submitAssignment -> new ResponseSubmit(
-                    submitAssignment.getId(),
-                    submitAssignment.getTrack(),
-                    submitAssignment.getAssignment().getId(),
-                    submitAssignment.getWriter(),
-                    submitAssignment.getSubmitStatus(),
-                    submitAssignment.getPassNonePass()))
                 .orElseThrow(InvalidIdException::new);
     }
 
@@ -124,16 +104,8 @@ public class SubmitAssignmentService {
         return new ResponseAssignmentSummary(totalAssignmentsByTrack, responseList);
     }
 
-
     private int getTotalAssignmentsByTrack(TrackType track) {
         return assignmentService.countByTrack(track);
-    }
-
-    @Transactional
-    public void deleteSubmitAssignment(Long id) {
-        SubmitAssignment submitAssignment = submitAssignmentRepository.findById(id)
-                .orElseThrow(InvalidIdException::new);
-        submitAssignmentRepository.delete(submitAssignment);
     }
 
     // @GetMapping("/admin/submit/details")
@@ -288,5 +260,4 @@ public class SubmitAssignmentService {
         }
         return AssignmentStatus.TODAY;
     }
-
 }

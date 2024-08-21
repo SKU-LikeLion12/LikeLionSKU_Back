@@ -73,8 +73,11 @@ public class LectureService {
                 .orElseThrow(InvalidIdException::new);
     }
 
-    public List<Lecture> findAllLecture() {
-        return lectureRepository.findAll();
+    @Transactional
+    public void deleteLecture(Long id) {
+        Lecture lecture = lectureRepository.findById(id)
+                .orElseThrow(InvalidIdException::new);
+        lectureRepository.delete(lecture);
     }
 
     public List<ResponseLectureWithoutFiles> findAllLectureByTrackOrderByIdDesc(TrackType trackType) {
@@ -92,13 +95,5 @@ public class LectureService {
                 lecture.getViewCount(),
                 lecture.getCreateDate()
         );
-    }
-
-
-    @Transactional
-    public void deleteLecture(Long id) {
-        Lecture lecture = lectureRepository.findById(id)
-                .orElseThrow(InvalidIdException::new);
-        lectureRepository.delete(lecture);
     }
 }

@@ -24,7 +24,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
     private final LionRepository lionRepository;
     private final JwtUtility jwtService;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance(); // JSON 처리를 위한 Jackson 라이브러리의 인스턴스

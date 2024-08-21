@@ -21,7 +21,6 @@ import static likelion.sku_sku.dto.ProjectDTO.ResponseProjectUpdate;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProjectService {
-
     private final ProjectRepository projectRepository;
 
     @Transactional
@@ -52,19 +51,11 @@ public class ProjectService {
         return project;
     }
 
-    public List<ResponseIdProjectUpdate> findProjectAll() {
-        List<Project> projects = projectRepository.findAll();
-
-        return projects.stream()
-                .map(project -> new ResponseIdProjectUpdate(
-                        project.getId(),
-                        project.getClassTh(),
-                        project.getTitle(),
-                        project.getSubTitle(),
-                        project.getUrl(),
-                        project.arrayToImage() // 이미지 바이트 배열을 Base64 문자열로 변환
-                ))
-                .collect(Collectors.toCollection(ArrayList::new));
+    @Transactional
+    public void deleteProject(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(InvalidIdException::new);
+        projectRepository.delete(project);
     }
 
     public List<ResponseIdProjectUpdate> findProjectAllIdDesc() {
@@ -82,7 +73,6 @@ public class ProjectService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-
     public ResponseProjectUpdate findProjectById(Long id) {
         return projectRepository.findById(id)
                 .map(project -> new ResponseProjectUpdate(
@@ -92,12 +82,5 @@ public class ProjectService {
                         project.getUrl(),
                         project.arrayToImage()))
                 .orElseThrow(InvalidIdException::new);
-    }
-
-    @Transactional
-    public void deleteProject(Long id) {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(InvalidIdException::new);
-        projectRepository.delete(project);
     }
 }

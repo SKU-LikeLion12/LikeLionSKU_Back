@@ -14,13 +14,10 @@ import java.util.Optional;
 public interface SubmitAssignmentRepository extends JpaRepository<SubmitAssignment, Long> {
     List<SubmitAssignment> findByWriterAndAssignment_AssignmentStatus(String writer, AssignmentStatus status);
     int countByWriterAndAssignment_AssignmentStatusAndAssignment_TrackAndSubmitStatus(String writer, AssignmentStatus assignmentStatus, TrackType trackType, SubmitStatus submitStatus);
-
     Optional<SubmitAssignment> findByWriterAndAssignment_Id(String writer, Long assignmentId);
     List<SubmitAssignment> findDistinctWriterByAssignment_Track(TrackType track);
     List<SubmitAssignment> findByAssignmentId(Long assignmentId);
-
-    int countByWriterAndAssignment_Track(String writer, TrackType track); // 제출한 과제 수
-
+    int countByWriterAndAssignment_Track(String writer, TrackType track);
     int countByWriterAndAssignment_TrackAndPassNonePass(String writer, TrackType trackType, PassNonePass passNonePass);
     Optional<SubmitAssignment> findByWriterAndAssignment(String writer, Assignment assignment);
 }

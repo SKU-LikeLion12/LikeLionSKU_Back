@@ -9,5 +9,4 @@ import java.util.Optional;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     Optional<Project> findByTitle(String title);
     List<Project> findAllByOrderByIdDesc();
-
 }

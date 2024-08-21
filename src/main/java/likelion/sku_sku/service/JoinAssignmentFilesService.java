@@ -18,7 +18,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class JoinAssignmentFilesService {
     private final JoinAssignmentFilesRepository joinAssignmentFilesRepository;
-    private final LionService lionService;
 
     @Transactional
     public List<JoinAssignmentFiles> uploadJoinAssignmentFiles(SubmitAssignment submitAssignment, List<MultipartFile> files) throws IOException {
@@ -36,24 +35,14 @@ public class JoinAssignmentFilesService {
         joinAssignmentFilesRepository.deleteBySubmitAssignment(submitAssignment);
     }
 
-    List<JoinAssignmentFiles> findBySubmitAssignment(SubmitAssignment submitAssignment) {
-        return joinAssignmentFilesRepository.findBySubmitAssignment(submitAssignment);
-    }
-
-
-    public List<JoinAssignmentFiles> findAllJoinAssignmentFiles() {
-        return joinAssignmentFilesRepository.findAll();
-    }
-
-    public JoinAssignmentFiles findJoinAssignmentFilesById(Long id) {
-        return joinAssignmentFilesRepository.findById(id)
-                .orElseThrow(InvalidIdException::new);
-    }
-
     @Transactional
     public void deleteJoinAssignmentFiles(Long id) {
         JoinAssignmentFiles joinAssignmentFiles = joinAssignmentFilesRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
         joinAssignmentFilesRepository.delete(joinAssignmentFiles);
+    }
+
+    List<JoinAssignmentFiles> findBySubmitAssignment(SubmitAssignment submitAssignment) {
+        return joinAssignmentFilesRepository.findBySubmitAssignment(submitAssignment);
     }
 }

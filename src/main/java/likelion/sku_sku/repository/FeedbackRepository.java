@@ -8,5 +8,4 @@ import java.util.Optional;
 
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     Optional<Feedback> findFeedbackBySubmitAssignment(SubmitAssignment submitAssignment);
-    Optional<Feedback> findFeedbackBySubmitAssignment_Id(Long submitAssignmentId);
 }

@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface LectureRepository extends JpaRepository<Lecture, Long> {
     @EntityGraph(attributePaths = {"joinLectureFiles"})
     Optional<Lecture> findById(Long id);
+
     @EntityGraph(attributePaths = {"joinLectureFiles"})
     List<Lecture> findAll();
 

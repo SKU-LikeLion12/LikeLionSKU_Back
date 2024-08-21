@@ -57,4 +57,12 @@ public class SubmitAssignmentAdminController {
         AssignmentAll assignmentAll = submitAssignmentService.getAssignmentWithSubmissions(request.getAssignmentId(), request.getWriter());
         return ResponseEntity.ok(assignmentAll);
     }
+
+    @Operation(summary = "(민규) 과제 안내물 상태별 조회 및 과제 조회", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 조회하고자 하는 아기사자 이름, 트랙 필요",
+            responses = {@ApiResponse(responseCode = "200", description = "조회 성공")})
+    @GetMapping("/status")
+    public ResponseEntity<AssignmentStatusGroupedDTO> getAssignmentsByWriterAndTrack(@ModelAttribute WriterAndTrack request) {
+        AssignmentStatusGroupedDTO assignmentsSummary = submitAssignmentService.findAssignmentsByWriterAndTrackGroupedByStatus(request.getWriter(), request.getTrack());
+        return ResponseEntity.ok(assignmentsSummary);
+    }
 }

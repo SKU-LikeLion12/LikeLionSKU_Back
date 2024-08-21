@@ -40,7 +40,7 @@ public class SubmitAssignmentController {
             responses = {@ApiResponse(responseCode = "200", description = "조회 성공")})
     @GetMapping("/status")
     public ResponseEntity<AssignmentStatusGroupedDTO> getAssignmentsByWriterAndTrack(@ModelAttribute WriterAndTrack request) {
-        AssignmentStatusGroupedDTO assignmentsSummary = submitAssignmentService.findAssignmentsByWriterAndTrackGroupedByStatus(request.getWriter(), request.getTrack());
+        AssignmentStatusGroupedDTO assignmentsSummary = submitAssignmentService.assignmentsByWriterAndTrackGroupedByStatus(request.getWriter(), request.getTrack());
         return ResponseEntity.ok(assignmentsSummary);
     }
 }

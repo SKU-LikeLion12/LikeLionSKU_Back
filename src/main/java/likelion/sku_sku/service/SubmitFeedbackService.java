@@ -2,6 +2,7 @@ package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.Feedback;
 import likelion.sku_sku.domain.SubmitAssignment;
+import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.PassNonePass;
 import likelion.sku_sku.exception.AlreadyFeedbackException;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,13 @@ public class SubmitFeedbackService {
         SubmitAssignment submitAssignment = submitAssignmentService.findSubmitAssignmentById(submitAssignmentId);
         Map<String, Object> response = new HashMap<>();
         if (passNonePass == PassNonePass.PASS) {
-            submitAssignment.update(passNonePass);
+            submitAssignment.updatePassNonePass(passNonePass);
+            submitAssignment.updateStatusAssignment(AssignmentStatus.DONE);
             response.put("passStatus", "PASS로 변경하였습니다.");
         }
         if (passNonePass == PassNonePass.FAIL) {
-            submitAssignment.update(passNonePass);
+            submitAssignment.updatePassNonePass(passNonePass);
+            submitAssignment.updateStatusAssignment(AssignmentStatus.ING);
             response.put("passStatus", "FAIL로 변경하였습니다.");
         }
         if (content != null && !content.isEmpty()) {
@@ -56,7 +59,12 @@ public class SubmitFeedbackService {
 
         if (passNonePass != null) {
             SubmitAssignment submitAssignment = feedback.getSubmitAssignment();
-            submitAssignment.update(passNonePass);
+            submitAssignment.updatePassNonePass(passNonePass);
+            if (passNonePass == PassNonePass.PASS) {
+                submitAssignment.updateStatusAssignment(AssignmentStatus.DONE);
+            } else {
+                submitAssignment.updateStatusAssignment(AssignmentStatus.ING);
+            }
             response.put("passStatus", passNonePass == PassNonePass.PASS ? "PASS로 변경하였습니다." : "FAIL로 변경하였습니다.");
         }
 

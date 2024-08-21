@@ -89,18 +89,14 @@ public class SubmitAssignmentDTO {
     @Data
     @AllArgsConstructor
     public static class ResponseAssignmentCount {
-        @Schema(description = "제출한 과제 작성자", example = "한민규")
+        @Schema(description = "아기사자 이름", example = "한민규")
         private String writer;
-        @Schema(description = "제출한 오늘의 과제 개수", example = "1")
-        private int submittedTodayCount;
-        @Schema(description = "해당 트랙 오늘의 과제 종 개수", example = "3")
-        private int todayCount;
-        @Schema(description = "제출한 진행중인 과제 개수", example = "1")
-        private int submittedIngCount;
-        @Schema(description = "해당 트랙 진행중인 과제 종 개수", example = "3")
-        private int ingCount;
-        @Schema(description = "해당 트랙 완료된 과제 종 개수", example = "3")
-        private int doneCount;
+        @Schema(description = "해당 트랙 (구)오늘의 과제 수", example = "3")
+        private int unsubmittedCount;
+        @Schema(description = "해당 트랙 (구)진행중인 과제 개수", example = "3")
+        private int submittedCount;
+        @Schema(description = "해당 트랙 통과된 과제 개수", example = "3")
+        private int passCount;
     }
 
     @Data
@@ -205,7 +201,34 @@ public class SubmitAssignmentDTO {
     @Data
     @AllArgsConstructor
     public static class ResponseAssignmentSummary {
+        @Schema(description = "해당 트랙의 총 과제 수", example = "한민규")
         private int totalAssignmentsByTrack;
+        @Schema(description = "해당 트랙의 아기사자 과제의 디테일 개수", example = "[\n" +
+                "        {\n" +
+                "            \"writer\": \"한민규\",\n" +
+                "            \"unsubmittedCount\": 2,\n" +
+                "            \"submittedCount\": 2,\n" +
+                "            \"passCount\": 1\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"writer\": \"김영현\",\n" +
+                "            \"unsubmittedCount\": 1,\n" +
+                "            \"submittedCount\": 3,\n" +
+                "            \"passCount\": 1\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"writer\": \"고창준\",\n" +
+                "            \"unsubmittedCount\": 3,\n" +
+                "            \"submittedCount\": 1,\n" +
+                "            \"passCount\": 0\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"writer\": \"신민서\",\n" +
+                "            \"unsubmittedCount\": 1,\n" +
+                "            \"submittedCount\": 3,\n" +
+                "            \"passCount\": 0\n" +
+                "        }\n" +
+                "    ]\n")
         private List<ResponseAssignmentCount> assignmentCounts;
     }
 
@@ -253,13 +276,13 @@ public class SubmitAssignmentDTO {
         @Schema(description = "제출한 과제 안내물 개수", example = "1")
         private int ingCount;
 
-        @Schema(description = "제출한 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"submitAssignmentWithoutDTO\": {\"submitAssignmentId\": 452, \"track\": \"BACKEND\", \"writer\": \"한민규\", \"submitStatus\": \"SUBMITTED or UNSUBMITTED\", \"passNonePass\": \"PASS or FAIL\", \"responseFeedback\": {\"feedBackId\": 302, \"content\": \"이게 최선이야?\"}, \"files\": [{\"id\": 452, \"fileName\": \"swagger.pdf\", \"fileType\": \"application/pdf\", \"size\": 199922, \"file\": \"base64 fileString\"}]}}]")
+        @Schema(description = "제출한 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"dueDate\": \"2024-08-25\", \"submitAssignmentWithoutDTO\": {\"submitAssignmentId\": 452, \"track\": \"BACKEND\", \"writer\": \"한민규\", \"submitStatus\": \"SUBMITTED or UNSUBMITTED\", \"passNonePass\": \"PASS or FAIL\", \"responseFeedback\": {\"feedBackId\": 302, \"content\": \"이게 최선이야?\"}, \"files\": [{\"id\": 452, \"fileName\": \"swagger.pdf\", \"fileType\": \"application/pdf\", \"size\": 199922, \"file\": \"base64 fileString\"}]}}]")
         private List<AssignmentStatusDTO> ing;
 
         @Schema(description = "끝난 과제 안내물 개수", example = "1")
         private int doneCount;
 
-        @Schema(description = "끝난 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"submitAssignmentWithoutDTO\": {\"submitAssignmentId\": 452, \"track\": \"BACKEND\", \"writer\": \"한민규\", \"submitStatus\": \"SUBMITTED or UNSUBMITTED\", \"passNonePass\": \"PASS or FAIL\", \"responseFeedback\": {\"feedBackId\": 302, \"content\": \"이게 최선이야?\"}, \"files\": [{\"id\": 452, \"fileName\": \"swagger.pdf\", \"fileType\": \"application/pdf\", \"size\": 199922, \"file\": \"base64 fileString\"}]}}]")
+        @Schema(description = "끝난 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"dueDate\": \"2024-08-25\", \"submitAssignmentWithoutDTO\": {\"submitAssignmentId\": 452, \"track\": \"BACKEND\", \"writer\": \"한민규\", \"submitStatus\": \"SUBMITTED or UNSUBMITTED\", \"passNonePass\": \"PASS or FAIL\", \"responseFeedback\": {\"feedBackId\": 302, \"content\": \"이게 최선이야?\"}, \"files\": [{\"id\": 452, \"fileName\": \"swagger.pdf\", \"fileType\": \"application/pdf\", \"size\": 199922, \"file\": \"base64 fileString\"}]}}]")
         private List<AssignmentStatusDTO> done;
     }
 

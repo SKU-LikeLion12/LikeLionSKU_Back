@@ -301,7 +301,7 @@ public class SubmitAssignmentDTO {
         @Schema(description = "오늘의 과제 개수 and 오늘의 과제 관리 개수", example = "1")
         private int todayCount;
 
-        @Schema(description = "제출하지 않은 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"submitAssignmentWithoutDTO\": null}]")
+        @Schema(description = "제출하지 않은 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"dueDate\": \"2024-08-25\", \"submitAssignmentWithoutDTO\": null}]")
         private List<AssignmentStatusDTO> today;
 
         @Schema(description = "진행중인 과제 관리 개수", example = "1")

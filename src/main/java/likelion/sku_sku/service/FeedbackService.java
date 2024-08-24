@@ -16,13 +16,6 @@ import java.util.Optional;
 public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
 
-    @Transactional
-    public void deleteFeedback(Long id) {
-        Feedback feedback = feedbackRepository.findById(id)
-                .orElseThrow(InvalidIdException::new);
-        feedbackRepository.delete(feedback);
-    }
-
     public void saveFeedback(Feedback feedback) {
         feedbackRepository.save(feedback);
     }

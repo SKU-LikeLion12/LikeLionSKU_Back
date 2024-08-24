@@ -65,20 +65,6 @@ public class SubmitAssignmentService {
         return submitAssignment;
     }
 
-    // @GetMapping("/admin/submit/all")
-    public Map<String, List<SubmitAssignment>> findAllAssignmentsByWriter(String writer) {
-        List<SubmitAssignment> todayAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.TODAY);
-        List<SubmitAssignment> ingAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.ING);
-        List<SubmitAssignment> doneAssignments = submitAssignmentRepository.findByWriterAndAssignment_AssignmentStatus(writer, AssignmentStatus.DONE);
-
-        Map<String, List<SubmitAssignment>> result = new HashMap<>();
-        result.put("today", todayAssignments);
-        result.put("ing", ingAssignments);
-        result.put("done", doneAssignments);
-
-        return result;
-    }
-
     public SubmitAssignment findSubmitAssignmentById(Long id) {
         return submitAssignmentRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);
@@ -86,10 +72,9 @@ public class SubmitAssignmentService {
 
     // @GetMapping("/admin/submit/trackcnt")
     public ResponseAssignmentSummary countAssignmentsByTrack(TrackType track) {
-        List<SubmitAssignment> assignments = submitAssignmentRepository.findDistinctWriterByAssignment_Track(track);
-        List<String> writers = assignments.stream()
+        List<String> writers = submitAssignmentRepository.findDistinctWriterByAssignment_Track(track)
+                .stream()
                 .map(SubmitAssignment::getWriter)
-                .distinct()
                 .toList();
 
         List<ResponseAssignmentCount> responseList = new ArrayList<>();
@@ -110,46 +95,6 @@ public class SubmitAssignmentService {
 
     private int getTotalAssignmentsByTrack(TrackType track) {
         return assignmentService.countByTrack(track);
-    }
-
-    // @GetMapping("/admin/submit/details")
-    public ResponseAssignmentDetails getAssignmentDetailsByWriter(String writer, TrackType track) {
-        int submittedTodayCount = getSubmittedCountByStatus(writer, AssignmentStatus.TODAY, track);
-        int todayCount = getCountByStatusAndTrack(AssignmentStatus.TODAY, track);
-
-        int submittedIngCount = getSubmittedCountByStatus(writer, AssignmentStatus.ING, track);
-        int ingCount = getCountByStatusAndTrack(AssignmentStatus.ING, track);
-
-        int doneCount = getCountByStatusAndTrack(AssignmentStatus.DONE, track);
-
-        Map<String, List<AssignmentAllDTO>> assignments = new HashMap<>();
-        assignments.put("today", convertAssignmentsToDTOByTrack(AssignmentStatus.TODAY, writer, track));
-        assignments.put("ing", convertAssignmentsToDTOByTrack(AssignmentStatus.ING, writer, track));
-        assignments.put("done", convertAssignmentsToDTOByTrack(AssignmentStatus.DONE, writer, track));
-
-        return new ResponseAssignmentDetails(writer, submittedTodayCount, todayCount, submittedIngCount, ingCount, doneCount, assignments);
-    }
-
-    private int getSubmittedCountByStatus(String writer, AssignmentStatus status, TrackType trackType) {
-        return submitAssignmentRepository.countByWriterAndAssignment_AssignmentStatusAndAssignment_TrackAndSubmitStatus(writer, status, trackType, SubmitStatus.SUBMITTED);
-    }
-    private int getCountByStatusAndTrack(AssignmentStatus status, TrackType track) {
-        return assignmentService.countByAssignmentStatusAndTrack(status, track);
-    }
-
-    private List<AssignmentAllDTO> convertAssignmentsToDTOByTrack(AssignmentStatus status, String writer, TrackType track) {
-        List<Assignment> assignments = assignmentService.findAssignmentsByAssignmentStatusAndTrack(status, track);
-        List<AssignmentAllDTO> dtoList = new ArrayList<>();
-
-        for (Assignment assignment : assignments) {
-            SubmitAssignment submitAssignment = submitAssignmentRepository.findByWriterAndAssignment(writer, assignment)
-                    .orElse(null);
-            List<JoinAssignmentFiles> files = submitAssignment != null ? joinAssignmentFilesService.findBySubmitAssignment(submitAssignment) : new ArrayList<>();
-            SubmitAssignmentAllDTO submitAssignmentAllDTO = submitAssignment != null ? new SubmitAssignmentAllDTO(submitAssignment, files) : null;
-            AssignmentAllDTO dto = new AssignmentAllDTO(assignment, submitAssignmentAllDTO);
-            dtoList.add(dto);
-        }
-        return dtoList;
     }
 
     // @GetMapping("/admin/submit/assignment")
@@ -180,7 +125,6 @@ public class SubmitAssignmentService {
 
         List<AssignmentStatusDTO> todayAssignments = new ArrayList<>();
         List<AssignmentStatusDTO> ingAssignments = new ArrayList<>();
-//        List<AssignmentStatusDTO> doneAssignments = new ArrayList<>();
 
         for (Assignment assignment : assignments) {
             AssignmentStatus status = adminDetermineStatus(assignment, writer);
@@ -189,7 +133,6 @@ public class SubmitAssignmentService {
             switch (status) {
                 case TODAY -> todayAssignments.add(assignmentStatusDTO);
                 case ING -> ingAssignments.add(assignmentStatusDTO);
-//                case DONE -> doneAssignments.add(assignmentStatusDTO);
             }
         }
 
@@ -205,9 +148,6 @@ public class SubmitAssignmentService {
     }
 
     private AssignmentStatus adminDetermineStatus(Assignment assignment, String writer) {
-//        if (assignment.getAssignmentStatus() == AssignmentStatus.DONE) {
-//            return AssignmentStatus.DONE;
-//        }
         SubmitAssignment submitAssignment = submitAssignmentRepository.findByWriterAndAssignment(writer, assignment).orElse(null);
 
         if (submitAssignment == null) {

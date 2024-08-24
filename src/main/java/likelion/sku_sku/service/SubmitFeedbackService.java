@@ -19,6 +19,7 @@ public class SubmitFeedbackService {
     private final SubmitAssignmentService submitAssignmentService;
     private final FeedbackService feedbackService;
 
+    // @PostMapping("/admin/feedback/add")
     @Transactional
     public Map<String, Object> addFeedbackPassStatus(Long submitAssignmentId, PassNonePass passNonePass, String content) {
         SubmitAssignment submitAssignment = submitAssignmentService.findSubmitAssignmentById(submitAssignmentId);
@@ -47,6 +48,7 @@ public class SubmitFeedbackService {
         return response;
     }
 
+    // @PutMapping("/admin/feedback/update")
     @Transactional
     public Map<String, Object> updateFeedbackPassStatus(Long feedbackId, PassNonePass passNonePass, String content) {
         Feedback feedback = feedbackService.getFeedbackById(feedbackId);

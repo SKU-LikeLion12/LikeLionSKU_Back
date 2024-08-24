@@ -35,13 +35,6 @@ public class JoinAssignmentFilesService {
         joinAssignmentFilesRepository.deleteBySubmitAssignment(submitAssignment);
     }
 
-    @Transactional
-    public void deleteJoinAssignmentFiles(Long id) {
-        JoinAssignmentFiles joinAssignmentFiles = joinAssignmentFilesRepository.findById(id)
-                .orElseThrow(InvalidIdException::new);
-        joinAssignmentFilesRepository.delete(joinAssignmentFiles);
-    }
-
     List<JoinAssignmentFiles> findBySubmitAssignment(SubmitAssignment submitAssignment) {
         return joinAssignmentFilesRepository.findBySubmitAssignment(submitAssignment);
     }

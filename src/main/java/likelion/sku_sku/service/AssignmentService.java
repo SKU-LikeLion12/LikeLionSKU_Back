@@ -9,6 +9,7 @@ import likelion.sku_sku.repository.AssignmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class AssignmentService {
         return assignmentRepository.save(assignment);
     }
 
+    // @PutMapping("/admin/assignment/update")
     @Transactional
     public Assignment updateAssignment(Long id, String title, String subTitle, String description, LocalDate dueDate) {
         Assignment assignment = assignmentRepository.findById(id)
@@ -40,6 +42,7 @@ public class AssignmentService {
         return assignment;
     }
 
+    // @PutMapping("/admin/assignment/update-status/")
     @Transactional
     public void updateAssignmentStatusToDone(Long assignmentId, AssignmentStatus assignmentStatus) {
         Assignment assignment = assignmentRepository.findById(assignmentId)
@@ -49,6 +52,7 @@ public class AssignmentService {
         assignmentRepository.save(assignment);
     }
 
+    // @DeleteMapping("/admin/assignment")
     @Transactional
     public void deleteAssignment(Long id) {
         Assignment assignment = assignmentRepository.findById(id)
@@ -56,6 +60,7 @@ public class AssignmentService {
         assignmentRepository.delete(assignment);
     }
 
+    // @DeleteMapping("/admin/assignment/delete-all")
     @Transactional
     public void deleteAssignmentsByIds(List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
@@ -68,6 +73,7 @@ public class AssignmentService {
         }
     }
 
+    // @GetMapping("/assignment")
     public Map<String, Object> getAssignmentsAndCountByTrackAndStatus(TrackType track, AssignmentStatus assignmentStatus) {
         List<Assignment> assignments = assignmentRepository.findByTrackAndAssignmentStatus(track, assignmentStatus);
         int assignmentCount = assignments.size();
@@ -79,8 +85,8 @@ public class AssignmentService {
         return result;
     }
 
-    public List<Assignment> findAssignmentsByAssignmentStatusAndTrack(AssignmentStatus status, TrackType track) {
-        return assignmentRepository.findAssignmentsByAssignmentStatusAndTrack(status, track);
+    public List<Assignment> findByTrackAndAssignmentStatus(TrackType track, AssignmentStatus status) {
+        return assignmentRepository.findByTrackAndAssignmentStatus(track, status);
     }
 
     public Assignment findAssignmentById(Long id) {

@@ -7,6 +7,7 @@ import likelion.sku_sku.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ import static likelion.sku_sku.dto.ProjectDTO.ResponseProjectUpdate;
 public class ProjectService {
     private final ProjectRepository projectRepository;
 
+    // @PostMapping("/admin/project/add")
     @Transactional
     public Project addProject(String classTh, String title, String subTitle, String url, MultipartFile image) throws IOException {
         if (projectRepository.findByTitle(title).isPresent()) {
@@ -33,6 +35,7 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    // @PutMapping("/admin/project/update")
     @Transactional
     public Project updateProject(Long id, String classTh, String title, String subTitle, String url, MultipartFile image) throws IOException {
         Project project = projectRepository.findById(id)
@@ -51,6 +54,7 @@ public class ProjectService {
         return project;
     }
 
+    // @DeleteMapping("/admin/project")
     @Transactional
     public void deleteProject(Long id) {
         Project project = projectRepository.findById(id)

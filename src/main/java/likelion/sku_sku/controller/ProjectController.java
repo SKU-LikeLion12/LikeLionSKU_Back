@@ -21,7 +21,6 @@ import static likelion.sku_sku.dto.ProjectDTO.ResponseIdProjectUpdate;
 //@PreAuthorize("hasRole('ADMIN_LION')")
 @Tag(name = "프로젝트 관련")
 public class ProjectController {
-
     private final ProjectService projectService;
 
     @Operation(summary = "(민규) 모든 Project 정보 조회", description = "",

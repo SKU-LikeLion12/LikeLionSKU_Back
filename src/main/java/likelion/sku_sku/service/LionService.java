@@ -51,6 +51,13 @@ public class LionService {
         return lionRepository.save(lion);
     }
 
+    @Transactional
+    public void deleteLion(Long id) {
+        Lion lion = lionRepository.findById(id)
+                .orElseThrow(InvalidIdException::new);
+        lionRepository.delete(lion);
+    }
+
     public List<Lion> getAllLions() {
         return lionRepository.findAll();
     }
@@ -63,12 +70,5 @@ public class LionService {
                         lion.getTrack(),
                         lion.getRole()))
                 .orElse(null);
-    }
-
-    @Transactional
-    public void deleteLion(Long id) {
-        Lion lion = lionRepository.findById(id)
-                .orElseThrow(InvalidIdException::new);
-        lionRepository.delete(lion);
     }
 }

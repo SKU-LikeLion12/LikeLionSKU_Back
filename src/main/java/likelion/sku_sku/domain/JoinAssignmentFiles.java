@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @Entity
 @NoArgsConstructor
-@Getter // 과제 파일 제출
+@Getter // 제출된 과제 파일
 public class JoinAssignmentFiles {
     @Id @GeneratedValue
     private Long id;
@@ -22,17 +22,18 @@ public class JoinAssignmentFiles {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "submitAssignment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private SubmitAssignment submitAssignment;
+    private SubmitAssignment submitAssignment; // 제출된 과제
 
-    private String fileName;
+    private String fileName; // 제출된 과제 파일 이름
 
-    private String fileType;
+    private String fileType; // 제출된 과제 파일 타입
 
-    private long size = 0;
+    private long size = 0; // 제출된 과제 파일 사이즈
 
     @Lob @Column(name = "file", columnDefinition = "LONGBLOB")
-    private byte[] file;
+    private byte[] file; // 제출된 과제 파일
 
+    // 생성자
     public JoinAssignmentFiles(SubmitAssignment submitAssignment, MultipartFile file) throws IOException {
         this.submitAssignment = submitAssignment;
         this.fileName = file.getOriginalFilename();
@@ -41,6 +42,7 @@ public class JoinAssignmentFiles {
         this.file = file.getBytes();
     }
 
+    // 제출된 과제 파일 인코딩
     public String arrayToFile() {
         return FileUploadUtility.encodeFile(this.file);
     }

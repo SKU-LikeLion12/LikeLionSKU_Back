@@ -44,10 +44,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> InvalidSubmitAssignment(InvalidSubmitAssignmentException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("그 제출한 과제 없");
     }
-    @ExceptionHandler(AlreadySubmittedException.class)
-    public ResponseEntity<String> AlreadySubmitted(AlreadySubmittedException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 제출한 과제");
-    }
 
     // LectureFile
     @ExceptionHandler(InvalidLectureFileException.class)

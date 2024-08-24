@@ -286,5 +286,28 @@ public class SubmitAssignmentDTO {
         private List<AssignmentStatusDTO> done;
     }
 
+    @Data
+    @AllArgsConstructor
+    public static class AssignmentStatusGrouped {
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
+        private String writer;
 
+        @Schema(description = "진행중인 과제 개수", example = "1")
+        private int submittedCount;
+
+        @Schema(description = "통과된 과제 개수", example = "1")
+        private int passCount;
+
+        @Schema(description = "오늘의 과제 개수 and 오늘의 과제 관리 개수", example = "1")
+        private int todayCount;
+
+        @Schema(description = "제출하지 않은 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"dueDate\": \"2024-08-25\", \"submitAssignmentWithoutDTO\": null}]")
+        private List<AssignmentStatusDTO> today;
+
+        @Schema(description = "진행중인 과제 관리 개수", example = "1")
+        private int ingCount;
+
+        @Schema(description = "제출한 과제 안내물 목록", example = "[{\"assignmentId\": 219, \"track\": \"BACKEND\", \"assignmentStatus\": \"ING\", \"title\": \"아니\", \"subTitle\": \"정말\", \"description\": \"테스트3\", \"dueDate\": \"2024-08-25\", \"submitAssignmentWithoutDTO\": {\"submitAssignmentId\": 452, \"track\": \"BACKEND\", \"writer\": \"한민규\", \"submitStatus\": \"SUBMITTED or UNSUBMITTED\", \"passNonePass\": \"PASS or FAIL\", \"responseFeedback\": {\"feedBackId\": 302, \"content\": \"이게 최선이야?\"}, \"files\": [{\"id\": 452, \"fileName\": \"swagger.pdf\", \"fileType\": \"application/pdf\", \"size\": 199922, \"file\": \"base64 fileString\"}]}}]")
+        private List<AssignmentStatusDTO> ing;
+    }
 }

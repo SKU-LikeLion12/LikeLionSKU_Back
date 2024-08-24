@@ -47,7 +47,7 @@ public class AssignmentAdminController {
 
     @Operation(summary = "(민규) 과제 안내물 상태 변경", description = "Headers에 Bearer token 필요, body에 json 형태로 과제 안내물의 id와 과제 안내물 상태 넣으면 됨",
             responses = {@ApiResponse(responseCode = "201", description = "수정 완료")})
-    @PutMapping("/update-status/")
+    @PutMapping("/update-status")
     public ResponseEntity<Void> updateAssignmentStatusToDone(@RequestBody AssignmentIdStatus request) {
         assignmentService.updateAssignmentStatusToDone(request.getId(), request.getAssignmentStatus());
         return ResponseEntity.ok().build();

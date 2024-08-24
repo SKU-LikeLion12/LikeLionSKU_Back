@@ -19,6 +19,7 @@ import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
 @Tag(name = "과제 관련")
 public class SubmitAssignmentController {
     private final SubmitAssignmentService submitAssignmentService;
+
     @Operation(summary = "(민규) 과제 제출", description = "Headers에 Bearer token 필요, body에 form-data로 강의 안내물의 id 필요",
             responses = {@ApiResponse(responseCode = "201", description = "생성"),
                     @ApiResponse(responseCode = "200", description = "과제를 이미 제출한 경우 제출한 과제의 정보를 반환함")})

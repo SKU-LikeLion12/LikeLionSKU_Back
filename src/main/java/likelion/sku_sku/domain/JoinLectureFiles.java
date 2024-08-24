@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-@Entity
+@Entity // 강의자료
 public class JoinLectureFiles {
     @Id @GeneratedValue
     private Long id;
@@ -23,28 +23,30 @@ public class JoinLectureFiles {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Lecture lecture;
+    private Lecture lecture; // 강의자료
 
-    private String fileName;
+    private String fileName; // 강의자료 이름
 
-    private String fileType;
+    private String fileType; // 강의자료 타입
 
-    private long size = 0;
+    private long size = 0; // 강의자료 사이즈
 
     @Lob @Column(name = "file", columnDefinition = "LONGBLOB")
-    private byte[] file;
+    private byte[] file; // 강의자료
 
-    private LocalDateTime createDate; // YYYY-MM-DD HH:MM:SS.nnnnnn
+    private LocalDateTime createDate; // YYYY-MM-DD HH:MM:SS.nnnnnn // 강의자료 생성일
 
+    // 생성자
     public JoinLectureFiles(Lecture lecture, MultipartFile file) throws IOException {
         this.lecture = lecture;
         this.fileName = file.getOriginalFilename();
         this.fileType = file.getContentType();
         this.size = file.getSize();
         this.file = file.getBytes();
-        this.createDate = LocalDateTime.now();
+        this.createDate = LocalDateTime.now(); // 생성 당시 시간
     }
 
+    // 강의자료 인코딩
     public String arrayToFile() {
         return FileUploadUtility.encodeFile(this.file);
     }

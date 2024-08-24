@@ -23,30 +23,12 @@ import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;
 public class SubmitAssignmentAdminController {
     private final SubmitAssignmentService submitAssignmentService;
 
-    @Operation(summary = "(민규) 사람별 과제 현황 전체 조회", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 조회하고자 하는 아기사자 이름 필요",
-            responses = {@ApiResponse(responseCode = "201", description = "조회 성공"),
-                    @ApiResponse(responseCode = "404", description = "")})
-    @GetMapping("/all")
-    public ResponseEntity<Map<String, List<SubmitAssignment>>> findAllAssignments(@RequestParam String writer) {
-        Map<String, List<SubmitAssignment>> assignments = submitAssignmentService.findAllAssignmentsByWriter(writer);
-        return ResponseEntity.ok(assignments);
-    }
-
     @Operation(summary = "(민규) 트랙별 사람별 과제 상태별 완료한 개수, 총 개수 조회", description = "Headers에 Bearer token 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회 성공"),
                     @ApiResponse(responseCode = "404", description = "")})
     @GetMapping("/trackcnt")
     public ResponseEntity<ResponseAssignmentSummary> getAssignmentCountsByTrack(@RequestParam TrackType track) {
         return ResponseEntity.ok(submitAssignmentService.countAssignmentsByTrack(track));
-    }
-
-    @Operation(summary = "(민규) 과제 상태별 완료한 개수 및 전체 조회", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 조회하고자 하는 아기사자 이름, 트랙 필요",
-            responses = {@ApiResponse(responseCode = "200", description = "조회 성공"),
-                    @ApiResponse(responseCode = "404", description = "")})
-    @GetMapping("/details")
-    public ResponseEntity<ResponseAssignmentDetails> getAssignmentDetailsByWriter(@ModelAttribute WriterAndTrack request) {
-        ResponseAssignmentDetails response = submitAssignmentService.getAssignmentDetailsByWriter(request.getWriter(), request.getTrack());
-        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "(민규) 제출한 과제 개별 조회", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 과제 안내물 id, 제출한 과제 작성자 필요",
@@ -61,8 +43,8 @@ public class SubmitAssignmentAdminController {
     @Operation(summary = "(민규) 과제 안내물 상태별 조회 및 과제 조회", description = "Headers에 Bearer token 필요, 쿼리 파라미터로 조회하고자 하는 아기사자 이름, 트랙 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회 성공")})
     @GetMapping("/status")
-    public ResponseEntity<AssignmentStatusGroupedDTO> getAssignmentsByWriterAndTrack(@ModelAttribute WriterAndTrack request) {
-        AssignmentStatusGroupedDTO assignmentsSummary = submitAssignmentService.findAssignmentsByWriterAndTrackGroupedByStatus(request.getWriter(), request.getTrack());
+    public ResponseEntity<AssignmentStatusGrouped> getAssignmentsByWriterAndTrack(@ModelAttribute WriterAndTrack request) {
+        AssignmentStatusGrouped assignmentsSummary = submitAssignmentService.findAssignmentsByWriterAndTrackGroupedByStatus(request.getWriter(), request.getTrack());
         return ResponseEntity.ok(assignmentsSummary);
     }
 }

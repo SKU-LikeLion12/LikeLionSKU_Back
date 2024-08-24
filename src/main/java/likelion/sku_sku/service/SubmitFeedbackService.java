@@ -19,6 +19,7 @@ public class SubmitFeedbackService {
     private final SubmitAssignmentService submitAssignmentService;
     private final FeedbackService feedbackService;
 
+    // @PostMapping("/admin/feedback/add")
     @Transactional
     public Map<String, Object> addFeedbackPassStatus(Long submitAssignmentId, PassNonePass passNonePass, String content) {
         SubmitAssignment submitAssignment = submitAssignmentService.findSubmitAssignmentById(submitAssignmentId);
@@ -26,13 +27,15 @@ public class SubmitFeedbackService {
         if (passNonePass == PassNonePass.PASS) {
             submitAssignment.updatePassNonePass(passNonePass);
             submitAssignment.updateStatusAssignment(AssignmentStatus.DONE);
-            response.put("passStatus", "PASS로 변경하였습니다.");
+            response.put("passStatus", "PASS로 변경");
         }
+
         if (passNonePass == PassNonePass.FAIL) {
             submitAssignment.updatePassNonePass(passNonePass);
             submitAssignment.updateStatusAssignment(AssignmentStatus.ING);
-            response.put("passStatus", "FAIL로 변경하였습니다.");
+            response.put("passStatus", "FAIL로 변경");
         }
+
         if (content != null && !content.isEmpty()) {
             if (feedbackService.findFeedbackBySubmitAssignment(submitAssignment).isPresent()) {
                 throw new AlreadyFeedbackException();
@@ -41,9 +44,11 @@ public class SubmitFeedbackService {
             feedbackService.saveFeedback(feedback);
             response.put("feedback", feedback);
         }
+
         return response;
     }
 
+    // @PutMapping("/admin/feedback/update")
     @Transactional
     public Map<String, Object> updateFeedbackPassStatus(Long feedbackId, PassNonePass passNonePass, String content) {
         Feedback feedback = feedbackService.getFeedbackById(feedbackId);
@@ -51,10 +56,9 @@ public class SubmitFeedbackService {
         Map<String, Object> response = new HashMap<>();
 
         if (content != null && !content.isEmpty()) {
-
             feedback.update(content);
             response.put("feedback", feedback);
-            response.put("message", "Feedback 내용이 업데이트되었습니다.");
+            response.put("message", "Feedback 내용 변경");
         }
 
         if (passNonePass != null) {
@@ -65,7 +69,7 @@ public class SubmitFeedbackService {
             } else {
                 submitAssignment.updateStatusAssignment(AssignmentStatus.ING);
             }
-            response.put("passStatus", passNonePass == PassNonePass.PASS ? "PASS로 변경하였습니다." : "FAIL로 변경하였습니다.");
+            response.put("passStatus", passNonePass == PassNonePass.PASS ? "PASS로 변경" : "FAIL로 변경");
         }
 
         feedbackService.saveFeedback(feedback);

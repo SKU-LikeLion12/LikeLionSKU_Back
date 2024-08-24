@@ -7,6 +7,7 @@ import likelion.sku_sku.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class LectureService {
     private final LionService lionService;
     private final JoinLectureFilesService joinLectureFilesService;
 
+    // @PostMapping("/admin/lecture/add")
     @Transactional
     public Lecture createLecture(String bearer, createLectureRequest request) throws IOException {
         String writer = lionService.tokenToLionName(bearer.substring(7));
@@ -35,6 +37,7 @@ public class LectureService {
         return lecture;
     }
 
+    // @PutMapping("/admin/lecture/update")
     @Transactional
     public Lecture updateLecture(String bearer, updateLectureRequest request) throws IOException {
         String newWriter = lionService.tokenToLionName(bearer.substring(7));
@@ -73,8 +76,12 @@ public class LectureService {
                 .orElseThrow(InvalidIdException::new);
     }
 
-    public List<Lecture> findAllLecture() {
-        return lectureRepository.findAll();
+    // @DeleteMapping("/admin/lecture/delete")
+    @Transactional
+    public void deleteLecture(Long id) {
+        Lecture lecture = lectureRepository.findById(id)
+                .orElseThrow(InvalidIdException::new);
+        lectureRepository.delete(lecture);
     }
 
     public List<ResponseLectureWithoutFiles> findAllLectureByTrackOrderByIdDesc(TrackType trackType) {
@@ -92,13 +99,5 @@ public class LectureService {
                 lecture.getViewCount(),
                 lecture.getCreateDate()
         );
-    }
-
-
-    @Transactional
-    public void deleteLecture(Long id) {
-        Lecture lecture = lectureRepository.findById(id)
-                .orElseThrow(InvalidIdException::new);
-        lectureRepository.delete(lecture);
     }
 }

@@ -7,6 +7,7 @@ import likelion.sku_sku.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -21,9 +22,9 @@ import static likelion.sku_sku.dto.ProjectDTO.ResponseProjectUpdate;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProjectService {
-
     private final ProjectRepository projectRepository;
 
+    // @PostMapping("/admin/project/add")
     @Transactional
     public Project addProject(String classTh, String title, String subTitle, String url, MultipartFile image) throws IOException {
         if (projectRepository.findByTitle(title).isPresent()) {
@@ -34,6 +35,7 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    // @PutMapping("/admin/project/update")
     @Transactional
     public Project updateProject(Long id, String classTh, String title, String subTitle, String url, MultipartFile image) throws IOException {
         Project project = projectRepository.findById(id)
@@ -52,19 +54,12 @@ public class ProjectService {
         return project;
     }
 
-    public List<ResponseIdProjectUpdate> findProjectAll() {
-        List<Project> projects = projectRepository.findAll();
-
-        return projects.stream()
-                .map(project -> new ResponseIdProjectUpdate(
-                        project.getId(),
-                        project.getClassTh(),
-                        project.getTitle(),
-                        project.getSubTitle(),
-                        project.getUrl(),
-                        project.arrayToImage() // 이미지 바이트 배열을 Base64 문자열로 변환
-                ))
-                .collect(Collectors.toCollection(ArrayList::new));
+    // @DeleteMapping("/admin/project")
+    @Transactional
+    public void deleteProject(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(InvalidIdException::new);
+        projectRepository.delete(project);
     }
 
     public List<ResponseIdProjectUpdate> findProjectAllIdDesc() {
@@ -82,7 +77,6 @@ public class ProjectService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-
     public ResponseProjectUpdate findProjectById(Long id) {
         return projectRepository.findById(id)
                 .map(project -> new ResponseProjectUpdate(
@@ -92,12 +86,5 @@ public class ProjectService {
                         project.getUrl(),
                         project.arrayToImage()))
                 .orElseThrow(InvalidIdException::new);
-    }
-
-    @Transactional
-    public void deleteProject(Long id) {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(InvalidIdException::new);
-        projectRepository.delete(project);
     }
 }

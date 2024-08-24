@@ -22,6 +22,7 @@ import static likelion.sku_sku.dto.FeedbackDTO.UpdateFeedBackPassStatust;
 public class FeedbackAdminController {
     private final FeedbackService feedbackService;
     private final SubmitFeedbackService submitFeedbackService;
+
     @Operation(summary = "(민규) 제출한 과제 상태 변경 또는 피드백 추가", description = "Headers에 Bearer token 필요, body에 json 형태로 과제 안내물 id 필요, 통과 상태와 피드백 내용은 추가할 때만 넣으면 됨",
             responses = {@ApiResponse(responseCode = "201", description = "생성"),
                     @ApiResponse(responseCode = "409", description = "이미 피드백이 작성된 과제")})

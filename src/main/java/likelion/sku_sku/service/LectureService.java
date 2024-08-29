@@ -26,7 +26,7 @@ public class LectureService {
     private final JoinLectureFilesService joinLectureFilesService;
 
     // @PostMapping("/admin/lecture/add")
-    @Transactional
+    @Transactional // 강의 안내물 생성 로직
     public Lecture createLecture(String bearer, createLectureRequest request) throws IOException {
         String writer = lionService.tokenToLionName(bearer.substring(7));
         Lecture lecture = new Lecture(request.getTrackType(), request.getTitle(), writer);
@@ -38,7 +38,7 @@ public class LectureService {
     }
 
     // @PutMapping("/admin/lecture/update")
-    @Transactional
+    @Transactional // 강의 안내물 업데이트 로직
     public Lecture updateLecture(String bearer, updateLectureRequest request) throws IOException {
         String newWriter = lionService.tokenToLionName(bearer.substring(7));
         Lecture lecture = lectureRepository.findById(request.getId())
@@ -56,11 +56,11 @@ public class LectureService {
         return lecture;
     }
 
-    @Transactional
+    @Transactional // 강의 안내물 조회 로직
     public ResponseLecture finaLectureById(Long lectureId) {
         return lectureRepository.findById(lectureId)
                 .map(lecture -> {
-                    lecture.incrementViewCount();
+                    lecture.incrementViewCount(); // 강의 안내물이 조회될 때 조회수 증가
                     lectureRepository.save(lecture);
                     return new ResponseLecture(
                             lecture.getId(),
@@ -77,7 +77,7 @@ public class LectureService {
     }
 
     // @DeleteMapping("/admin/lecture/delete")
-    @Transactional
+    @Transactional // 강의 안내물 삭제 로직
     public void deleteLecture(Long id) {
         Lecture lecture = lectureRepository.findById(id)
                 .orElseThrow(InvalidIdException::new);

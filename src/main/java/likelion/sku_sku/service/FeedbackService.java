@@ -16,9 +16,14 @@ import java.util.Optional;
 public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
 
+//Transactional
+
+    @Transactional
     public void saveFeedback(Feedback feedback) {
         feedbackRepository.save(feedback);
     }
+
+// Abstraction
 
     Optional<Feedback> findFeedbackBySubmitAssignment(SubmitAssignment submitAssignment) {
         return feedbackRepository.findFeedbackBySubmitAssignment(submitAssignment);

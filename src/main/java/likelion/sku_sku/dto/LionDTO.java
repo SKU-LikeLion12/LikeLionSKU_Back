@@ -64,4 +64,10 @@ public class LionDTO {
         private RoleType roleType;
     }
 
+    @Data
+    @AllArgsConstructor
+    public static class NameRole {
+        private String name;
+        private RoleType role;
+    }
 }

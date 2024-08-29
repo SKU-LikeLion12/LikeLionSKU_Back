@@ -22,6 +22,9 @@ import java.util.Map;
 public class AssignmentService {
     private final AssignmentRepository assignmentRepository;
 
+// Admin
+// Transactional
+
     // @PostMapping("/admin/assignment/add")
     @Transactional
     public Assignment addAssignment(TrackType trackType, String title, String subTitle, String description, LocalDate dueDate) {
@@ -73,6 +76,9 @@ public class AssignmentService {
         }
     }
 
+// Non-Admin
+// Non-Transactional
+
     // @GetMapping("/assignment")
     public Map<String, Object> getAssignmentsAndCountByTrackAndStatus(TrackType track, AssignmentStatus assignmentStatus) {
         List<Assignment> assignments = assignmentRepository.findByTrackAndAssignmentStatus(track, assignmentStatus);
@@ -85,9 +91,7 @@ public class AssignmentService {
         return result;
     }
 
-    public List<Assignment> findByTrackAndAssignmentStatus(TrackType track, AssignmentStatus status) {
-        return assignmentRepository.findByTrackAndAssignmentStatus(track, status);
-    }
+// Abstraction
 
     public Assignment findAssignmentById(Long id) {
         return assignmentRepository.findById(id)

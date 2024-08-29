@@ -17,55 +17,55 @@ public class LectureDTO {
     public static class createLectureRequest {
         @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
         private TrackType trackType;
-        @Schema(description = "강의자료 제목", example = "백엔드 3주차")
+        @Schema(description = "강의 안내물 제목", example = "백엔드 3주차")
         private String title;
-        @Schema(description = "강의자료 파일", example = "파일 넣으셔")
+        @Schema(description = "강의 안내물 파일", example = "파일 넣으셔")
         private List<MultipartFile> files;
     }
 
     @Data
     public static class updateLectureRequest {
-        @Schema(description = "강의자료 id", example = "1")
+        @Schema(description = "강의 안내물 id", example = "1")
         private Long id;
         @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
         private TrackType trackType;
-        @Schema(description = "강의자료 제목", example = "백엔드 3주차")
+        @Schema(description = "강의 안내물 제목", example = "백엔드 3주차")
         private String title;
-        @Schema(description = "강의자료 파일", example = "파일 넣으셔")
+        @Schema(description = "강의자료", example = "파일 넣으셔")
         private List<MultipartFile> files;
     }
 
     @Data
     @AllArgsConstructor
     public static class ResponseLecture {
-        @Schema(description = "강의자료 id", example = "1")
+        @Schema(description = "강의 안내물 id", example = "1")
         private Long id;
         @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
         private TrackType trackType;
-        @Schema(description = "강의자료 제목", example = "백엔드 3주차")
+        @Schema(description = "강의 안내물 제목", example = "백엔드 3주차")
         private String title;
-        @Schema(description = "강의자료 작성자", example = "한민규")
+        @Schema(description = "강의 안내물 작성자", example = "한민규")
         private String writer;
-        @Schema(description = "강의자료 조회수", example = "21")
+        @Schema(description = "강의 안내물 조회수", example = "21")
         private int views;
-        @Schema(description = "강의자료 작성 시간", example = "YYYY-MM-DD")
+        @Schema(description = "강의 안내물 작성 시간", example = "YYYY-MM-DD")
         private LocalDate createDate;
-        @Schema(description = "강의자료 파일", example = "")
+        @Schema(description = "강의자료", example = "")
         private List<CreateJoinLectureFilesRequest> joinLectureFiles;
     }
 
     @Data
     @AllArgsConstructor
     public static class ResponseLectureWithoutFiles {
-        @Schema(description = "강의자료 id", example = "1")
+        @Schema(description = "강의 안내물 id", example = "1")
         private Long id;
-        @Schema(description = "강의자료 제목", example = "백엔드 3주차")
+        @Schema(description = "강의 안내물 제목", example = "백엔드 3주차")
         private String title;
-        @Schema(description = "강의자료 작성자", example = "한민규")
+        @Schema(description = "강의 안내물 작성자", example = "한민규")
         private String writer;
-        @Schema(description = "강의자료 조회수", example = "21")
+        @Schema(description = "강의 안내물 조회수", example = "21")
         private int views;
-        @Schema(description = "강의자료 작성 시간", example = "YYYY-MM-DD")
+        @Schema(description = "강의 안내물 작성 시간", example = "YYYY-MM-DD")
         private LocalDate createDate;
     }
 }

@@ -19,6 +19,8 @@ import java.util.List;
 public class JoinAssignmentFilesService {
     private final JoinAssignmentFilesRepository joinAssignmentFilesRepository;
 
+// Transactional
+
     @Transactional
     public List<JoinAssignmentFiles> uploadJoinAssignmentFiles(SubmitAssignment submitAssignment, List<MultipartFile> files) throws IOException {
         List<JoinAssignmentFiles> joinAssignmentFilesList = new ArrayList<>();
@@ -34,6 +36,8 @@ public class JoinAssignmentFilesService {
     public void deleteBySubmitAssignment(SubmitAssignment submitAssignment) {
         joinAssignmentFilesRepository.deleteBySubmitAssignment(submitAssignment);
     }
+
+// Abstraction
 
     List<JoinAssignmentFiles> findBySubmitAssignment(SubmitAssignment submitAssignment) {
         return joinAssignmentFilesRepository.findBySubmitAssignment(submitAssignment);

@@ -3,6 +3,7 @@ package likelion.sku_sku.service;
 import likelion.sku_sku.domain.Lion;
 import likelion.sku_sku.domain.enums.RoleType;
 import likelion.sku_sku.domain.enums.TrackType;
+import likelion.sku_sku.dto.LionDTO;
 import likelion.sku_sku.exception.InvalidEmailException;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.exception.InvalidLionException;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static likelion.sku_sku.dto.LionDTO.*;
 import static likelion.sku_sku.dto.LionDTO.ResponseLionUpdate;
 
 @Service
@@ -61,6 +63,21 @@ public class LionService {
     public List<Lion> getAllLions() {
         return lionRepository.findAll();
     }
+
+    public List<String> findWritersByTrack(TrackType track) {
+        List<Lion> lions = lionRepository.findWritersByTrack(track);
+        return lions.stream()
+                .map(Lion::getName)
+                .toList();
+    }
+
+    public List<String> findWritersByTrackAndBaby(TrackType track) {
+        List<Lion> lions = lionRepository.findWritersByTrackAndRole(track, RoleType.BABY_LION);
+        return lions.stream()
+                .map(Lion::getName)
+                .toList();
+    }
+
 
     public ResponseLionUpdate findLionById(Long id) {
         return lionRepository.findById(id)

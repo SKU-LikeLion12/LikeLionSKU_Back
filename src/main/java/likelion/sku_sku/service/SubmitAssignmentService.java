@@ -40,9 +40,9 @@ public class SubmitAssignmentService {
     @Transactional // 과제 제출
     public ResponseEntity<SubmitAssignment> createSubmitAssignment(String bearer, Long assignmentId, List<MultipartFile> files) throws IOException {
         String writer = lionService.tokenToLionName(bearer.substring(7));
-        Optional<SubmitAssignment> existSumnitAssignment = submitAssignmentRepository.findByWriterAndAssignment_Id(writer, assignmentId);
-        if (existSumnitAssignment.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(existSumnitAssignment.get());
+        Optional<SubmitAssignment> existSubmitAssignment = submitAssignmentRepository.findByWriterAndAssignment_Id(writer, assignmentId);
+        if (existSubmitAssignment.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(existSubmitAssignment.get());
         }
         Assignment assignment = assignmentService.findAssignmentById(assignmentId);
         SubmitAssignment submitAssignment = new SubmitAssignment(assignment.getTrack(), assignment, writer);
@@ -72,15 +72,19 @@ public class SubmitAssignmentService {
 
     // @GetMapping("/admin/submit/trackcnt")
     public ResponseAssignmentSummary countAssignmentsByTrack(TrackType track) {
-        List<String> writers = submitAssignmentRepository.findDistinctWriterByAssignment_Track(track)
-                .stream()
+        List<String> allWritersInTrack = lionService.findWritersByTrack(track);
+//        List<String> allWritersInTrackAndBaby = lionService.findWritersByTrackAndBaby(track);
+
+        List<SubmitAssignment> assignments = submitAssignmentRepository.findDistinctWriterByAssignment_Track(track);
+        List<String> submittedWriters = assignments.stream()
                 .map(SubmitAssignment::getWriter)
+                .distinct()
                 .toList();
 
         List<ResponseAssignmentCount> responseList = new ArrayList<>();
         int totalAssignmentsByTrack = getTotalAssignmentsByTrack(track);
 
-        for (String writer : writers) {
+        for (String writer : allWritersInTrack) {
             int totalTodayAssignments = assignmentService.countByAssignmentStatusAndTrack(AssignmentStatus.TODAY, track);
 
             int submittedCount = submitAssignmentRepository.countByWriterAndAssignment_TrackAndPassNonePass(writer, track, PassNonePass.FAIL);
@@ -96,6 +100,7 @@ public class SubmitAssignmentService {
     private int getTotalAssignmentsByTrack(TrackType track) {
         return assignmentService.countByTrack(track);
     }
+
 
     // @GetMapping("/admin/submit/assignment")
     public AssignmentAll getAssignmentWithSubmissions(Long assignmentId, String writer) {

@@ -1,7 +1,7 @@
 package likelion.sku_sku.domain;
 
 import jakarta.persistence.*;
-import likelion.sku_sku.service.ImageUtility;
+import likelion.sku_sku.service.FileUtility;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,7 +45,7 @@ public class Project {
 
     // 프로젝트 이미지 인코딩
     public String arrayToImage() {
-        return ImageUtility.encodeImage(this.image);
+        return FileUtility.encodeFile(this.image);
     }
 
     // 이미지 업데이트

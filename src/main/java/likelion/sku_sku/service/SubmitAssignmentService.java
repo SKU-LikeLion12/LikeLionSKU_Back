@@ -75,11 +75,11 @@ public class SubmitAssignmentService {
         List<String> allWritersInTrack = lionService.findWritersByTrack(track);
 //        List<String> allWritersInTrackAndBaby = lionService.findWritersByTrackAndBaby(track);
 
-        List<SubmitAssignment> assignments = submitAssignmentRepository.findDistinctWriterByAssignment_Track(track);
-        List<String> submittedWriters = assignments.stream()
-                .map(SubmitAssignment::getWriter)
-                .distinct()
-                .toList();
+//        List<SubmitAssignment> assignments = submitAssignmentRepository.findDistinctWriterByAssignment_Track(track);
+//        List<String> submittedWriters = assignments.stream()
+//                .map(SubmitAssignment::getWriter)
+//                .distinct()
+//                .toList();
 
         List<ResponseAssignmentCount> responseList = new ArrayList<>();
         int totalAssignmentsByTrack = getTotalAssignmentsByTrack(track);
@@ -100,7 +100,6 @@ public class SubmitAssignmentService {
     private int getTotalAssignmentsByTrack(TrackType track) {
         return assignmentService.countByTrack(track);
     }
-
 
     // @GetMapping("/admin/submit/assignment")
     public AssignmentAll getAssignmentWithSubmissions(Long assignmentId, String writer) {

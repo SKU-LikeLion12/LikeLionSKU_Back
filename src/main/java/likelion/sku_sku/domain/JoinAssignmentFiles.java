@@ -2,7 +2,7 @@ package likelion.sku_sku.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import likelion.sku_sku.service.FileUploadUtility;
+import likelion.sku_sku.service.FileUtility;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
@@ -44,6 +44,6 @@ public class JoinAssignmentFiles {
 
     // 제출된 과제 파일 인코딩
     public String arrayToFile() {
-        return FileUploadUtility.encodeFile(this.file);
+        return FileUtility.encodeFile(this.file);
     }
 }

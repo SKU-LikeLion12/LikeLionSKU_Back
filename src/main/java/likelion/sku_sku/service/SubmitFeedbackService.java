@@ -64,12 +64,14 @@ public class SubmitFeedbackService {
         if (passNonePass != null) {
             SubmitAssignment submitAssignment = feedback.getSubmitAssignment();
             submitAssignment.updatePassNonePass(passNonePass);
+
             if (passNonePass == PassNonePass.PASS) {
                 submitAssignment.updateStatusAssignment(AssignmentStatus.DONE);
+                response.put("passStatus", "PASS로 변경");
             } else {
                 submitAssignment.updateStatusAssignment(AssignmentStatus.ING);
+                response.put("passStatus", "FAIL로 변경");
             }
-            response.put("passStatus", passNonePass == PassNonePass.PASS ? "PASS로 변경" : "FAIL로 변경");
         }
 
         feedbackService.saveFeedback(feedback);

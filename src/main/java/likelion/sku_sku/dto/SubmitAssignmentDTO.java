@@ -47,6 +47,7 @@ public class SubmitAssignmentDTO {
     public static class assignmentWriter {
         @Schema(description = "제출한 과제 id", example = "1")
         private Long assignmentId;
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
         private String writer;
     }
 
@@ -159,7 +160,6 @@ public class SubmitAssignmentDTO {
         private ResponseFeedback responseFeedback;
         @Schema(description = "제출한 과제 파일들", example = "")
         private List<JoinAssignmentFiles> files;
-
 
         public SubmitAssignmentWithoutDTO(SubmitAssignment submitAssignment, List<JoinAssignmentFiles> files, ResponseFeedback responseFeedback) {
             this.submitAssignmentId = submitAssignment.getId();

@@ -20,10 +20,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> invalidEmail(InvalidEmailException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("그 email 이미 있");
     }
+
     @ExceptionHandler(InvalidLionException.class)
     public ResponseEntity<String> invalidLion(InvalidLionException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이런 Lion 없");
     }
+
     // Project
     @ExceptionHandler(InvalidTitleException.class)
     public ResponseEntity<String> invalidTitle(InvalidTitleException e) {

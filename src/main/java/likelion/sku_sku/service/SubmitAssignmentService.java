@@ -178,8 +178,19 @@ public class SubmitAssignmentService {
     }
 
     // @GetMapping("/submit/status")
-    public AssignmentStatusGroupedDTO assignmentsByWriterAndTrackGroupedByStatus(String writer, TrackType track) {
-        List<Assignment> assignments = assignmentService.findByTrackOrderByIdDesc(track);
+    public AssignmentStatusGroupedDTO assignmentsByWriterAndTrackGroupedByStatus(String writer, String track) {
+        track = track.trim();
+
+        TrackType trackType;
+        switch (track) {
+            case "PM&DESIGN", "PM" -> trackType = TrackType.PM_DESIGN;
+            case "FRONTEND" -> trackType = TrackType.FRONTEND;
+            case "BACKEND" -> trackType = TrackType.BACKEND;
+            default -> throw new IllegalArgumentException("Unknown track type: " + track);
+        }
+
+        // TrackType으로 필터된 assignment 목록 가져오기
+        List<Assignment> assignments = assignmentService.findByTrackOrderByIdDesc(trackType);
 
         List<AssignmentStatusDTO> todayAssignments = new ArrayList<>();
         List<AssignmentStatusDTO> ingAssignments = new ArrayList<>();

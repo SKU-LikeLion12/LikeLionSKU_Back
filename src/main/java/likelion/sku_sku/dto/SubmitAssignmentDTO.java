@@ -58,6 +58,14 @@ public class SubmitAssignmentDTO {
         @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
         private TrackType track;
     }
+    @Data
+    public static class WriterAndStringTrack {
+        @Schema(description = "제출한 과제 작성자", example = "한민규")
+        private String writer;
+        @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
+//        private TrackType track;
+        private String track;
+    }
 
     @Data
     public static class ResponseAssignmentDetails {

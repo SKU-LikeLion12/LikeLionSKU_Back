@@ -72,19 +72,13 @@ public class SubmitAssignmentService {
 
     // @GetMapping("/admin/submit/trackcnt")
     public ResponseAssignmentSummary countAssignmentsByTrack(TrackType track) {
-        List<String> allWritersInTrack = lionService.findWritersByTrack(track);
-//        List<String> allWritersInTrackAndBaby = lionService.findWritersByTrackAndBaby(track);
-
-//        List<SubmitAssignment> assignments = submitAssignmentRepository.findDistinctWriterByAssignment_Track(track);
-//        List<String> submittedWriters = assignments.stream()
-//                .map(SubmitAssignment::getWriter)
-//                .distinct()
-//                .toList();
+//        List<String> allWritersInTrack = lionService.findWritersByTrack(track); // 운영진만
+        List<String> allWritersInTrackAndBaby = lionService.findWritersByTrackAndBaby(track); // 아기사자만
 
         List<ResponseAssignmentCount> responseList = new ArrayList<>();
         int totalAssignmentsByTrack = getTotalAssignmentsByTrack(track);
 
-        for (String writer : allWritersInTrack) {
+        for (String writer : allWritersInTrackAndBaby) {
             int totalTodayAssignments = assignmentService.countByAssignmentStatusAndTrack(AssignmentStatus.TODAY, track);
 
             int submittedCount = submitAssignmentRepository.countByWriterAndAssignment_TrackAndPassNonePass(writer, track, PassNonePass.FAIL);

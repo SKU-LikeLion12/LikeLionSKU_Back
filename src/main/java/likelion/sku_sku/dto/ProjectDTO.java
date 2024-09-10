@@ -39,11 +39,6 @@ public class ProjectDTO {
         @Schema(description = "프로젝트 이미지(생략가능)", example = "파일을 넣으면 됨")
         private MultipartFile image;
     }
-    @Data
-    public static class TitleRequest {
-        @Schema(description = "프로젝트 제목", example = "스쿠스쿠")
-        private String title;
-    }
 // sonsworld@hanmail.net
 
     // Response

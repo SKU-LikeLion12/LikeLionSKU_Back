@@ -20,7 +20,7 @@ public class LionDTO {
         @Schema(description = "트랙", example = "BACKEND or FRONTEND or PM_DESIGN")
         private TrackType trackType;
 
-        @Schema(description = "권한", example = "ADMIN_LION or BABY_LION")
+        @Schema(description = "권한", example = "ADMIN_LION or BABY_LION or LEGACY_LION")
         private RoleType roleType;
     }
 }

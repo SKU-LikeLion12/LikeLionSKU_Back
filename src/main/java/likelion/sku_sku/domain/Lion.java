@@ -21,7 +21,7 @@ public class Lion {
     private TrackType track; // 트랙 BACKEND or FRONTEND or PM_DESIGN
 
     @Enumerated(EnumType.STRING)
-    private RoleType role; // 권한 ADMIN_LION or BABY_LION
+    private RoleType role; // 권한 ADMIN_LION or BABY_LION or LEGACY_LION
 
     // 생성자
     public Lion(String name, String email, TrackType track, RoleType role) {

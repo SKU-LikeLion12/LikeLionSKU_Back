@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
         String email = claims.getSubject(); // 클레임에서 JWT 토큰의 주체 추출
         String role = claims.get("role").toString(); // 클레임에서 역할 추출 후 문자열 변환
 
-        if (email.endsWith("@sungkyul.ac.kr") && (role.equals("BABY_LION") || role.equals("ADMIN_LION"))) { // 추출한 이메일이 @sungkyul.ac.kr로 끝나고, 역할이 BABY_LION 또는 ADMIN_LION인 경우
+        if (email.endsWith("@sungkyul.ac.kr") && (role.equals("BABY_LION") || role.equals("ADMIN_LION") || role.equals("LEGACY_LION"))) { // 추출한 이메일이 @sungkyul.ac.kr로 끝나고, 역할이 BABY_LION 또는 ADMIN_LION인 경우
             return new UsernamePasswordAuthenticationToken(email, "", Collections.singletonList(() -> "ROLE_" + role));
         } // UsernamePasswordAuthenticationToken 객체를 생성하여 사용자의 이메일, 비밀번호(여기서는 빈 문자열로 사용), 역할 정보를 포함한 객체 반환합니다.
         return null; // 그렇지 않으면 null 반환

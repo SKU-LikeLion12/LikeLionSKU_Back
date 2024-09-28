@@ -91,6 +91,13 @@ public class LectureService {
                 .toList();
     }
 
+    public List<ResponseLectureWithoutFiles> findAllLectureByTrackOrderByCreateDateDesc(TrackType trackType) {
+        List<Lecture> lectures = lectureRepository.findByTrackOrderByCreateDateDesc(trackType);
+        return lectures.stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
     private ResponseLectureWithoutFiles convertToDTO(Lecture lecture) {
         return new ResponseLectureWithoutFiles(
                 lecture.getId(),

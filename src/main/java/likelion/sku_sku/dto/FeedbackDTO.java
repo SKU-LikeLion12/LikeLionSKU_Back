@@ -8,15 +8,6 @@ import lombok.Data;
 public class FeedbackDTO {
 
     @Data
-    public static class CreateFeedbackRequest {
-        @Schema(description = "제출한 과제 id", example = "1")
-        private Long submitAssignmentId;
-
-        @Schema(description = "피드백 내용", example = "하면 되지")
-        private String content;
-    }
-
-    @Data
     public static class UpdateFeedBackPassStatust {
         @Schema(description = "피드백 id", example = "1")
         private Long feedBackId;

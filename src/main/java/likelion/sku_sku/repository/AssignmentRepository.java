@@ -20,5 +20,4 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
 
     // 트랙별 과제 안내물 개수 반환
     int countByTrack(TrackType trackType);
-
 }

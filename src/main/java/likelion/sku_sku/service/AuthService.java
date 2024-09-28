@@ -71,7 +71,7 @@ public class AuthService {
         if (optionalLion.isPresent()) {
             Lion lion = optionalLion.get();
             // 역할 확인
-            if (lion.getRole() == RoleType.BABY_LION || lion.getRole() == RoleType.ADMIN_LION) {
+            if (lion.getRole() == RoleType.BABY_LION || lion.getRole() == RoleType.ADMIN_LION || lion.getRole() == RoleType.LEGACY_LION) {
                 // JWT 생성 및 반환
                 String jwtToken = jwtService.createJwtToken(lion.getName(), email, lion.getTrack(), lion.getRole());
                 return ResponseEntity.ok(Collections.singletonMap("token", jwtToken));

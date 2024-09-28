@@ -75,6 +75,7 @@ public class LionService {
         List<Lion> lions = lionRepository.findWritersByTrackAndRole(track, RoleType.BABY_LION);
         return lions.stream()
                 .map(Lion::getName)
+                .sorted()
                 .toList();
     }
 

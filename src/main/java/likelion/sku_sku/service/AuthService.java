@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,19 +67,37 @@ public class AuthService {
         }
 
         // 사용자 정보로 DB에서 사용자 검색
-        Optional<Lion> optionalLion = lionRepository.findByEmail(email);
-        if (optionalLion.isPresent()) {
-            Lion lion = optionalLion.get();
-            // 역할 확인
-            if (lion.getRole() == RoleType.BABY_LION || lion.getRole() == RoleType.ADMIN_LION || lion.getRole() == RoleType.LEGACY_LION) {
-                // JWT 생성 및 반환
-                String jwtToken = jwtService.createJwtToken(lion.getName(), email, lion.getTrack(), lion.getRole());
-                return ResponseEntity.ok(Collections.singletonMap("token", jwtToken));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("접근 권한이 없는 유저입니다.");
-            }
-        } else {
+        List<Lion> lions = lionRepository.findAllLionsByEmail(email);
+
+        if (lions.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자를 찾을 수 없습니다.");
         }
+
+        // 중복 데이터 중 하나 선택
+        Lion lion = lions.get(0); // 첫 번째 결과를 선택
+
+        // 역할 확인
+        if (lion.getRole() == RoleType.BABY_LION || lion.getRole() == RoleType.ADMIN_LION || lion.getRole() == RoleType.LEGACY_LION) {
+            // JWT 생성 및 반환
+            String jwtToken = jwtService.createJwtToken(lion.getName(), email, lion.getTrack(), lion.getRole());
+            return ResponseEntity.ok(Collections.singletonMap("token", jwtToken));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("접근 권한이 없는 유저입니다.");
+        }
+
+//        Optional<Lion> optionalLion = lionRepository.findByEmail(email);
+//        if (optionalLion.isPresent()) {
+//            Lion lion = optionalLion.get();
+//            // 역할 확인
+//            if (lion.getRole() == RoleType.BABY_LION || lion.getRole() == RoleType.ADMIN_LION || lion.getRole() == RoleType.LEGACY_LION) {
+//                // JWT 생성 및 반환
+//                String jwtToken = jwtService.createJwtToken(lion.getName(), email, lion.getTrack(), lion.getRole());
+//                return ResponseEntity.ok(Collections.singletonMap("token", jwtToken));
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("접근 권한이 없는 유저입니다.");
+//            }
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자를 찾을 수 없습니다.");
+//        }
     }
 }

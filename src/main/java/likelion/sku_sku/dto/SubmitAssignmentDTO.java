@@ -3,7 +3,6 @@ package likelion.sku_sku.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import likelion.sku_sku.domain.JoinAssignmentFiles;
 import likelion.sku_sku.domain.SubmitAssignment;
-import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.PassNonePass;
 import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
@@ -13,9 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
-import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAllDTO;
 import static likelion.sku_sku.dto.AssignmentDTO.AssignmentStatusDTO;
 import static likelion.sku_sku.dto.FeedbackDTO.ResponseFeedback;
 

@@ -12,6 +12,8 @@ public interface LionRepository extends JpaRepository<Lion, Long> {
 
     // 이메일로 사자 반환
     Optional<Lion> findByEmail(String email);
+    List<Lion> findAllLionsByEmail(String email);
+
 
     // 트랙으로 사자 반환
     List<Lion> findWritersByTrack(TrackType track);

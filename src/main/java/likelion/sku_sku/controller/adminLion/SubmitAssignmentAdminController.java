@@ -3,15 +3,11 @@ package likelion.sku_sku.controller.adminLion;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.TrackType;
 import likelion.sku_sku.service.SubmitAssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAll;
 import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;

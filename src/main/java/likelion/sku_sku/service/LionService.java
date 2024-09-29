@@ -3,7 +3,6 @@ package likelion.sku_sku.service;
 import likelion.sku_sku.domain.Lion;
 import likelion.sku_sku.domain.enums.RoleType;
 import likelion.sku_sku.domain.enums.TrackType;
-import likelion.sku_sku.dto.LionDTO;
 import likelion.sku_sku.exception.InvalidEmailException;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.exception.InvalidLionException;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static likelion.sku_sku.dto.LionDTO.*;
 import static likelion.sku_sku.dto.LionDTO.ResponseLionUpdate;
 
 @Service

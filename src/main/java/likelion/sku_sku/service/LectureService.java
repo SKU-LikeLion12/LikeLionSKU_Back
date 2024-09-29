@@ -7,7 +7,6 @@ import likelion.sku_sku.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -2,7 +2,6 @@ package likelion.sku_sku.service;
 
 import likelion.sku_sku.domain.JoinAssignmentFiles;
 import likelion.sku_sku.domain.SubmitAssignment;
-import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.repository.JoinAssignmentFilesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

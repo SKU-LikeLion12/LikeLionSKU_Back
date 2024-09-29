@@ -2,13 +2,10 @@ package likelion.sku_sku.repository;
 
 import likelion.sku_sku.domain.Assignment;
 import likelion.sku_sku.domain.SubmitAssignment;
-import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.PassNonePass;
-import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface SubmitAssignmentRepository extends JpaRepository<SubmitAssignment, Long> {

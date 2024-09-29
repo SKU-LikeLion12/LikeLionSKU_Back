@@ -6,7 +6,6 @@ import likelion.sku_sku.domain.JoinAssignmentFiles;
 import likelion.sku_sku.domain.SubmitAssignment;
 import likelion.sku_sku.domain.enums.AssignmentStatus;
 import likelion.sku_sku.domain.enums.PassNonePass;
-import likelion.sku_sku.domain.enums.SubmitStatus;
 import likelion.sku_sku.domain.enums.TrackType;
 import likelion.sku_sku.exception.InvalidIdException;
 import likelion.sku_sku.exception.InvalidSubmitAssignmentException;
@@ -19,9 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import static likelion.sku_sku.dto.AssignmentDTO.*;
+import static likelion.sku_sku.dto.AssignmentDTO.AssignmentAll;
+import static likelion.sku_sku.dto.AssignmentDTO.AssignmentStatusDTO;
 import static likelion.sku_sku.dto.FeedbackDTO.ResponseFeedback;
 import static likelion.sku_sku.dto.JoinAssignmentFilesDTO.ResponseJoinAss;
 import static likelion.sku_sku.dto.SubmitAssignmentDTO.*;

@@ -1,22 +1,29 @@
 package likelion.sku_sku.security;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import likelion.sku_sku.domain.enums.RoleType;
 import likelion.sku_sku.domain.enums.TrackType;
 import likelion.sku_sku.exception.JwtValidationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.Date;
 
 @Service
 public class JwtUtility {
 
-    @Value("${jwt.key}")
-    private String jwtKey; // JWT 토큰 서명에 사용할 비밀 키
+//    @Value("${jwt.key}")
+//    private String jwtKey; // JWT 토큰 서명에 사용할 비밀 키
+    private final Key jwtKey;
 
     @Value("${jwt.expire-length}")
     private long expireLength; // JWT 토큰 만료 시간
+
+    public JwtUtility() {
+        this.jwtKey = Keys.secretKeyFor(SignatureAlgorithm.HS512); // 키 생성
+    }
 
     // JWT 토큰 생성
     public String createJwtToken(String name, String email, TrackType track, RoleType role) {
@@ -26,7 +33,7 @@ public class JwtUtility {
                 .claim("track", track.name()) // JWT 토큰에 트랙 추가
                 .claim("role", role.name()) // JWT 토큰에 역할 추가
                 .setExpiration(new Date(System.currentTimeMillis() + expireLength)) // JWT 토큰의 만료시간 설정
-                .signWith(SignatureAlgorithm.HS512, jwtKey) // 지정된 알고리즘과 비밀키를 사용하여 JWT 토큰 서명
+                .signWith(jwtKey) // 지정된 알고리즘과 비밀키를 사용하여 JWT 토큰 서명
                 .compact(); // JWT 문자열 생성
     }
 

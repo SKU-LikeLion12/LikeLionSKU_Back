@@ -38,4 +38,4 @@ out/
 
 # 환경 변수 파일
 .env
-application.yml
+*.yml

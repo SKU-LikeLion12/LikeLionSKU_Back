@@ -12,11 +12,13 @@ import java.util.Date;
 @Service
 public class JwtUtility {
 
-    @Value("${jwt.key}")
+    @Value("${jwt.base64Secret}")
     private String jwtKey; // JWT 토큰 서명에 사용할 비밀 키
 
-    @Value("${jwt.expire-length}")
-    private long expireLength; // JWT 토큰 만료 시간
+//    @Value("${jwt.expire-length}")
+//    private long expireLength; // JWT 토큰 만료 시간
+    private static final long expireLength = 1000 * 60 * 60; // 밀리초 단위 // JWT 만료 시간: 1시간
+
 
     // JWT 토큰 생성
     public String createJwtToken(String name, String email, TrackType track, RoleType role) {

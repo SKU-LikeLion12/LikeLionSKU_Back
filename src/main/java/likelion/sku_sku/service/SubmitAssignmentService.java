@@ -179,7 +179,7 @@ public class SubmitAssignmentService {
 
         TrackType trackType;
         switch (track) {
-            case "PM&DESIGN", "PM" -> trackType = TrackType.PM_DESIGN;
+            case "PM&DESIGN", "PM", "DESIGN" -> trackType = TrackType.PM_DESIGN;
             case "FRONTEND" -> trackType = TrackType.FRONTEND;
             case "BACKEND" -> trackType = TrackType.BACKEND;
             default -> throw new IllegalArgumentException("Unknown track type: " + track);
